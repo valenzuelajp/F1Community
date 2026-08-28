@@ -306,6 +306,120 @@ Next.js App Router offers multiple data fetching/mutation patterns.
 
 ---
 
+## ADR-013: F1 Schedule API - Jolpica (Jolpi.ca)
+**Date**: 2026-08-28 | **Status**: Accepted
+
+### Context
+Need Formula 1 race calendar, session times, results, and standings data for the F1 Website.
+
+### Decision
+Use **Jolpica F1 API** (`https://api.jolpi.ca/ergast/f1/`) - the successor to Ergast API.
+
+### Consequences
+- ✅ Free, no authentication required
+- ✅ Ergast-compatible endpoints (drop-in replacement)
+- ✅ Comprehensive data: seasons, races, circuits, drivers, constructors, standings, results
+- ✅ Rate limit: 500 requests/hour (sufficient with caching)
+- ✅ CORS enabled, JSON responses
+- ⚠️ Rate limit requires caching strategy (ISR + TanStack Query)
+- ⚠️ Community-run (not official F1), but reliable successor
+- ⚠️ No live timing data (only historical/schedule)
+
+### Alternatives Considered
+- Ergast API: Deprecated/shut down end of 2024
+- Sportradar F1 API: Comprehensive but paid ($500+/month), requires contract
+- Official F1 API: Not publicly documented, requires partnership
+- FastF1 (Python): Server-side only, not suitable for web frontend
+
+---
+
+## ADR-014: F1 Live Timing API - f1-live-api
+**Date**: 2026-08-28 | **Status**: Proposed
+
+### Context
+Need real-time telemetry, leaderboard, sectors, mini-sectors, weather, race control messages during race weekends.
+
+### Decision
+Use **f1-live-api** (`https://f1-live-api.onrender.com`) - connects directly to F1's SignalR WebSocket feed.
+
+### Consequences
+- ✅ Free tier available (100 req/min, 10 SSE connections/min)
+- ✅ Real-time data: timing, telemetry, track status, race control, team radio
+- ✅ SSE (Server-Sent Events) for live updates (~3.7 Hz)
+- ✅ Historical archive access (every session back to 2018)
+- ✅ No authentication required for free tier
+- ✅ Auto-documentation at `/` and `/docs`
+- ⚠️ Free tier rate limits (100 req/min)
+- ⚠️ Community project (not official), but connects to official F1 feed
+- ⚠️ Only works during live sessions for real-time data
+- ⚠️ Requires SSE connection management (reconnect, cleanup)
+
+### Alternatives Considered
+- Official F1 TV / F1 API: Requires F1 TV Pro subscription (~$80/year), complex auth
+- OpenF1: Similar to f1-live-api, but less maintained
+- Sportradar Live: Paid, enterprise only
+- Custom SignalR client: High effort, maintenance burden
+
+---
+
+## ADR-015: F1 News Aggregation - RSS + RapidAPI
+**Date**: 2026-08-28 | **Status**: Proposed
+
+### Context
+Need latest F1 news from multiple sources (official, major publishers) for news feed.
+
+### Decision
+Dual-source approach:
+1. **Primary**: RSS feeds from Formula1.com, ESPN F1, BBC F1, Sky Sports F1
+2. **Fallback/Enhancement**: RapidAPI "F1 Latest News" (aggregates 5+ sources)
+
+### Consequences
+- ✅ RSS: Free, no rate limits, standard format, reliable
+- ✅ Multiple sources = redundancy if one feed breaks
+- ✅ RapidAPI: Single endpoint for aggregated news, free tier
+- ✅ Can implement cron job for hourly ingestion
+- ⚠️ RSS parsing requires handling different feed formats
+- ⚠️ RapidAPI free tier has limits (100 req/month on free)
+- ⚠️ No official F1 news API (Formula1.com doesn't publish one)
+- ⚠️ Content scraping may violate ToS (RSS is intended for syndication)
+
+### Alternatives Considered
+- Formula1.com official API: Not publicly available
+- Single RSS source: Risk of feed changes/breakage
+- Custom scrapers: High maintenance, legal risk
+- NewsAPI.org: General news, not F1-specific, paid tiers
+
+---
+
+## ADR-016: Route Groups - Dual Platform Structure
+**Date**: 2026-08-28 | **Status**: Proposed
+
+### Context
+Single Next.js app serving both F1 Website (content-heavy, SSR/ISR) and F1 Store (e-commerce, interactive).
+
+### Decision
+Use Next.js Route Groups:
+- `src/app/(f1)/` - F1 Website (schedule, news, live, standings)
+- `src/app/(shop)/` - F1 Store (catalog, cart, checkout, account)
+- `src/app/(admin)/` - Admin Dashboard (shared)
+- Shared components, auth, layout at root level
+
+### Consequences
+- ✅ Clear separation of concerns
+- ✅ Shared authentication, design system, utilities
+- ✅ Independent layouts per group
+- ✅ Single deployment, shared infrastructure
+- ✅ Easy cross-linking (website → store for merch)
+- ⚠️ Shared bundle size (mitigate with dynamic imports)
+- ⚠️ Route group naming affects URL structure (no prefix)
+
+### Alternatives Considered
+- Separate Next.js apps: Duplicate infra, auth, components
+- Single app with path prefixes: Less clean separation
+- Monorepo with shared packages: Overhead for solo dev
+
+---
+
 ## Decision Log
 
 | ADR | Title | Status | Date |
@@ -322,6 +436,10 @@ Next.js App Router offers multiple data fetching/mutation patterns.
 | 010 | Polyrepo Structure | Proposed | 2026-08-28 |
 | 011 | Vitest + Playwright Testing | Proposed | 2026-08-28 |
 | 012 | Server Actions + Route Handlers | Proposed | 2026-08-28 |
+| 013 | F1 Schedule API - Jolpica | Accepted | 2026-08-28 |
+| 014 | F1 Live Timing API - f1-live-api | Proposed | 2026-08-28 |
+| 015 | F1 News Aggregation - RSS + RapidAPI | Proposed | 2026-08-28 |
+| 016 | Route Groups - Dual Platform | Proposed | 2026-08-28 |
 
 ---
 

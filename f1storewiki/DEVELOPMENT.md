@@ -1,4 +1,4 @@
-# Development Guidelines: F1Store
+# Development Guidelines: F1 Platform (Website + Store)
 
 ## Code Style & Conventions
 
@@ -49,46 +49,83 @@ export function AddToCartButton({ variantId }: { variantId: string }) {
 ### File & Folder Structure
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── (auth)/            # Route groups
-│   ├── (shop)/
-│   ├── api/               # Route handlers (webhooks, external APIs)
-│   ├── actions/           # Server Actions
+├── app/                              # Next.js App Router
+│   ├── (f1)/                         # F1 Website route group
+│   │   ├── schedule/                 # Race calendar
+│   │   ├── races/[id]/               # Race detail
+│   │   ├── standings/                # Driver/Constructor standings
+│   │   ├── news/                     # News feed
+│   │   ├── live/                     # Live timing (race weekends)
+│   │   ├── teams/[id]/               # Team profiles
+│   │   ├── drivers/[id]/             # Driver profiles
+│   │   └── layout.tsx                # F1 layout
+│   ├── (shop)/                       # F1 Store route group
+│   │   ├── catalog/                  # Product listing
+│   │   ├── product/[id]/             # Product detail
+│   │   ├── cart/                     # Shopping cart
+│   │   ├── checkout/                 # Checkout flow
+│   │   ├── account/                  # User account
+│   │   └── layout.tsx                # Store layout
+│   ├── (admin)/                      # Admin Dashboard route group
+│   │   ├── products/                 # Product management
+│   │   ├── orders/                   # Order management
+│   │   ├── content/                  # Content management
+│   │   └── layout.tsx                # Admin layout
+│   ├── api/                          # Route handlers (webhooks, external APIs)
+│   │   ├── f1/                       # F1 API proxies
+│   │   │   ├── schedule/             # Proxies Jolpica schedule
+│   │   │   ├── live/                 # Proxies f1-live-api
+│   │   │   └── news/                 # Aggregates RSS feeds
+│   │   └── shop/                     # Store APIs
+│   ├── actions/                      # Server Actions
 │   └── globals.css
 ├── components/
-│   ├── ui/                # Base components (Button, Input, Card)
-│   ├── shop/              # Shop-specific (ProductCard, CartDrawer)
-│   ├── admin/             # Admin-specific
-│   └── layout/            # Header, Footer, Navigation
+│   ├── ui/                           # Base components (Button, Input, Card)
+│   ├── f1/                           # F1 Website components
+│   │   ├── schedule/                 # RaceCard, SessionTable, Countdown
+│   │   ├── standings/                # StandingsTable, PointsBreakdown
+│   │   ├── live/                     # LiveLeaderboard, Telemetry, RaceControl
+│   │   ├── news/                     # NewsCard, NewsFeed, ArticleView
+│   │   └── profiles/                 # TeamCard, DriverCard
+│   ├── shop/                         # Shop-specific (ProductCard, CartDrawer)
+│   ├── admin/                        # Admin-specific
+│   └── layout/                       # Header, Footer, Navigation (shared)
 ├── lib/
-│   ├── utils.ts           # Shared utilities (cn, formatters)
-│   ├── validations/       # Zod schemas
-│   ├── constants/         # Enums, config
-│   └── hooks/             # Custom React hooks
-├── hooks/                 # Shared hooks (useCart, useAuth)
-├── store/                 # Zustand stores
-├── types/                 # Global TypeScript types
-├── prisma/                # Prisma schema + extensions
-└── styles/                # Global styles, Tailwind config
+│   ├── utils.ts                      # Shared utilities (cn, formatters)
+│   ├── validations/                  # Zod schemas
+│   ├── constants/                    # Enums, config
+│   ├── hooks/                        # Custom React hooks
+│   └── f1/                           # F1 API clients
+│       ├── jolpica.ts                # Jolpica F1 client
+│       ├── live.ts                   # f1-live-api client
+│       └── news.ts                   # News aggregator (RSS + RapidAPI)
+├── hooks/                            # Shared hooks (useCart, useAuth, useF1)
+├── store/                            # Zustand stores (cart, f1-data)
+├── types/                            # Global TypeScript types
+│   ├── f1.ts                         # F1 types (Race, Circuit, Session, etc.)
+│   └── shop.ts                       # Shop types (Product, Cart, Order)
+├── prisma/                           # Prisma schema + extensions
+└── styles/                           # Global styles, Tailwind config
 ```
 
 ### Naming Conventions
 | Type | Convention | Example |
 |------|------------|---------|
-| Files (components) | PascalCase | `ProductCard.tsx` |
-| Files (utils, hooks) | camelCase | `formatPrice.ts`, `useCart.ts` |
-| Folders | kebab-case | `product-card/`, `api-utils/` |
-| Variables/functions | camelCase | `getProductById`, `cartItems` |
-| Constants | UPPER_SNAKE_CASE | `MAX_CART_ITEMS` |
-| Types/Interfaces | PascalCase | `Product`, `CartState` |
-| Zod schemas | PascalCase + `Schema` | `ProductSchema` |
+| Files (components) | PascalCase | `ProductCard.tsx`, `RaceCard.tsx` |
+| Files (utils, hooks) | camelCase | `formatPrice.ts`, `useCart.ts`, `useLiveTiming.ts` |
+| Folders | kebab-case | `product-card/`, `race-card/`, `api-utils/` |
+| Variables/functions | camelCase | `getProductById`, `cartItems`, `fetchRaceSchedule` |
+| Constants | UPPER_SNAKE_CASE | `MAX_CART_ITEMS`, `JOLPICA_BASE_URL` |
+| Types/Interfaces | PascalCase | `Product`, `CartState`, `Race`, `Session` |
+| Zod schemas | PascalCase + `Schema` | `ProductSchema`, `RaceScheduleSchema` |
 | CSS classes | Tailwind utilities | No custom CSS unless necessary |
 
 ### Git Workflow
-- **Branch naming**: `type/short-description` (e.g., `feat/product-card`, `fix/cart-total`, `docs/readme-update`)
+- **Branch naming**: `type/short-description` (e.g., `feat/f1-schedule-page`, `fix/cart-total`, `docs/readme-update`)
 - **Commit messages**: Conventional Commits
   ```
-  feat: add product variant selector
+  feat(f1-web): add race schedule page with Jolpica
+  feat(f1-store): add product variant selector
   fix: correct cart total calculation
   docs: update API documentation
   refactor: extract cart logic to hook
@@ -112,6 +149,8 @@ src/
 - **Bundle**: Monitor with `@next/bundle-analyzer`; keep client bundles small
 - **Caching**: Use `fetch(..., { next: { revalidate: 3600 } })` for ISR
 - **Database**: Select only needed fields; use `include`/`select` in Prisma
+- **F1 APIs**: Aggressive caching (TanStack Query 1hr stale, ISR 3600s)
+- **Live Data**: SSE only during active sessions; cleanup on unmount
 
 ### Accessibility (WCAG 2.1 AA)
 - **Semantic HTML**: `<button>`, `<nav>`, `<main>`, heading hierarchy
@@ -120,13 +159,14 @@ src/
 - **Color contrast**: 4.5:1 normal, 3:1 large text (Tailwind `text-gray-900` on `bg-white`)
 - **Keyboard**: All interactive elements reachable and operable
 - **Screen readers**: `alt` text, `aria-label` for icon buttons, form labels
+- **Live Regions**: `aria-live="polite"` for live timing updates
 
 ### Security
 - **Never commit secrets**: Use `.env.local` (gitignored), `.env.example` for template
 - **Validate all inputs**: Zod schemas on Server Actions + Route Handlers
 - **Sanitize output**: React auto-escapes; be careful with `dangerouslySetInnerHTML`
 - **CSP**: Configure via `next.config.js` headers
-- **Rate limiting**: On auth endpoints, checkout, webhooks
+- **Rate limiting**: On auth endpoints, checkout, webhooks, F1 API proxies
 - **Dependencies**: `npm audit` in CI; Dependabot alerts
 
 ### Database (Prisma)
@@ -135,18 +175,71 @@ src/
 - **Indexes**: Add `@@index([field])` for query patterns
 - **Relations**: Explicit `relation` names for clarity
 - **Soft deletes**: `deletedAt` DateTime? + middleware for `findMany`
+- **F1 Reference Data**: Teams, Drivers, Circuits seeded once, rarely updated
 
 ### Error Handling
 - **Server Actions**: Return `{ error: string }` or `{ data: T }` (never throw)
 - **Client**: Try/catch with user-friendly toasts (Sonner/React Hot Toast)
 - **Logging**: Sentry for errors; structured logs for debugging
 - **Boundary**: `error.tsx` per route segment; `global-error.tsx` for root
+- **F1 APIs**: Graceful degradation (cached data fallback, error boundaries)
 
 ### Documentation
 - **JSDoc**: For exported utilities, complex functions, Zod schemas
 - **README**: Per package/folder if non-obvious
 - **ADR**: For architectural decisions (see ARCHITECTURE.md)
 - **Wiki**: Keep PROJECT_OVERVIEW, PROGRESS, ROADMAP, TASKS current
+
+---
+
+## F1-Specific Guidelines
+
+### API Client Patterns
+```ts
+// lib/f1/jolpica.ts - Server-side client with caching
+export async function getRaceSchedule(season: string = 'current') {
+  const response = await fetch(`${JOLPICA_BASE_URL}/${season}/races/`, {
+    next: { revalidate: 3600 }, // ISR: 1 hour
+  });
+  return response.json();
+}
+
+// lib/f1/live.ts - Client-side SSE hook
+export function useLiveTiming(sessionKey?: string) {
+  // TanStack Query with SSE subscription
+  // Auto-cleanup on unmount
+  // Reconnect with exponential backoff
+}
+```
+
+### Timezone Handling
+- All Jolpica times are UTC
+- Convert to user's local timezone using `Intl.DateTimeFormat`
+- Display both UTC and local for race sessions
+- Store user preference in localStorage/cookies
+
+### Team Color System
+```ts
+// lib/constants/teams.ts
+export const TEAM_COLORS = {
+  mercedes: { primary: '#00D2BE', secondary: '#000000' },
+  ferrari: { primary: '#DC143C', secondary: '#FFD700' },
+  // ... all 10 teams
+} as const;
+
+// Usage: CSS variables or Tailwind arbitrary values
+<div className="bg-[#00D2BE] text-white" />
+```
+
+### Race Weekend Detection
+- Use Jolpica to determine current/next race
+- Enable live timing features only during active sessions
+- Feature flag: `NEXT_PUBLIC_ENABLE_LIVE_TIMING`
+
+### Cross-Platform Linking
+- F1 Website → Store: Team/Driver profile pages link to filtered catalog
+- Store → Website: Product pages link to race schedule for relevant GP
+- Shared: User preferences (favorite team/driver) sync across both
 
 ---
 

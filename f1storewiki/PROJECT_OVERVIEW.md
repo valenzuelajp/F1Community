@@ -1,8 +1,50 @@
-# Project Overview: F1Store
+# Project Overview: F1 Platform
 
 ## Vision
 
-Build a modern, performant e-commerce website for Formula 1 merchandise, providing fans with an authentic shopping experience for official F1 team and driver merchandise.
+Build a comprehensive Formula 1 platform combining **F1 Website** (schedule, news, live timing, standings) with **F1 Store** (official merchandise e-commerce), providing fans a complete F1 digital experience.
+
+## Core Objectives
+
+1. **Authentic F1 Experience** - Official branding, team colors, driver collections, real-time data
+2. **High Performance** - Fast load times, optimized for global CDN delivery, race-weekend scale
+3. **Scalable Architecture** - Handle traffic spikes during race weekends across both properties
+4. **Developer Experience** - Clean codebase, easy to maintain and extend
+5. **Unified Platform** - Shared auth, design system, infrastructure across website and store
+
+## Target Audience
+
+- Formula 1 fans globally (website + store)
+- Casual viewers converted during race weekends (website → store funnel)
+- Collectors seeking official merchandise (store)
+- Fantasy/analytics users (website live data)
+
+## Scope
+
+### In Scope (MVP - Combined Platform)
+
+#### F1 Website
+- Race calendar & schedule (2024, 2025 seasons)
+- Live timing & telemetry (race weekends)
+- Driver & Constructor standings
+- Team & Driver profiles
+- News aggregation (official F1, ESPN, BBC, Sky F1)
+
+#### F1 Store
+- Product catalog (teams, drivers, categories)
+- Shopping cart & checkout
+- User accounts & order history
+- Admin dashboard for inventory management
+- Responsive design (mobile-first)
+- Search & filtering
+
+### Out of Scope (Future Phases)
+- Loyalty/rewards program (cross-platform)
+- Live race integration with store (race-day flash sales)
+- AR product visualization
+- Multi-language support (beyond EN)
+- Mobile app
+- Fantasy F1 integration
 
 ## Core Objectives
 
@@ -41,16 +83,27 @@ Build a modern, performant e-commerce website for Formula 1 merchandise, providi
 | Frontend | Next.js 14+ (App Router) | React ecosystem, SSR/SSG, excellent DX |
 | Styling | Tailwind CSS | Utility-first, fast iteration, small bundle |
 | State | Zustand + TanStack Query | Lightweight, server state management |
-| Auth | NextAuth.js | Built for Next.js, multiple providers |
+| Auth | NextAuth.js v5 | Built for Next.js, multiple providers |
 | Database | PostgreSQL (Prisma ORM) | Relational, type-safe, mature ecosystem |
 | Payments | Stripe | Industry standard, global support |
 | Hosting | Vercel | Native Next.js support, edge network |
 | CMS | Contentful or Sanity | Headless, team-friendly content editing |
 | Search | Algolia or Meilisearch | Fast, typo-tolerant product search |
+| **F1 Schedule API** | **Jolpica F1 (Jolpi.ca)** | Free, no auth, Ergast-compatible, 500 req/hr |
+| **F1 Live API** | **f1-live-api** | Free tier, real-time telemetry via SSE |
+| **F1 News** | **RSS + RapidAPI** | Formula1.com RSS, ESPN, BBC, Sky F1 aggregation |
 
 ## Key Features
 
-### Customer-Facing
+### F1 Website (Customer-Facing)
+- **Homepage**: Current race countdown, latest news, standings snapshot, next race info
+- **Schedule**: Full season calendar with circuit details, session times (local + UTC), results
+- **Race Weekend Hub**: Live timing, session tracker, team radio, weather, race control messages
+- **Standings**: Driver & Constructor tables with historical comparison
+- **Teams/Drivers**: Profiles with stats, bio, current season performance, merchandise links
+- **News Feed**: Aggregated from Formula1.com, ESPN F1, BBC F1, Sky F1, Autosport
+
+### F1 Store (Customer-Facing)
 - **Homepage**: Hero with current season, featured collections, latest drops
 - **Catalog**: Filterable by team, driver, category, price, new arrivals
 - **Product Pages**: High-res galleries, size guides, related products
@@ -58,11 +111,12 @@ Build a modern, performant e-commerce website for Formula 1 merchandise, providi
 - **Checkout**: Address validation, multiple payment methods, order summary
 - **Account**: Order history, wishlist, addresses, notifications
 
-### Admin-Facing
-- **Dashboard**: Sales metrics, low stock alerts, recent orders
+### Admin-Facing (Shared)
+- **Dashboard**: Sales metrics, low stock alerts, recent orders, traffic analytics
 - **Products CRUD**: Variants, images, SEO, inventory tracking
 - **Orders**: Status management, fulfillment, refunds
 - **Collections**: Curated pages for campaigns (e.g., "Monaco GP Collection")
+- **Content Management**: News articles, race previews, team/driver bios (CMS)
 
 ## Success Metrics
 
