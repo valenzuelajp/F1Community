@@ -13,6 +13,7 @@ Welcome to the F1Store project wiki. This serves as the central knowledge base f
 | [Architecture Decisions](ARCHITECTURE.md) | Technical decisions and rationale (ADR log) |
 | [Development Guidelines](DEVELOPMENT.md) | Coding standards, workflows, and conventions |
 | [F1 API Reference](F1_API_REFERENCE.md) | Formula 1 data sources, endpoints, and integration patterns |
+| [Figma MCP Setup](FIGMA_MCP_SETUP.md) | Connect Figma to opencode for design-to-code workflow |
 
 ## Project Links
 
