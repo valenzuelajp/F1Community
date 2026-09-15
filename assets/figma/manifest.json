@@ -1,0 +1,142 @@
+﻿[
+    {
+        "name":  "Frame 143",
+        "category":  "screens",
+        "page":  "main",
+        "path":  "screens\\main\\png\\Frame 143.png",
+        "bytes":  30881
+    },
+    {
+        "name":  "Home (Responsive)",
+        "category":  "screens",
+        "page":  "main",
+        "path":  "screens\\main\\png\\Home (Responsive).png",
+        "bytes":  5189303
+    },
+    {
+        "name":  "image",
+        "category":  "screens",
+        "page":  "main",
+        "path":  "screens\\main\\png\\image.png",
+        "bytes":  40655
+    },
+    {
+        "name":  "04-Calendar",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\04-Calendar.png",
+        "bytes":  204088
+    },
+    {
+        "name":  "asymmetric-news-hero",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\asymmetric-news-hero.png",
+        "bytes":  2521203
+    },
+    {
+        "name":  "canvas-gallery",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\canvas-gallery.png",
+        "bytes":  3893450
+    },
+    {
+        "name":  "Driver Radio",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\Driver Radio.png",
+        "bytes":  130603
+    },
+    {
+        "name":  "Driver",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\Driver.png",
+        "bytes":  40261
+    },
+    {
+        "name":  "f1-account - Variation 2 - Centered",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\f1-account - Variation 2 - Centered.png",
+        "bytes":  283805
+    },
+    {
+        "name":  "f1-account",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\f1-account.png",
+        "bytes":  277889
+    },
+    {
+        "name":  "f1-admin",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\f1-admin.png",
+        "bytes":  343953
+    },
+    {
+        "name":  "f1-login",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\f1-login.png",
+        "bytes":  225683
+    },
+    {
+        "name":  "f1-schedules-standings - Variation 2 - Centered",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\f1-schedules-standings - Variation 2 - Centered.png",
+        "bytes":  416829
+    },
+    {
+        "name":  "f1-store - Variation 2 - Centered",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\f1-store - Variation 2 - Centered.png",
+        "bytes":  404103
+    },
+    {
+        "name":  "f1-store - Variation 3 - Split Layout",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\f1-store - Variation 3 - Split Layout.png",
+        "bytes":  324933
+    },
+    {
+        "name":  "Frame 16",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\Frame 16.png",
+        "bytes":  7534127
+    },
+    {
+        "name":  "Frame 79",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\Frame 79.png",
+        "bytes":  127036
+    },
+    {
+        "name":  "Frame 84",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\Frame 84.png",
+        "bytes":  198471
+    },
+    {
+        "name":  "hero-banner",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\hero-banner.png",
+        "bytes":  83234
+    },
+    {
+        "name":  "login-card",
+        "category":  "screens",
+        "page":  "References",
+        "path":  "screens\\References\\png\\login-card.png",
+        "bytes":  217473
+    }
+]
