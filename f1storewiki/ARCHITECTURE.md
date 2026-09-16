@@ -111,23 +111,23 @@ Need client state (cart, UI) + server state (products, user) management.
 
 ---
 
-## ADR-005: Authentication - NextAuth.js v5 (Auth.js)
-**Date**: 2026-08-28 | **Status**: Proposed
+## ADR-005: Authentication - NextAuth.js v4 (v5/Auth.js on roadmap)
+**Date**: 2026-08-28 | **Status**: Superseded (implementation used v4)
 
 ### Context
 Need auth for customers + admins, multiple providers, session management.
 
 ### Decision
-**NextAuth.js v5 (Auth.js)** with credentials + OAuth providers.
+**NextAuth.js v4** with credentials + OAuth providers (installed `next-auth@^4.24.15`). Upgrade to **v5 (Auth.js)** remains a planned follow-up; the original v5 ADR is archived below.
+
+> Superseded note (2026-09-16): production code on `main` implements NextAuth.js **v4** (`authOptions` + `NextAuth(authOptions)` route handler). See TASKS.md for the v5 upgrade item. The v5 proposal text is preserved here for reference.
 
 ### Consequences
-- ✅ Built for Next.js (App Router support)
+- ✅ Built for Next.js (works with App Router route handler pattern)
 - ✅ Multiple providers (Google, Apple, Email, Credentials)
-- ✅ Database sessions + JWT options
-- ✅ Middleware integration for route protection
-- ✅ Extensible callbacks for custom logic
-- ⚠️ v5 is beta (breaking changes possible)
-- ⚠️ Complex configuration for advanced flows
+- ✅ JWT sessions + callback hooks
+- ⚠️ v4 API differs from v5 (`handlers`, `auth()` middleware) - docs updated to match v4
+- ⚠️ `authorize()` currently uses a mock check; DB lookup is a known TODO
 
 ### Alternatives Considered
 - Clerk: Great DX, but paid at scale
@@ -428,7 +428,7 @@ Use Next.js Route Groups:
 | 002 | Tailwind CSS | Proposed | 2026-08-28 |
 | 003 | PostgreSQL + Prisma | Proposed | 2026-08-28 |
 | 004 | Zustand + TanStack Query | Proposed | 2026-08-28 |
-| 005 | NextAuth.js v5 | Proposed | 2026-08-28 |
+| 005 | NextAuth.js v4 (v5 upgrade planned) | Superseded | 2026-08-28 |
 | 006 | Stripe Payments | Accepted | 2026-08-28 |
 | 007 | Contentful/Sanity CMS | Proposed | 2026-08-28 |
 | 008 | Algolia/Meilisearch Search | Proposed | 2026-08-28 |
