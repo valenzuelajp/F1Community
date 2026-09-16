@@ -6,7 +6,7 @@ Welcome to the development guide for the **Formula 1 Platform (F1 Website + F1 S
 
 ## Table of Contents
 1. [Platform Architecture & Dual-Domain Vision](#1-platform-architecture--dual-domain-vision)
-2. [Authentication Flow (NextAuth v5 + Next.js 14)](#2-authentication-flow-nextauth-v5--nextjs-14)
+2. [Authentication Flow (NextAuth v4 + Next.js 14)](#2-authentication-flow-nextauth-v4--nextjs-14)
 3. [Data Validation with Zod](#3-data-validation-with-zod)
 4. [Client Components vs. Server Components](#4-client-components-vs-server-components)
 5. [Interactive Form Handling (React Hook Form)](#5-interactive-form-handling-react-hook-form)
@@ -41,7 +41,9 @@ A user logs in **once** and gains access to both their favorite teams/standings 
 
 ---
 
-## 2. Authentication Flow (NextAuth v5 + Next.js 14)
+## 2. Authentication Flow (NextAuth v4 + Next.js 14)
+
+> **Note**: The project currently uses **NextAuth v4** (`next-auth@^4.24.15`, ADR-005 "v5/Auth.js" was proposed but NOT adopted — upgrade to v5 is still an open decision). The snippets below match the code actually in `main`.
 
 ### How It Works Under the Hood
 
@@ -60,8 +62,8 @@ A user logs in **once** and gains access to both their favorite teams/standings 
          ▼
 [ authorize() in src/lib/auth.ts ]
    ├── Runs server-side Zod validation
-   ├── Checks user against Database (Prisma)
-   └── Returns user object or error
+   ├── Checks user against Database (Prisma)   ← TODO: currently a mock check
+   └── Returns user object or null
          │
          ▼
 [ JWT Session Issued ] ─── (Encrypted cookie saved in browser)
@@ -73,21 +75,23 @@ A user logs in **once** and gains access to both their favorite teams/standings 
 In Next.js 14 App Router, dynamic folder names with brackets `[...]` act as catch-all handlers. Any request to `/api/auth/signin`, `/api/auth/signout`, or `/api/auth/session` is handled here:
 
 ```typescript
-import { handlers } from '@/lib/auth';
+import NextAuth from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
-// NextAuth v5 exports standard GET and POST Web Handlers
-export const { GET, POST } = handlers;
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
 ```
 
 #### 📄 `src/lib/auth.ts`
-Configures authentication providers, session strategies, and callbacks:
+Configures authentication providers (Credentials), session strategies, and callbacks:
 
 ```typescript
-import NextAuth from 'next-auth';
+import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { loginSchema } from '@/lib/validations/auth';
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -98,17 +102,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // authorize() runs on the server when someone logs in
       async authorize(credentials) {
         // 1. Validate incoming data with Zod
-        const validated = loginSchema.safeParse(credentials);
-        if (!validated.success) return null;
+        const validatedFields = loginSchema.safeParse(credentials);
+        if (!validatedFields.success) return null;
 
-        const { email, password } = validated.data;
+        const { email, password } = validatedFields.data;
 
-        // 2. Validate credentials (demo check, replaced with DB in Phase 3)
+        // 2. TODO (Phase 3): look up user via Prisma + bcrypt.compare
+        //    Currently a demo check — seeded bcrypt users don't log in yet.
         if (email && password.length >= 6) {
           return {
             id: 'f1-fan-1',
             name: 'Lewis Fan',
             email: email,
+            image: '/avatars/driver-placeholder.jpg',
             role: 'CUSTOMER',
           };
         }
@@ -138,7 +144,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
-});
+};
 ```
 
 ---
@@ -203,68 +209,84 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginInput } from '@/lib/validations/auth';
 import { signIn } from 'next-auth/react';
-import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
-export function LoginForm({ activeTab }: { activeTab: 'f1' | 'store' }) {
-  const [showPassword, setShowPassword] = useState(false);
+export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [authSuccess, setAuthSuccess] = useState<string | null>(null);
 
   // Initialize React Hook Form with Zod schema resolver
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '', rememberMe: false },
   });
 
   const onSubmit = async (data: LoginInput) => {
     setIsLoading(true);
-    const result = await signIn('credentials', {
-      email: data.email,
-      password: data.password,
-      redirect: false, // Prevents full page reload on submission
-    });
-    setIsLoading(false);
+    setAuthError(null);
+    setAuthSuccess(null);
+
+    try {
+      const result = await signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirect: false, // Prevents full page reload on submission
+      });
+      if (result?.error) {
+        setAuthError('Invalid credentials. Please check your email and password.');
+      } else {
+        setAuthSuccess('Welcome back to F1 Philippines! Telemetry syncing...');
+      }
+    } catch {
+      setAuthError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+      {authError && <div className="...">{authError}</div>}
+      {authSuccess && <div className="...">{authSuccess}</div>}
+
       {/* Email Field with register() hook */}
       <div>
-        <label className="text-xs font-semibold text-gray-300">Email</label>
+        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">EMAIL ADDRESS</label>
         <input
           {...register('email')}
           type="email"
-          placeholder="fan@formula1.com"
-          className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-white"
+          placeholder="driver@f1-philippines.com"
+          className={`w-full pl-10 pr-4 py-3 bg-[#0a0d14] border rounded-lg text-sm ${errors.email ? 'border-red-500' : 'border-white/10'}`}
         />
         {errors.email && <p className="text-xs text-red-400">{errors.email.message}</p>}
       </div>
 
       {/* Password Field with Show/Hide Toggle */}
       <div>
-        <label className="text-xs font-semibold text-gray-300">Password</label>
+        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">PASSWORD</label>
         <div className="relative">
           <input
             {...register('password')}
             type={showPassword ? 'text' : 'password'}
-            className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-white"
+            className="w-full pl-10 pr-11 py-3 bg-[#0a0d14] border rounded-lg text-sm border-white/10"
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-3 text-gray-400 hover:text-white"
-          >
+          <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label="Toggle password visibility">
             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
         {errors.password && <p className="text-xs text-red-400">{errors.password.message}</p>}
       </div>
 
-      {/* Dynamic Submit Button */}
+      {/* Sign In Button */}
       <button type="submit" disabled={isLoading} className="w-full f1-btn-primary py-3 rounded-xl font-bold">
-        {isLoading ? <Loader2 className="animate-spin" /> : `Sign In to ${activeTab === 'f1' ? 'F1 Website' : 'F1 Store'}`}
+        {isLoading ? <Loader2 className="animate-spin" /> : 'SIGN IN'}
       </button>
     </form>
   );
@@ -317,11 +339,11 @@ body {
 
 | Path | Purpose |
 | :--- | :--- |
-| [`src/lib/validations/auth.ts`](file:///a:/Github/F1Store/F1Store/src/lib/validations/auth.ts) | Zod validation rules & TypeScript types |
-| [`src/lib/auth.ts`](file:///a:/Github/F1Store/F1Store/src/lib/auth.ts) | NextAuth.js v5 setup, credentials provider & session callbacks |
-| [`src/app/api/auth/[...nextauth]/route.ts`](file:///a:/Github/F1Store/F1Store/src/app/api/auth/%5B...nextauth%5D/route.ts) | Next.js 14 catch-all authentication API route |
-| [`src/components/auth/AuthHeader.tsx`](file:///a:/Github/F1Store/F1Store/src/components/auth/AuthHeader.tsx) | Header with F1 branding and platform switcher toggle |
-| [`src/components/auth/LoginForm.tsx`](file:///a:/Github/F1Store/F1Store/src/components/auth/LoginForm.tsx) | Client form with validation, password toggle & submit states |
-| [`src/components/auth/SocialAuth.tsx`](file:///a:/Github/F1Store/F1Store/src/components/auth/SocialAuth.tsx) | Google & Apple OAuth sign-in options |
-| [`src/app/login/page.tsx`](file:///a:/Github/F1Store/F1Store/src/app/login/page.tsx) | Split-screen login layout with feature preview sidebar |
-| [`src/app/globals.css`](file:///a:/Github/F1Store/F1Store/src/app/globals.css) | F1 brand tokens, button glow utilities & glassmorphism |
+| [`src/lib/validations/auth.ts`](file:///a:/Github/F1Community/src/lib/validations/auth.ts) | Zod validation rules & TypeScript types |
+| [`src/lib/auth.ts`](file:///a:/Github/F1Community/src/lib/auth.ts) | NextAuth.js v4 setup, credentials provider & session callbacks |
+| [`src/app/api/auth/[...nextauth]/route.ts`](file:///a:/Github/F1Community/src/app/api/auth/%5B...nextauth%5D/route.ts) | Next.js 14 catch-all authentication API route |
+| [`src/components/auth/AuthHeader.tsx`](file:///a:/Github/F1Community/src/components/auth/AuthHeader.tsx) | Header with F1 branding and platform switcher toggle |
+| [`src/components/auth/LoginForm.tsx`](file:///a:/Github/F1Community/src/components/auth/LoginForm.tsx) | Client form with validation, password toggle & submit states |
+| [`src/components/auth/SocialAuth.tsx`](file:///a:/Github/F1Community/src/components/auth/SocialAuth.tsx) | Google & Apple OAuth sign-in options (stubs) |
+| [`src/app/login/page.tsx`](file:///a:/Github/F1Community/src/app/login/page.tsx) | F1 Philippines split-screen login layout with brand hub |
+| [`src/app/globals.css`](file:///a:/Github/F1Community/src/app/globals.css) | F1 brand tokens, button glow utilities & glassmorphism |

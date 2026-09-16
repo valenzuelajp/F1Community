@@ -17,15 +17,15 @@ Welcome to the F1Store project wiki. This serves as the central knowledge base f
 
 ## Project Links
 
-- **Repository**: `A:\Github\F1Store`
-- **Wiki Location**: `A:\Github\f1storewiki`
+- **Repository**: `A:\Github\F1Community` (GitHub: `valenzuelajp/F1Community`)
+- **Wiki Location**: `A:\Github\F1Community\f1storewiki`
 - **Live Site**: *TBD*
 
 ## Quick Status
 
-> **Last Updated**: 2026-08-28
-> **Current Phase**: Project Initialization
-> **Active Sprint**: Setup & Planning
+> **Last Updated**: 2026-09-16
+> **Current Phase**: Phase 0 - Foundation (~40%)
+> **Active Sprint**: Auth Completion + Foundation Cleanup
 
 ---
 

@@ -17,24 +17,24 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 
 ---
 
-## Current Sprint: Foundation Setup (Week of 2026-08-28)
+## Current Sprint: Auth Completion + Foundation Cleanup (Week of 2026-09-16)
 
 ### In Progress
 | Task | Label | Assignee | Notes |
 |------|-------|----------|-------|
-| Initialize Next.js project in F1Store repo | P0 | — | Done - Next.js 14 + App Router |
-| Configure TypeScript strict mode | P0 | — | Done |
-| Set up ESLint + Prettier + Husky | P0 | — | Done - Airbnb + prettier-plugin-tailwindcss |
-| Create base Prisma schema | P0 | — | Done - Product, Variant, Category, Team, Driver models |
+| Fix `prisma/seed.ts` typecheck (`username` drift schema vs client) | P0, bug | — | CI-blocking |
+| Create `prisma/migrations/` folder (CI runs `db:migrate deploy`) | P0 | — | First migration needed |
+| Build `/register` page + registration server action (bcrypt + DB) | P0, f1-store | — | Link exists in LoginForm; page missing (404) |
+| Wire NextAuth `authorize()` to Prisma user lookup | P0, f1-store | — | Replace mock check; seeded creds must work |
 
 ### Ready (Next Up)
 | Task | Label | Dependencies | Estimate |
 |------|-------|--------------|----------|
-| Configure GitHub Actions CI pipeline | P0 | Repo initialized | 2h |
-| Set up Vercel project & preview deployments | P0 | CI passing | 1h |
-| Create Docker Compose for PostgreSQL | P1 | Prisma schema | 1h |
+| Merge `Assets` branch (team/driver/track images) into main | P1 | Auth done | 30m |
+| Global layout (Header, Footer, Nav) w/ real routes | P1 | UI components | 3h |
 | Build base UI components (Button, Input, Card) | P1 | Tailwind configured | 4h |
-| Implement global layout (Header, Footer, Nav) | P1 | UI components | 3h |
+| Create route groups `(f1)` + `(shop)` | P0, f1-web | — | 1h |
+| F1 API clients (Jolpica, live, news) | P0, f1-web | Route groups | 3h |
 | Set up error tracking (Sentry) | P2 | Vercel deployed | 1h |
 | Configure analytics (PostHog) | P2 | Vercel deployed | 1h |
 
@@ -47,8 +47,8 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 | Design system tokens (colors, spacing, typography) | P1 | 3h | Figma → Tailwind config |
 | Set up Storybook | P2 | 2h | Document UI components |
 | Configure testing (Vitest + Playwright) | P2 | 3h | Unit + E2E |
-| Create `.env.example` with all required vars | P1 | 30m | Document each variable |
-| Set up database migration workflow | P1 | 1h | `prisma migrate dev` + seeding |
+| ✔ Create `.env.example` with all required vars | P1 | 30m | Done - committed |
+| Set up database migration workflow | P1 | 1h | `prisma migrate dev` + seeding (*migrations/ folder missing*) |
 | API contract (OpenAPI/Swagger) | P2 | 2h | For future mobile/integrations |
 | Configure font optimization (next/font) | P1 | 30m | Inter + F1 brand font |
 | Set up image optimization pipeline | P1 | 1h | Vercel Blob / Cloudinary |
@@ -59,6 +59,18 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 | **Create route groups: (f1) and (shop)** | P0, f1-web | 1h | `src/app/(f1)/`, `src/app/(shop)/` |
 | **Create shared navigation with dual nav** | P1, f1-web | 2h | Header with Website/Store toggle |
 | **Seed F1 reference data (teams, drivers, circuits)** | P1, f1-web | 2h | 2024/2025 season data |
+
+## Backlog - Auth / Registration (Pulled forward from Phase 3)
+
+| Task | Label | Estimate | Notes |
+|------|-------|----------|-------|
+| ~~Add `username` to User model OR remove from client~~ | P0, bug | 1h | Fix seed typecheck drift |
+| **Build `/register` page (shared auth layout)** | P0 | 3h | PR #2 only merged assets - code missing |
+| Registration server action (Zod + bcrypt + unique username) | P0 | 2h | `src/app/actions/auth.ts` |
+| NextAuth `authorize()` → Prisma user lookup (bcrypt compare) | P0 | 2h | Replace mock in `src/lib/auth.ts` |
+| Connect OAuth providers (Google, Apple) | P1 | 2h | Replace `SocialAuth` stubs |
+| Forgot-password / reset flow | P1 | 3h | `#forgot` link is a placeholder |
+| Demo user docs + auto-fill parity with seeded bcrypt users | P1 | 1h | LoginForm quick-fill uses `driver@f1-philippines.com` |
 
 ---
 
@@ -200,6 +212,13 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 | Update PROJECT_OVERVIEW with F1 Website scope | 2026-08-28 | Dual platform vision |
 | Update ROADMAP with phased F1 + Store plan | 2026-08-28 | 26-week roadmap |
 | Create F1_API_REFERENCE with all API endpoints and recommendations | 2026-08-28 | Jolpica, f1-live-api, RSS, RapidAPI documented |
+| F1-branded auth flow + login UI (NextAuth v4, Zod, `/login`) | 2026-09-02 | PR #1 - full login experience |
+| Prisma schema expanded for auth + store relations | 2026-09-02 | User/Account/Session + cart/order/collection linkage |
+| Seeded bcrypt demo users (admin + customer) | 2026-09-02 | `prisma/seed.ts` |
+| GitHub Actions CI pipeline | 2026-09-02 | lint, typecheck, test, build, e2e, Vercel deploy |
+| Docker Compose for PostgreSQL | 2026-09-02 | `docker-compose.yml` |
+| Figma design references exported (auth/store/account/schedules/admin) | 2026-09-15 | `assets/figma/` |
+| Team/driver/track image assets prepared | 2026-09-15 | `Assets` branch - **not yet merged to main** |
 
 ---
 
@@ -215,4 +234,4 @@ When adding new tasks, use this format:
 
 ---
 
-*Last updated: 2026-08-28 | Sprint review: Weekly (Sundays)*
+*Last updated: 2026-09-16 | Sprint review: Weekly (Sundays)*

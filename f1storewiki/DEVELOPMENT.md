@@ -309,4 +309,4 @@ When working with AI on this codebase:
 
 ---
 
-*Last updated: 2026-08-28 | Review: Monthly or on major stack changes*
+*Last updated: 2026-09-16 | Review: Monthly or on major stack changes*

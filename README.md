@@ -76,7 +76,7 @@ prisma/
 - **Language**: TypeScript (strict mode)
 - **Styling**: Tailwind CSS
 - **Database**: PostgreSQL + Prisma ORM
-- **Auth**: NextAuth.js v5
+- **Auth**: NextAuth.js v4 (v5 upgrade planned)
 - **Payments**: Stripe
 - **Testing**: Vitest + Playwright
 - **Hosting**: Vercel

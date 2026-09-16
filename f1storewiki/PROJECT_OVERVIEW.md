@@ -48,33 +48,11 @@ Build a comprehensive Formula 1 platform combining **F1 Website** (schedule, new
 
 ## Core Objectives
 
-1. **Authentic F1 Experience** - Official branding, team colors, driver collections
-2. **High Performance** - Fast load times, optimized for global CDN delivery
-3. **Scalable Architecture** - Handle traffic spikes during race weekends
+1. **Authentic F1 Experience** - Official branding, team colors, driver collections, real-time data
+2. **High Performance** - Fast load times, optimized for global CDN delivery, race-weekend scale
+3. **Scalable Architecture** - Handle traffic spikes during race weekends across both properties
 4. **Developer Experience** - Clean codebase, easy to maintain and extend
-
-## Target Audience
-
-- Formula 1 fans globally
-- Casual viewers converted during race weekends
-- Collectors seeking official merchandise
-
-## Scope
-
-### In Scope (MVP)
-- Product catalog (teams, drivers, categories)
-- Shopping cart & checkout
-- User accounts & order history
-- Admin dashboard for inventory management
-- Responsive design (mobile-first)
-- Search & filtering
-
-### Out of Scope (Future Phases)
-- Loyalty/rewards program
-- Live race integration
-- AR product visualization
-- Multi-language support (beyond EN)
-- Mobile app
+5. **Unified Platform** - Shared auth, design system, infrastructure across website and store
 
 ## Technical Stack (Proposed)
 
@@ -83,7 +61,7 @@ Build a comprehensive Formula 1 platform combining **F1 Website** (schedule, new
 | Frontend | Next.js 14+ (App Router) | React ecosystem, SSR/SSG, excellent DX |
 | Styling | Tailwind CSS | Utility-first, fast iteration, small bundle |
 | State | Zustand + TanStack Query | Lightweight, server state management |
-| Auth | NextAuth.js v5 | Built for Next.js, multiple providers |
+| Auth | NextAuth.js v4 (v5 upgrade planned) | Built for Next.js, multiple providers |
 | Database | PostgreSQL (Prisma ORM) | Relational, type-safe, mature ecosystem |
 | Payments | Stripe | Industry standard, global support |
 | Hosting | Vercel | Native Next.js support, edge network |
@@ -144,4 +122,6 @@ Build a comprehensive Formula 1 platform combining **F1 Website** (schedule, new
 
 ---
 
-*Document created: 2026-08-28 | Last updated: 2026-08-28*
+*Document created: 2026-08-28 | Last updated: 2026-09-16*
+
+> **Naming note**: Project rebranded to **F1 Philippines / F1Community** (see login UI). This doc still uses "F1 Platform / F1Store" terminology; update once branding is final.

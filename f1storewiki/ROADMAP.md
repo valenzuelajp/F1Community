@@ -25,29 +25,29 @@ Phase 4: Admin Dashboard (4 weeks) → Phase 5: Polish & Launch (4 weeks)
 ### Deliverables
 - [x] Next.js 14+ project with App Router
 - [x] TypeScript strict mode configured
-- [x] ESLint (Airbnb/Next.js) + Prettier
-- [x] Husky + lint-staged pre-commit
-- [x] GitHub Actions CI (lint, typecheck, test)
-- [x] Vercel preview deployments
-- [x] Prisma schema + PostgreSQL (Docker)
-- [x] Database migrations workflow
-- [x] Environment management (.env.local, .env.production)
-- [x] Base UI component library (Button, Input, Card, etc.)
-- [x] Design tokens (colors, spacing, typography)
-- [x] Global layout (Header, Footer, Navigation)
-- [x] Error boundaries & logging setup (Sentry)
-- [x] Analytics + error tracking initialized (PostHog)
+- [x] ESLint (Next.js) + Prettier
+- [x] GitHub Actions CI (lint, typecheck, test, build, e2e)
+- [x] Vercel preview deployments (workflow configured)
+- [x] Prisma schema (store + auth models)
+- [x] Prisma seed data (teams, drivers, products, demo users)
+- [ ] Database migrations workflow (**`prisma/migrations/` folder not created - CI blocker**)
+- [x] Environment management (.env.example)
+- [x] Global layout (F1 Philippines login page; shared Header/Footer/Nav pending real routes)
+- [x] **Auth scaffold + login UI** (NextAuth v4 + Zod + `/login`)
+- [ ] Error boundaries & logging setup (Sentry)
+- [ ] Analytics + error tracking initialized (PostHog)
 - [ ] **F1 API clients**: Jolpica (schedule), f1-live-api (live), News aggregator
-- [ ] **Extended Prisma schema**: Race, Circuit, NewsArticle, Team, Driver, Season
+- [ ] **Extended Prisma schema**: Race, Circuit, NewsArticle (F1 models)
 - [ ] **Route groups**: `(f1)` for website, `(shop)` for store
 - [ ] Shared navigation/header with dual navigation
 
 ### Technical Decisions (Mostly Made)
 - [x] CSS: Tailwind CSS
-- [x] State: Zustand + TanStack Query
-- [x] Forms: React Hook Form + Zod
-- [x] Images: Next/Image + Vercel Blob
-- [x] Fonts: next/font (Inter + F1 brand font)
+- [x] Auth (Phase 3 pulled forward): NextAuth v4 + Credentials + bcrypt + JWT
+- [ ] State: Zustand + TanStack Query (declared, not installed)
+- [ ] Forms: React Hook Form + Zod (RHF installed; React Hook Form ✅ in auth)
+- [ ] Images: Next/Image + Vercel Blob
+- [ ] Fonts: next/font (Inter + F1 brand font)
 - [x] F1 Schedule: Jolpica (free, no auth)
 - [x] F1 Live: f1-live-api (free tier)
 - [x] F1 News: RSS + RapidAPI fallback
@@ -333,4 +333,4 @@ Phase 4: Admin Dashboard (4 weeks) → Phase 5: Polish & Launch (4 weeks)
 
 ---
 
-*Last updated: 2026-08-28 | Review cadence: Weekly (Sundays)*
+*Last updated: 2026-09-16 | Review cadence: Weekly (Sundays)*

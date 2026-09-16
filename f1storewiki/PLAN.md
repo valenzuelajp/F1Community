@@ -1,5 +1,7 @@
 # 3D Cinematic Login Experience: Design & Implementation Plan
 
+> **Status**: ⏳ Not Implemented (as of 2026-09-16). The shipped login page (`src/app/login/page.tsx`) is a static F1 Philippines split-pane layout - no Three.js/3D canvas yet. Plan kept for future execution; re-prioritize after Phase 0 cleanup (registration + DB auth).
+
 ## Vision
 Transform the **F1 Platform Login Page** into a world-class, immersive **3D cinematic experience** combining cutting-edge WebGL graphics, dynamic camera movements, and Formula 1 aesthetics.
 
