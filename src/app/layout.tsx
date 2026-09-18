@@ -1,10 +1,18 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Anton } from 'next/font/google';
+import { AppShell } from '@/components/layout/AppShell';
 import './globals.css';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+  display: 'swap',
+});
+
+const anton = Anton({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-display',
   display: 'swap',
 });
 
@@ -62,15 +70,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html lang="en" className={`${inter.variable} ${anton.variable} antialiased`}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className="min-h-screen flex flex-col">
-        {children}
+      <body className="flex min-h-screen flex-col bg-[#0b0e14]">
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

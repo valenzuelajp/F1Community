@@ -12,6 +12,7 @@ Welcome to the F1Store project wiki. This serves as the central knowledge base f
 | [Task Board](TASKS.md) | Active tasks, backlog, and sprint tracking |
 | [Architecture Decisions](ARCHITECTURE.md) | Technical decisions and rationale (ADR log) |
 | [Development Guidelines](DEVELOPMENT.md) | Coding standards, workflows, and conventions |
+| [Current File Tree](FILE_TREE.md) | Current repository folders and files |
 | [F1 API Reference](F1_API_REFERENCE.md) | Formula 1 data sources, endpoints, and integration patterns |
 | [Figma MCP Setup](FIGMA_MCP_SETUP.md) | Connect Figma to opencode for design-to-code workflow |
 
