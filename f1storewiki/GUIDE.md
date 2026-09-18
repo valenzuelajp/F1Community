@@ -337,6 +337,8 @@ body {
 
 ## 7. File Directory Reference
 
+For the complete current repository tree, including assets, wiki files, Prisma files, public files, and source files, see [FILE_TREE.md](FILE_TREE.md). The structure below highlights the files most relevant to authentication.
+
 | Path | Purpose |
 | :--- | :--- |
 | [`src/lib/validations/auth.ts`](file:///a:/Github/F1Community/src/lib/validations/auth.ts) | Zod validation rules & TypeScript types |

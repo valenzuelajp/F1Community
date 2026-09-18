@@ -38,6 +38,8 @@
 - [x] F1 API reference documented (Jolpica, f1-live-api, RSS)
 - [x] **Auth scaffold**: NextAuth (v4) credentials provider, Zod validation, `/api/auth/[...nextauth]` route, JWT session
 - [x] **Auth UI**: F1-branded login page (`/login`), LoginForm, SocialAuth, AuthHeader, global F1 styling
+- [x] **Login visual pass**: angular black login tile, elevated two-column composition, and `imgSticker1.png` driver artwork beside the form
+- [x] **Repository documentation**: current file tree added in `FILE_TREE.md`
 - [x] Figma design exports added (`assets/figma/...` - login, store, account, schedules/standings, admin screens)
 - [ ] API contract defined (OpenAPI)
 - [ ] Component library chosen/created
@@ -59,7 +61,7 @@
 - [x] NextAuth credentials provider with Zod `loginSchema` validation
 - [x] `src/lib/auth.ts` (JWT strategy, role on token/session)
 - [x] `src/app/api/auth/[...nextauth]/route.ts`
-- [x] `src/app/login/page.tsx` - F1 Philippines split-pane layout (brand hub + login card)
+- [x] `src/app/login/page.tsx` - F1 Philippines layout with top navigation, driver sticker, and angular login tile
 - [x] `src/components/auth/LoginForm.tsx` (validated form, show/hide password, success/error alerts, demo quick-fill)
 - [x] `src/components/auth/SocialAuth.tsx` (Google/Apple stubs)
 - [x] `src/components/auth/AuthHeader.tsx` (F1/Store platform switcher)

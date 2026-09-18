@@ -219,6 +219,7 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 | Docker Compose for PostgreSQL | 2026-09-02 | `docker-compose.yml` |
 | Figma design references exported (auth/store/account/schedules/admin) | 2026-09-15 | `assets/figma/` |
 | Team/driver/track image assets prepared | 2026-09-15 | `Assets` branch - **not yet merged to main** |
+| Login visual pass + current repository file tree documentation | 2026-09-16 | `/login` uses `imgSticker1.png`; see `FILE_TREE.md` |
 
 ---
 

@@ -7,6 +7,17 @@
   --f1-red-hover: #e01500;
   --f1-dark: #0b0e14;
   --f1-card-bg: #11141e;
+  /* NEW: hero-card translucency + tire compound colors */
+  --f1-card-glass: rgba(17, 20, 30, 0.55);
+  --tire-soft: #ff1801;
+  --tire-medium: #ffd12e;
+  --tire-hard: #ffffff;
+  --tire-intermediate: #43b02a;
+  --tire-wet: #0067ad;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -18,10 +29,18 @@ body {
 
 /* Custom Racing Grid Background */
 .bg-racing-grid {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 32px 32px;
+}
+
+.f1-outline-title {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.08);
+  filter: drop-shadow(0 0 18px rgba(255, 24, 1, 0.15));
+  letter-spacing: -0.08em;
 }
 
 /* Glowing Effects */
