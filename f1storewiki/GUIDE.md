@@ -62,7 +62,8 @@ A user logs in **once** and gains access to both their favorite teams/standings 
          ▼
 [ authorize() in src/lib/auth.ts ]
    ├── Runs server-side Zod validation
-   ├── Checks user against Database (Prisma)   ← TODO: currently a mock check
+   ├── Looks up the user by email via Prisma (src/lib/db.ts)
+   ├── Verifies password with bcrypt.compare (constant-time)
    └── Returns user object or null
          │
          ▼
@@ -89,7 +90,9 @@ Configures authentication providers (Credentials), session strategies, and callb
 ```typescript
 import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { compare } from 'bcryptjs';
 import { loginSchema } from '@/lib/validations/auth';
+import { db } from '@/lib/db'; // shared PrismaClient singleton
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -107,18 +110,23 @@ export const authOptions: AuthOptions = {
 
         const { email, password } = validatedFields.data;
 
-        // 2. TODO (Phase 3): look up user via Prisma + bcrypt.compare
-        //    Currently a demo check — seeded bcrypt users don't log in yet.
-        if (email && password.length >= 6) {
-          return {
-            id: 'f1-fan-1',
-            name: 'Lewis Fan',
-            email: email,
-            image: '/avatars/driver-placeholder.jpg',
-            role: 'CUSTOMER',
-          };
-        }
-        return null; // Triggers invalid credentials error
+        // 2. Look up the user by email in the database
+        const user = await db.user.findUnique({
+          where: { email },
+          select: {
+            id: true, email: true, username: true, name: true,
+            image: true, role: true, passwordHash: true, emailVerified: true,
+          },
+        });
+        if (!user || !user.passwordHash) return null; // no user / OAuth-only account
+
+        // 3. Constant-time bcrypt comparison
+        const passwordMatches = await compare(password, user.passwordHash);
+        if (!passwordMatches) return null;
+
+        // 4. Return user object; jwt callback adds id + role to the token
+        return { id: user.id, name: user.name ?? user.username, email: user.email,
+                 image: user.image ?? undefined, role: user.role };
       },
     }),
   ],
@@ -146,6 +154,15 @@ export const authOptions: AuthOptions = {
   },
 };
 ```
+
+### Registration (mirror of the login flow)
+
+`/register` uses the same three-layer pattern: **client** `RegisterForm`
+(React Hook Form + `registerSchema`) → **server action** `registerUser` in
+`src/app/actions/auth.ts` (re-validates with the same Zod schema, `hash(password, 12)`,
+then `db.user.create`). A failed unique constraint (`P2002` on `email` or `username`)
+returns a friendly "already taken" message instead of crashing. Success redirects to
+`/login?registered=1`. All three layers in one file each — nothing shared, nothing hidden.
 
 ---
 
@@ -337,15 +354,21 @@ body {
 
 ## 7. File Directory Reference
 
-For the complete current repository tree, including assets, wiki files, Prisma files, public files, and source files, see [FILE_TREE.md](FILE_TREE.md). The structure below highlights the files most relevant to authentication.
+For the complete current repository tree, including assets, wiki files, Prisma files, public files, and source files, see [FILE_TREE.md](FILE_TREE.md). The structure below highlights the files most relevant to authentication and the database.
 
 | Path | Purpose |
 | :--- | :--- |
-| [`src/lib/validations/auth.ts`](file:///a:/Github/F1Community/src/lib/validations/auth.ts) | Zod validation rules & TypeScript types |
+| [`src/lib/validations/auth.ts`](file:///a:/Github/F1Community/src/lib/validations/auth.ts) | Zod validation rules (`loginSchema`, `registerSchema`) & TypeScript types |
 | [`src/lib/auth.ts`](file:///a:/Github/F1Community/src/lib/auth.ts) | NextAuth.js v4 setup, credentials provider & session callbacks |
+| [`src/lib/db.ts`](file:///a:/Github/F1Community/src/lib/db.ts) | Shared PrismaClient singleton |
+| [`src/app/actions/auth.ts`](file:///a:/Github/F1Community/src/app/actions/auth.ts) | Registration server action (Zod + bcrypt + DB insert) |
 | [`src/app/api/auth/[...nextauth]/route.ts`](file:///a:/Github/F1Community/src/app/api/auth/%5B...nextauth%5D/route.ts) | Next.js 14 catch-all authentication API route |
 | [`src/components/auth/AuthHeader.tsx`](file:///a:/Github/F1Community/src/components/auth/AuthHeader.tsx) | Header with F1 branding and platform switcher toggle |
 | [`src/components/auth/LoginForm.tsx`](file:///a:/Github/F1Community/src/components/auth/LoginForm.tsx) | Client form with validation, password toggle & submit states |
+| [`src/components/auth/RegisterForm.tsx`](file:///a:/Github/F1Community/src/components/auth/RegisterForm.tsx) | Client registration form (name/username/email/password) |
 | [`src/components/auth/SocialAuth.tsx`](file:///a:/Github/F1Community/src/components/auth/SocialAuth.tsx) | Google & Apple OAuth sign-in options (stubs) |
 | [`src/app/login/page.tsx`](file:///a:/Github/F1Community/src/app/login/page.tsx) | F1 Philippines split-screen login layout with brand hub |
+| [`src/app/register/page.tsx`](file:///a:/Github/F1Community/src/app/register/page.tsx) | Registration page (same visual language as login) |
 | [`src/app/globals.css`](file:///a:/Github/F1Community/src/app/globals.css) | F1 brand tokens, button glow utilities & glassmorphism |
+| [`prisma/schema.prisma`](file:///a:/Github/F1Community/prisma/schema.prisma) | Database models (User/Account/Session + store catalog) |
+| [`prisma/seed.ts`](file:///a:/Github/F1Community/prisma/seed.ts) | Dev seed: teams/drivers/products + bcrypt demo users |

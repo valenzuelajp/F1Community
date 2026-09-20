@@ -22,21 +22,26 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 ### In Progress
 | Task | Label | Assignee | Notes |
 |------|-------|----------|-------|
-| Fix `prisma/seed.ts` typecheck (`username` drift schema vs client) | P0, bug | — | CI-blocking |
-| Create `prisma/migrations/` folder (CI runs `db:migrate deploy`) | P0 | — | First migration needed |
-| Build `/register` page + registration server action (bcrypt + DB) | P0, f1-store | — | Link exists in LoginForm; page missing (404) |
-| Wire NextAuth `authorize()` to Prisma user lookup | P0, f1-store | — | Replace mock check; seeded creds must work |
+| Fix `pnpm lint`: `eslint-config-next@16.3.4` (eslint 9/flat) vs `eslint@8.57.1` + Next 14.2.35 | P0, tech-debt | — | Pin `eslint-config-next@^14` or upgrade eslint to 9; CI lint job is red pre-existing |
+| Merge `Assets` branch (team/driver/track images) into main | P1 | — | 30m |
+| Add auth hardening: rate limit `/api/auth/callback/credentials` + `/register` (5/min/IP) | P0, security | — | See `SECURITY.md` P0 list |
+| Add CSP + cookie hardening via `next.config.js` headers | P0, security | — | See `SECURITY.md` P0 list |
 
 ### Ready (Next Up)
 | Task | Label | Dependencies | Estimate |
 |------|-------|--------------|----------|
-| Merge `Assets` branch (team/driver/track images) into main | P1 | Auth done | 30m |
 | Global layout (Header, Footer, Nav) w/ real routes | P1 | UI components | 3h |
 | Build base UI components (Button, Input, Card) | P1 | Tailwind configured | 4h |
 | Create route groups `(f1)` + `(shop)` | P0, f1-web | — | 1h |
 | F1 API clients (Jolpica, live, news) | P0, f1-web | Route groups | 3h |
 | Set up error tracking (Sentry) | P2 | Vercel deployed | 1h |
 | Configure analytics (PostHog) | P2 | Vercel deployed | 1h |
+
+### Completed This Sprint
+| Task | Completed | Notes |
+|------|-----------|-------|
+| Full-width F1 login landing page | 2026-09-20 | `/` now redirects to `/login`; race-week hero, angular auth card, timing ticker, and partner bar use existing local assets. See `LOGIN_LANDING_PAGE.md`. |
+| Preserve post-login navigation | 2026-09-20 | Default credentials sign-in now goes to `/home`, avoiding the root-to-login redirect loop. |
 
 ---
 
@@ -48,10 +53,12 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 | Set up Storybook | P2 | 2h | Document UI components |
 | Configure testing (Vitest + Playwright) | P2 | 3h | Unit + E2E |
 | ✔ Create `.env.example` with all required vars | P1 | 30m | Done - committed |
-| Set up database migration workflow | P1 | 1h | `prisma migrate dev` + seeding (*migrations/ folder missing*) |
+| Set up database migration workflow | P1 | 1h | ✅ `prisma/migrations/` baseline created 2026-09-18 (*was*: `migrations/` folder missing) |
 | API contract (OpenAPI/Swagger) | P2 | 2h | For future mobile/integrations |
 | Configure font optimization (next/font) | P1 | 30m | Inter + F1 brand font |
 | Set up image optimization pipeline | P1 | 1h | Vercel Blob / Cloudinary |
+| **Fix repo-level lint** (`eslint-config-next@16` vs `eslint@8`/Next 14) | P0, tech-debt | 1h | `pnpm lint` red pre-existing on main |
+| **Auth hardening** (rate limit, CSP, cookie flags, email verify) | P0, security | 4h | See `SECURITY.md` |
 | **Create F1 API client: Jolpica (schedule/standings)** | P0, f1-web | 3h | `src/lib/f1/jolpica.ts` |
 | **Create F1 API client: f1-live-api (live timing)** | P0, f1-web | 3h | `src/lib/f1/live.ts` |
 | **Create F1 API client: News aggregator (RSS + RapidAPI)** | P1, f1-web | 4h | `src/lib/f1/news.ts` |
@@ -64,13 +71,14 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 
 | Task | Label | Estimate | Notes |
 |------|-------|----------|-------|
-| ~~Add `username` to User model OR remove from client~~ | P0, bug | 1h | Fix seed typecheck drift |
-| **Build `/register` page (shared auth layout)** | P0 | 3h | PR #2 only merged assets - code missing |
-| Registration server action (Zod + bcrypt + unique username) | P0 | 2h | `src/app/actions/auth.ts` |
-| NextAuth `authorize()` → Prisma user lookup (bcrypt compare) | P0 | 2h | Replace mock in `src/lib/auth.ts` |
+| ~~Add `username` to User model AND client (schema drift fix)~~ | P0, bug | 1h | ✅ 2026-09-18 — `username` added to schema, client regenerated, seed supplies it |
+| ~~Build `/register` page (shared auth layout)~~ | P0 | 3h | ✅ 2026-09-18 — page + `RegisterForm` built, verified E2E |
+| ~~Registration server action (Zod + bcrypt + unique username)~~ | P0 | 2h | ✅ 2026-09-18 — `src/app/actions/auth.ts` (P2002 duplicates handled) |
+| ~~NextAuth `authorize()` → Prisma user lookup (bcrypt compare)~~ | P0 | 2h | ✅ 2026-09-18 — verified live with seeded creds |
+| ~~Create `prisma/migrations/` baseline (CI `db:migrate deploy`)~~ | P0 | 1h | ✅ 2026-09-18 — `20260915024910_community_init`, status = up to date |
 | Connect OAuth providers (Google, Apple) | P1 | 2h | Replace `SocialAuth` stubs |
 | Forgot-password / reset flow | P1 | 3h | `#forgot` link is a placeholder |
-| Demo user docs + auto-fill parity with seeded bcrypt users | P1 | 1h | LoginForm quick-fill uses `driver@f1-philippines.com` |
+| Demo user docs + auto-fill parity with seeded bcrypt users | P1 | 1h | ✅ quick-fill now `customer@f1store.com`/`customer123` |
 
 ---
 
@@ -220,6 +228,12 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 | Figma design references exported (auth/store/account/schedules/admin) | 2026-09-15 | `assets/figma/` |
 | Team/driver/track image assets prepared | 2026-09-15 | `Assets` branch - **not yet merged to main** |
 | Login visual pass + current repository file tree documentation | 2026-09-16 | `/login` uses `imgSticker1.png`; see `FILE_TREE.md` |
+| DB-backed login (`authorize()` → Prisma + bcrypt) | 2026-09-18 | Verified live; seeded creds sign in, JWT carries real user + role |
+| `/register` page + registration server action | 2026-09-18 | `src/app/actions/auth.ts`; duplicate email/username friendly error |
+| Prisma schema/client/DB reconciliation (`username`) | 2026-09-18 | `prisma generate` + seed updated; typecheck green |
+| `prisma/migrations/` baseline for CI | 2026-09-18 | `20260915024910_community_init`; `migrate status`: up to date |
+| Security plan + database guide wiki docs | 2026-09-18 | `SECURITY.md`, `DATABASE.md` |
+| Full-width F1 login landing page + root redirect | 2026-09-20 | `/login` is the visitor entry page; plan and implementation are recorded in `LOGIN_LANDING_PAGE.md` |
 
 ---
 
@@ -235,4 +249,4 @@ When adding new tasks, use this format:
 
 ---
 
-*Last updated: 2026-09-16 | Sprint review: Weekly (Sundays)*
+*Last updated: 2026-09-20 | Sprint review: Weekly (Sundays)*

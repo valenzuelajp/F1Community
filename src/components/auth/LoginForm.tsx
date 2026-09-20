@@ -41,7 +41,7 @@ export function LoginForm() {
       if (result?.error) {
         setAuthError('Invalid credentials. Please check your email and password.');
       } else {
-        const callbackUrl = new URLSearchParams(window.location.search).get('callbackUrl') || '/';
+        const callbackUrl = new URLSearchParams(window.location.search).get('callbackUrl') || '/home';
         window.location.assign(callbackUrl);
       }
     } catch {
@@ -157,8 +157,8 @@ export function LoginForm() {
         <button
           type="button"
           onClick={() => {
-            setValue('email', 'driver@f1-philippines.com');
-            setValue('password', 'racing2026!');
+            setValue('email', 'customer@f1store.com');
+            setValue('password', 'customer123');
           }}
           className="flex w-full items-center justify-center gap-2 rounded-md border border-white/10 bg-[#0b1017] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 transition-colors hover:border-white/20 hover:text-white"
         >

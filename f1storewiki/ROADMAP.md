@@ -30,20 +30,21 @@ Phase 4: Admin Dashboard (4 weeks) → Phase 5: Polish & Launch (4 weeks)
 - [x] Vercel preview deployments (workflow configured)
 - [x] Prisma schema (store + auth models)
 - [x] Prisma seed data (teams, drivers, products, demo users)
-- [ ] Database migrations workflow (**`prisma/migrations/` folder not created - CI blocker**)
+- [x] Database migrations workflow (baseline `20260915024910_community_init` in `prisma/migrations/`)
 - [x] Environment management (.env.example)
 - [x] Global layout (F1 Philippines login page; shared Header/Footer/Nav pending real routes)
-- [x] **Auth scaffold + login UI** (NextAuth v4 + Zod + `/login`)
+- [x] **Auth: DB-backed login + `/register`** (NextAuth v4 + Zod + bcrypt + Prisma; verified 2026-09-18)
 - [ ] Error boundaries & logging setup (Sentry)
 - [ ] Analytics + error tracking initialized (PostHog)
 - [ ] **F1 API clients**: Jolpica (schedule), f1-live-api (live), News aggregator
 - [ ] **Extended Prisma schema**: Race, Circuit, NewsArticle (F1 models)
 - [ ] **Route groups**: `(f1)` for website, `(shop)` for store
 - [ ] Shared navigation/header with dual navigation
+- [ ] **Auth hardening** (rate limit, CSP, cookie flags) — per SECURITY.md
 
 ### Technical Decisions (Mostly Made)
 - [x] CSS: Tailwind CSS
-- [x] Auth (Phase 3 pulled forward): NextAuth v4 + Credentials + bcrypt + JWT
+- [x] Auth (Phase 3 pulled forward): NextAuth v4 + Credentials + bcrypt + JWT (+ DB-backed 2026-09-18)
 - [ ] State: Zustand + TanStack Query (declared, not installed)
 - [ ] Forms: React Hook Form + Zod (RHF installed; React Hook Form ✅ in auth)
 - [ ] Images: Next/Image + Vercel Blob
@@ -333,4 +334,4 @@ Phase 4: Admin Dashboard (4 weeks) → Phase 5: Polish & Launch (4 weeks)
 
 ---
 
-*Last updated: 2026-09-16 | Review cadence: Weekly (Sundays)*
+*Last updated: 2026-09-18 | Review cadence: Weekly (Sundays)*

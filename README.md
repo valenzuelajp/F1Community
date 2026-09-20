@@ -19,14 +19,11 @@ pnpm install
 
 # Set up environment
 cp .env.example .env.local
-# Edit .env.local with your values
+# Edit .env.local with your values (DATABASE_URL → Neon, NEXTAUTH_SECRET)
 
-# Start database (if using Docker)
-docker compose up -d
-
-# Set up database
+# Set up database (migrations already checked in)
 pnpm db:generate
-pnpm db:migrate
+pnpm db:migrate deploy   # or pnpm db:migrate in dev
 pnpm db:seed
 
 # Start development server
@@ -34,6 +31,15 @@ pnpm dev
 ```
 
 Visit `http://localhost:3000`
+
+## Demo Accounts (from `pnpm db:seed`)
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@f1store.com` | `admin123` |
+| Customer | `customer@f1store.com` | `customer123` |
+
+The Login page's **Demo credentials** button auto-fills the customer account.
 
 ## Project Structure
 
@@ -86,6 +92,8 @@ prisma/
 - **Wiki**: See `../f1storewiki` for project tracking, roadmap, and decisions
 - **ADRs**: Architecture Decision Records in `../f1storewiki/ARCHITECTURE.md`
 - **Development Guidelines**: `../f1storewiki/DEVELOPMENT.md`
+- **Security Plan**: `../f1storewiki/SECURITY.md`
+- **Database Guide**: `../f1storewiki/DATABASE.md`
 
 ## Contributing
 

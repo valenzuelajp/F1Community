@@ -6,11 +6,11 @@ import { SiteFooter } from '@/components/layout/SiteFooter';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isLoginPage = pathname === '/login';
+  const isAuthPage = pathname === '/login' || pathname === '/register';
 
   return (
     <>
-      {!isLoginPage && <SiteHeader />}
+      {!isAuthPage && <SiteHeader />}
       {children}
       <SiteFooter />
     </>

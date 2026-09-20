@@ -12,9 +12,12 @@ Welcome to the F1Store project wiki. This serves as the central knowledge base f
 | [Task Board](TASKS.md) | Active tasks, backlog, and sprint tracking |
 | [Architecture Decisions](ARCHITECTURE.md) | Technical decisions and rationale (ADR log) |
 | [Development Guidelines](DEVELOPMENT.md) | Coding standards, workflows, and conventions |
+| [Security Plan](SECURITY.md) | Threat model, implemented auth controls, staged hardening checklist |
+| [Database Guide](DATABASE.md) | How the Neon + Prisma database works and how to control it |
 | [Current File Tree](FILE_TREE.md) | Current repository folders and files |
 | [F1 API Reference](F1_API_REFERENCE.md) | Formula 1 data sources, endpoints, and integration patterns |
 | [Figma MCP Setup](FIGMA_MCP_SETUP.md) | Connect Figma to opencode for design-to-code workflow |
+| [Login Landing Page](LOGIN_LANDING_PAGE.md) | 2026-09-20 plan, implementation, validation, and follow-up |
 
 ## Project Links
 
@@ -24,9 +27,10 @@ Welcome to the F1Store project wiki. This serves as the central knowledge base f
 
 ## Quick Status
 
-> **Last Updated**: 2026-09-16
-> **Current Phase**: Phase 0 - Foundation (~40%)
+> **Last Updated**: 2026-09-18
+> **Current Phase**: Phase 0 - Foundation (~50%)
 > **Active Sprint**: Auth Completion + Foundation Cleanup
+> **Latest**: DB-backed login + `/register` are live in code (verified end-to-end); migration baseline created; lint infra has a pre-existing config mismatch (see TASKS.md)
 
 ---
 
