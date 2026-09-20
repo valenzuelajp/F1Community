@@ -61,23 +61,24 @@ Use **Tailwind CSS v3+** with Tailwind UI / Headless UI for components.
 ---
 
 ## ADR-003: Database - PostgreSQL + Prisma ORM
-**Date**: 2026-08-28 | **Status**: Proposed
+**Date**: 2026-08-28 | **Status**: Accepted
 
 ### Context
 Need type-safe database access, migrations, relational data for products/orders.
 
 ### Decision
-**PostgreSQL** (via Docker locally, managed in prod) with **Prisma ORM**.
+**PostgreSQL** (managed via **Neon**, formerly Docker-local, with Prisma ORM). Migrations are
+version-controlled in `prisma/migrations/` (baseline applied 2026-09-18).
 
 ### Consequences
 - ✅ End-to-end type safety (DB → API → UI)
 - ✅ Prisma Migrate = version-controlled schema
 - ✅ Prisma Studio = visual DB management
 - ✅ PostgreSQL = mature, JSON support, full-text search
-- ✅ Connection pooling (PgBouncer) for serverless
+- ✅ Neon = managed pooling, PITR backups, branch previews
 - ⚠️ Prisma adds build-time dependency
-- ⚠️ Cold starts with serverless (mitigate with pooling)
-- ⚠️ Learning curve for complex queries
+- ⚠️ Cold starts with serverless (mitigate with pooler + singleton client)
+- ⚠️ Env/schema drift risk — keep schema.prisma ↔ DB in sync (see DATABASE.md)
 
 ### Alternatives Considered
 - Drizzle ORM: Lighter, but less mature ecosystem
@@ -121,13 +122,20 @@ Need auth for customers + admins, multiple providers, session management.
 **NextAuth.js v4** with credentials + OAuth providers (installed `next-auth@^4.24.15`). Upgrade to **v5 (Auth.js)** remains a planned follow-up; the original v5 ADR is archived below.
 
 > Superseded note (2026-09-16): production code on `main` implements NextAuth.js **v4** (`authOptions` + `NextAuth(authOptions)` route handler). See TASKS.md for the v5 upgrade item. The v5 proposal text is preserved here for reference.
+>
+> Update (2026-09-18): `authorize()` is now **DB-backed** — Prisma user lookup
+> (`src/lib/db.ts` singleton) + `bcrypt.compare` against `passwordHash`. Registration
+> server action lives in `src/app/actions/auth.ts`. The v4 docs in `GUIDE.md` match
+> the shipped code.
 
 ### Consequences
 - ✅ Built for Next.js (works with App Router route handler pattern)
 - ✅ Multiple providers (Google, Apple, Email, Credentials)
 - ✅ JWT sessions + callback hooks
+- ✅ DB-backed `authorize()` (Prisma + bcrypt, verified 2026-09-18)
+- ✅ Registration server action (`src/app/actions/auth.ts`) with unique-aware error handling
 - ⚠️ v4 API differs from v5 (`handlers`, `auth()` middleware) - docs updated to match v4
-- ⚠️ `authorize()` currently uses a mock check; DB lookup is a known TODO
+- ⚠️ OAuth providers still stubs; password reset flow pending
 
 ### Alternatives Considered
 - Clerk: Great DX, but paid at scale
@@ -426,7 +434,7 @@ Use Next.js Route Groups:
 |-----|-------|--------|------|
 | 001 | Next.js 14+ App Router | Accepted | 2026-08-28 |
 | 002 | Tailwind CSS | Proposed | 2026-08-28 |
-| 003 | PostgreSQL + Prisma | Proposed | 2026-08-28 |
+| 003 | PostgreSQL + Prisma (Neon) | Accepted | 2026-08-28 |
 | 004 | Zustand + TanStack Query | Proposed | 2026-08-28 |
 | 005 | NextAuth.js v4 (v5 upgrade planned) | Superseded | 2026-08-28 |
 | 006 | Stripe Payments | Accepted | 2026-08-28 |
