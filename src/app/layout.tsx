@@ -17,6 +17,7 @@ const anton = Anton({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
   title: {
     default: 'F1Store - Official Formula 1 Merchandise',
     template: '%s | F1Store',

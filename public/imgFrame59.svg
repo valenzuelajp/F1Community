@@ -1,0 +1,19 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="114" height="43" viewBox="0 0 114 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 59">
+<g id="Rectangle 423">
+<mask id="path-1-inside-1_0_919" fill="white">
+<path d="M16.5 0H33L16.5 43H0L16.5 0Z"/>
+</mask>
+<g clip-path="url(#paint0_diamond_0_919_clip_path)" data-figma-skip-parse="true" mask="url(#path-1-inside-1_0_919)"><g transform="matrix(0.0219 -0.0117079 0.0563101 0.0530325 11.1 19.5842)"><rect x="0" y="0" width="1303.65" height="440.943" fill="url(#paint0_diamond_0_919)" opacity="1" shape-rendering="crispEdges"/><rect x="0" y="0" width="1303.65" height="440.943" transform="scale(1 -1)" fill="url(#paint0_diamond_0_919)" opacity="1" shape-rendering="crispEdges"/><rect x="0" y="0" width="1303.65" height="440.943" transform="scale(-1 1)" fill="url(#paint0_diamond_0_919)" opacity="1" shape-rendering="crispEdges"/><rect x="0" y="0" width="1303.65" height="440.943" transform="scale(-1)" fill="url(#paint0_diamond_0_919)" opacity="1" shape-rendering="crispEdges"/></g></g><path d="M16.5 0V-1H15.8126L15.5664 -0.358251L16.5 0ZM33 0L33.9336 0.358251L34.4548 -1H33V0ZM16.5 43V44H17.1874L17.4336 43.3582L16.5 43ZM0 43L-0.933625 42.6417L-1.45481 44H0V43ZM16.5 0V1H33V0V-1H16.5V0ZM33 0L32.0664 -0.358251L15.5664 42.6417L16.5 43L17.4336 43.3582L33.9336 0.358251L33 0ZM16.5 43V42H0V43V44H16.5V43ZM0 43L0.933625 43.3582L17.4336 0.358251L16.5 0L15.5664 -0.358251L-0.933625 42.6417L0 43Z" data-figma-gradient-fill="{&#34;type&#34;:&#34;GRADIENT_DIAMOND&#34;,&#34;stops&#34;:[{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.26442307233810425,&#34;b&#34;:0.26442307233810425,&#34;a&#34;:1.0},&#34;position&#34;:0.23076923191547394},{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.036858778446912766,&#34;b&#34;:0.036858778446912766,&#34;a&#34;:0.0},&#34;position&#34;:1.0}],&#34;transform&#34;:{&#34;m00&#34;:43.799999237060547,&#34;m01&#34;:112.62010955810547,&#34;m02&#34;:-67.110054016113281,&#34;m10&#34;:-23.415847778320312,&#34;m11&#34;:106.06491851806641,&#34;m12&#34;:-21.740379333496094},&#34;opacity&#34;:1.0,&#34;blendMode&#34;:&#34;NORMAL&#34;,&#34;stopsVar&#34;:[{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.26442307233810425,&#34;b&#34;:0.26442307233810425,&#34;a&#34;:1.0},&#34;position&#34;:0.23076923191547394},{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.036858778446912766,&#34;b&#34;:0.036858778446912766,&#34;a&#34;:0.0},&#34;position&#34;:1.0}],&#34;visible&#34;:true}" mask="url(#path-1-inside-1_0_919)"/>
+</g>
+<path id="Rectangle 424" d="M43.5 0H60L43.5 43H27L43.5 0Z" fill="#EA0C16"/>
+<path id="Rectangle 425" d="M70.5 0H87L70.5 43H54L70.5 0Z" fill="#EA0C16"/>
+<path id="Rectangle 426" d="M97.5 0H114L97.5 43H81L97.5 0Z" fill="#EA0C16"/>
+</g>
+<defs>
+<clipPath id="paint0_diamond_0_919_clip_path"><path d="M16.5 0V-1H15.8126L15.5664 -0.358251L16.5 0ZM33 0L33.9336 0.358251L34.4548 -1H33V0ZM16.5 43V44H17.1874L17.4336 43.3582L16.5 43ZM0 43L-0.933625 42.6417L-1.45481 44H0V43ZM16.5 0V1H33V0V-1H16.5V0ZM33 0L32.0664 -0.358251L15.5664 42.6417L16.5 43L17.4336 43.3582L33.9336 0.358251L33 0ZM16.5 43V42H0V43V44H16.5V43ZM0 43L0.933625 43.3582L17.4336 0.358251L16.5 0L15.5664 -0.358251L-0.933625 42.6417L0 43Z"/></clipPath><linearGradient id="paint0_diamond_0_919" x1="0" y1="0" x2="500" y2="500" gradientUnits="userSpaceOnUse">
+<stop offset="0.230769" stop-color="#FF4343"/>
+<stop offset="1" stop-color="#FF0909" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>
