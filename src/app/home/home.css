@@ -3,7 +3,7 @@
    Cleanly separated for simple reading, editing, and teammate onboarding.
    ========================================================================== */
 
-.home-page {
+.page {
   position: relative;
   flex: 1 1 0%;
   overflow: hidden;
@@ -11,7 +11,7 @@
   color: #e5e7eb;
 }
 
-.home-radial-light {
+.page__glow {
   pointer-events: none;
   position: absolute;
   left: 25%;
@@ -23,11 +23,11 @@
   filter: blur(48px);
 }
 
-.home-hero-section {
+.hero {
   position: relative;
 }
 
-.home-hero-container {
+.hero__inner {
   position: relative;
   margin: 0 auto;
   width: 100%;
@@ -37,19 +37,19 @@
 }
 
 @media (min-width: 640px) {
-  .home-hero-container {
+  .hero__inner {
     padding-left: 2.5rem;
     padding-right: 2.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .home-hero-container {
+  .hero__inner {
     padding: 7rem 4rem;
   }
 }
 
-.home-pill-badge {
+.hero__badge {
   margin-bottom: 1.5rem;
   display: inline-flex;
   align-items: center;
@@ -65,7 +65,7 @@
   color: #f87171;
 }
 
-.home-hero-headline {
+.hero__headline {
   font-size: 2.25rem;
   font-weight: 800;
   line-height: 1;
@@ -73,12 +73,12 @@
 }
 
 @media (min-width: 640px) {
-  .home-hero-headline {
+  .hero__headline {
     font-size: 3.75rem;
   }
 }
 
-.home-hero-subtext {
+.hero__subtext {
   margin: 1.5rem auto 0;
   max-width: 42rem;
   font-size: 0.875rem;
@@ -87,12 +87,12 @@
 }
 
 @media (min-width: 640px) {
-  .home-hero-subtext {
+  .hero__subtext {
     font-size: 1rem;
   }
 }
 
-.home-actions-group {
+.hero__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -101,7 +101,7 @@
   padding-top: 2rem;
 }
 
-.home-btn-primary {
+.hero__btn--primary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -117,11 +117,11 @@
   transition: opacity 0.15s ease, filter 0.15s ease;
 }
 
-.home-btn-primary:hover {
+.hero__btn--primary:hover {
   filter: brightness(1.1);
 }
 
-.home-btn-secondary {
+.hero__btn--secondary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -137,6 +137,6 @@
   transition: background-color 0.15s ease;
 }
 
-.home-btn-secondary:hover {
+.hero__btn--secondary:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }

@@ -4,7 +4,7 @@
    ========================================================================== */
 
 /* Overall Page */
-.login-viewport {
+.page {
   position: relative;
   min-height: 100vh;
   width: 100%;
@@ -13,178 +13,8 @@
   overflow-x: hidden;
 }
 
-/* --- Top Navigation Header --- */
-.login-header {
-  position: relative;
-  z-index: 40;
-  width: 100%;
-  background-color: #000000;
-  border-bottom: 2px solid #ffffff;
-}
-
-.login-header-inner {
-  display: flex;
-  height: 58px;
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
-}
-
-@media (min-width: 640px) {
-  .login-header-inner {
-    height: 64px;
-    padding: 0 1.75rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .login-header-inner {
-    height: 72px;
-    padding: 0 3.5rem;
-  }
-}
-
-.login-logo {
-  position: relative;
-  height: 32px;
-  width: 115px;
-}
-
-@media (min-width: 640px) {
-  .login-logo {
-    height: 42px;
-    width: 155px;
-  }
-}
-
-/* Nav items centered or right */
-.login-nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-@media (min-width: 1024px) {
-  .login-nav {
-    gap: 2.25rem;
-  }
-}
-
-.login-nav-items {
-  display: none;
-  align-items: center;
-  gap: 1.25rem;
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #ffffff;
-}
-
-@media (min-width: 768px) {
-  .login-nav-items {
-    display: flex;
-  }
-}
-
-.login-nav-link {
-  transition: color 0.15s ease;
-}
-
-.login-nav-link:hover {
-  color: #ff1801;
-}
-
-.login-nav-divider {
-  display: inline-block;
-  height: 18px;
-  width: 2px;
-  background-color: #ffffff;
-}
-
-/* Buttons on right: SALE & MENU */
-.login-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .login-header-actions {
-    gap: 0.85rem;
-  }
-}
-
-.login-sale-pill {
-  display: flex;
-  height: 30px;
-  min-width: 64px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  background-color: #ffffff;
-  padding: 0 0.85rem;
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #000000;
-  transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-@media (min-width: 640px) {
-  .login-sale-pill {
-    height: 34px;
-    min-width: 80px;
-    padding: 0 1.25rem;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-  }
-}
-
-.login-sale-pill:hover {
-  background-color: #f3f3f3;
-  transform: translateY(-1px);
-}
-
-.login-menu-pill {
-  display: flex;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  border-radius: 9999px;
-  background-color: #ffffff;
-  padding: 0 0.85rem;
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #000000;
-  cursor: pointer;
-  border: none;
-  transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-@media (min-width: 640px) {
-  .login-menu-pill {
-    height: 34px;
-    padding: 0 1.25rem;
-    font-size: 11px;
-    gap: 0.5rem;
-  }
-}
-
-.login-menu-pill:hover {
-  background-color: #f3f3f3;
-  transform: translateY(-1px);
-}
-
 /* --- Hero Banner Section --- */
-.login-hero {
+.hero {
   position: relative;
   min-height: 580px;
   width: 100%;
@@ -194,13 +24,13 @@
 }
 
 @media (min-width: 1024px) {
-  .login-hero {
+  .hero {
     min-height: 640px;
   }
 }
 
 /* Crowd backdrop in red duo-tone */
-.login-hero-backdrop {
+.hero__backdrop {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -209,7 +39,7 @@
   pointer-events: none;
 }
 
-.login-hero-overlay {
+.hero__overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -220,7 +50,7 @@
 }
 
 /* Hero Content Area */
-.login-hero-inner {
+.hero__inner {
   position: relative;
   z-index: 10;
   margin: 0 auto;
@@ -233,20 +63,20 @@
 }
 
 @media (min-width: 640px) {
-  .login-hero-inner {
+  .hero__inner {
     min-height: 580px;
     padding: 2rem 1.75rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .login-hero-inner {
+  .hero__inner {
     min-height: 640px;
     padding: 2.5rem 3.5rem;
   }
 }
 
-.login-hero-grid {
+.hero__grid {
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
@@ -255,13 +85,13 @@
 }
 
 @media (min-width: 1024px) {
-  .login-hero-grid {
+  .hero__grid {
     grid-template-columns: minmax(0, 1.15fr) minmax(360px, 420px);
   }
 }
 
 /* Left Hero Typography and Hooks */
-.login-hero-left {
+.hero__left {
   position: relative;
   z-index: 15;
   display: flex;
@@ -271,19 +101,19 @@
 }
 
 @media (min-width: 640px) {
-  .login-hero-left {
+  .hero__left {
     padding-bottom: 2rem;
   }
 }
 
 /* SPRINT QUALI Title & Oval orbit star */
-.login-hero-title-wrap {
+.hero__title-wrap {
   position: relative;
   width: 100%;
   max-width: 680px;
 }
 
-.login-hero-title {
+.hero__title {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 12vw, 4.5rem);
   line-height: 0.85;
@@ -295,21 +125,21 @@
 }
 
 @media (min-width: 640px) {
-  .login-hero-title {
+  .hero__title {
     font-size: 6.2rem;
     -webkit-text-stroke: 2px #ffffff;
   }
 }
 
 @media (min-width: 1024px) {
-  .login-hero-title {
+  .hero__title {
     font-size: 8rem;
     -webkit-text-stroke: 2.5px #ffffff;
   }
 }
 
 /* 104 Star / Ellipse Ornament */
-.login-hero-star {
+.hero__star {
   position: absolute;
   top: -1rem;
   left: 3rem;
@@ -321,7 +151,7 @@
 }
 
 @media (min-width: 640px) {
-  .login-hero-star {
+  .hero__star {
     top: -2rem;
     left: 8rem;
     width: 340px;
@@ -330,7 +160,7 @@
 }
 
 @media (min-width: 1024px) {
-  .login-hero-star {
+  .hero__star {
     top: -2.5rem;
     left: 12rem;
     width: 440px;
@@ -339,28 +169,30 @@
 }
 
 /* Red F1 car shape logo */
-.login-hero-badge {
+.hero__badge {
   position: relative;
   margin-top: 1.25rem;
-  height: 24px;
-  width: 60px;
+  height: 48px;
+  width: 120px;
 }
 
 @media (min-width: 640px) {
-  .login-hero-badge {
+  .hero__badge {
     margin-top: 1.5rem;
+    height: 64px;
+    width: 160px;
   }
 }
 
 /* [TITLEHOOK] and details */
-.login-hero-meta {
+.hero__meta {
   margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.login-meta-hook {
+.meta__hook {
   font-size: clamp(1.1rem, 4.5vw, 1.35rem);
   font-weight: 900;
   text-transform: uppercase;
@@ -368,7 +200,7 @@
   color: #ff1801;
 }
 
-.login-meta-title {
+.meta__title {
   font-size: 1rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -376,7 +208,7 @@
   color: #ffffff;
 }
 
-.login-meta-details {
+.meta__details {
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -385,7 +217,7 @@
 }
 
 /* Stat row: [INTERACTIONDATA]+ and [PREDICTIONDATA]* */
-.login-stats {
+.stats {
   margin-top: 1.25rem;
   display: flex;
   flex-wrap: wrap;
@@ -394,19 +226,19 @@
 }
 
 @media (min-width: 640px) {
-  .login-stats {
+  .stats {
     margin-top: 1.5rem;
     gap: 2.5rem;
   }
 }
 
-.login-stat {
+.stats__item {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
 }
 
-.login-stat-value--red {
+.stats__value--red {
   font-size: 1.25rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -414,7 +246,7 @@
   color: #ff1801;
 }
 
-.login-stat-value {
+.stats__value {
   font-size: 1.25rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -422,7 +254,7 @@
   color: #ffffff;
 }
 
-.login-stat-label {
+.stats__label {
   font-size: 9.5px;
   font-weight: 800;
   text-transform: uppercase;
@@ -431,7 +263,7 @@
 }
 
 /* --- Graphic Layer: Watermark 01, Driver, and Plus Grid (Anchored beside Auth Card) --- */
-.login-driver {
+.hero__driver {
   position: absolute;
   top: -100px;
   left: 50%;
@@ -443,7 +275,7 @@
   z-index: 5;
 }
 
-.login-watermark {
+.hero__watermark {
   position: absolute;
   top: -75px;
   left: 50%;
@@ -458,30 +290,30 @@
   z-index: 4;
 }
 
-.login-plus-grid {
+.hero__plus-grid {
   display: none;
   pointer-events: none;
 }
 
 /* Tablet: Enhanced background presence */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .login-driver {
+  .hero__driver {
     top: -120px;
     width: 380px;
     height: 420px;
     opacity: 0.45;
   }
 
-  .login-watermark {
+  .hero__watermark {
     top: -100px;
     font-size: 11rem;
     -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.45);
   }
 }
 
-/* Desktop: Driver proudly positioned directly on the left side of class="login-card" */
+/* Desktop: Driver positioned on the left side of auth-card */
 @media (min-width: 1024px) {
-  .login-driver {
+  .hero__driver {
     top: -20px;
     left: auto;
     right: calc(100% - 60px);
@@ -492,7 +324,7 @@
     z-index: 15;
   }
 
-  .login-watermark {
+  .hero__watermark {
     top: -3.5rem;
     left: auto;
     right: calc(100% - 150px);
@@ -502,7 +334,7 @@
     z-index: 10;
   }
 
-  .login-plus-grid {
+  .hero__plus-grid {
     display: block;
     position: absolute;
     bottom: 1.5rem;
@@ -516,7 +348,7 @@
 }
 
 @media (min-width: 1440px) {
-  .login-driver {
+  .hero__driver {
     width: 530px;
     height: 570px;
     right: calc(100% - 70px);
@@ -524,7 +356,7 @@
 }
 
 /* --- Right Side: Login Card --- */
-.login-card-anchor {
+.auth-card {
   position: relative;
   z-index: 20;
   margin-top: 1.5rem;
@@ -534,14 +366,14 @@
 }
 
 @media (min-width: 1024px) {
-  .login-card-anchor {
+  .auth-card {
     margin-top: 0;
     justify-self: end;
   }
 }
 
 /* Card Cutout Shape */
-.login-card {
+.auth-card__inner {
   position: relative;
   background-color: #06080d;
   border: 1px solid rgba(255, 24, 1, 0.5);
@@ -554,13 +386,13 @@
 }
 
 @media (min-width: 640px) {
-  .login-card {
+  .auth-card__inner {
     padding: 2.25rem 2rem;
   }
 }
 
 /* --- Live Telemetry Strip --- */
-.login-telemetry {
+.telemetry {
   display: flex;
   align-items: center;
   min-height: 44px;
@@ -577,18 +409,18 @@
   scrollbar-width: none;
 }
 
-.login-telemetry::-webkit-scrollbar {
+.telemetry::-webkit-scrollbar {
   display: none;
 }
 
 @media (min-width: 640px) {
-  .login-telemetry {
+  .telemetry {
     min-height: 48px;
     font-size: 11px;
   }
 }
 
-.login-live-cell {
+.telemetry__live {
   display: flex;
   height: 44px;
   align-items: center;
@@ -600,14 +432,14 @@
 }
 
 @media (min-width: 640px) {
-  .login-live-cell {
+  .telemetry__live {
     height: 48px;
     gap: 0.75rem;
     padding: 0 2rem;
   }
 }
 
-.login-live-dot {
+.telemetry__dot {
   height: 14px;
   width: 14px;
   border-radius: 9999px;
@@ -616,13 +448,13 @@
 }
 
 @media (min-width: 640px) {
-  .login-live-dot {
+  .telemetry__dot {
     height: 18px;
     width: 18px;
   }
 }
 
-.login-telemetry-data {
+.telemetry__data {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -632,38 +464,38 @@
 }
 
 @media (min-width: 640px) {
-  .login-telemetry-data {
+  .telemetry__data {
     gap: 1.5rem;
     padding: 0 2rem;
   }
 }
 
-.login-telemetry-slash {
+.telemetry__slash {
   font-weight: 300;
   color: rgba(255, 255, 255, 0.6);
   font-size: 13px;
 }
 
 @media (min-width: 640px) {
-  .login-telemetry-slash {
+  .telemetry__slash {
     font-size: 14px;
   }
 }
 
-.login-telemetry-phase {
+.telemetry__phase {
   color: #ff1801;
   font-weight: 900;
   margin-left: 1rem;
 }
 
 @media (min-width: 640px) {
-  .login-telemetry-phase {
+  .telemetry__phase {
     margin-left: 1.5rem;
   }
 }
 
 /* --- Trusted Teams Logo Strip --- */
-.login-teams {
+.teams {
   width: 100%;
   background-color: #000000;
   padding: 2rem 1rem 1.5rem;
@@ -671,12 +503,12 @@
 }
 
 @media (min-width: 640px) {
-  .login-teams {
+  .teams {
     padding: 2.5rem 1.5rem 2rem;
   }
 }
 
-.login-teams-heading {
+.teams__heading {
   font-size: clamp(10px, 2.8vw, 13px);
   font-weight: 900;
   text-transform: uppercase;
@@ -685,7 +517,7 @@
   margin-bottom: 1.5rem;
 }
 
-.login-teams-row {
+.teams__row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -696,18 +528,18 @@
 }
 
 @media (min-width: 640px) {
-  .login-teams-row {
+  .teams__row {
     gap: 2rem 2.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .login-teams-row {
+  .teams__row {
     gap: 3rem;
   }
 }
 
-.login-team-logo {
+.teams__logo {
   position: relative;
   height: 24px;
   width: 46px;
@@ -716,19 +548,19 @@
 }
 
 @media (min-width: 640px) {
-  .login-team-logo {
+  .teams__logo {
     height: 32px;
     width: 58px;
   }
 }
 
-.login-team-logo:hover {
+.teams__logo:hover {
   opacity: 1;
   transform: scale(1.08);
 }
 
 /* --- Pirelli Tire Strip Divider --- */
-.login-tires {
+.tires {
   position: relative;
   display: flex;
   align-items: center;
@@ -739,12 +571,12 @@
 }
 
 @media (min-width: 640px) {
-  .login-tires {
+  .tires {
     padding: 1.25rem 0 0.5rem;
   }
 }
 
-.login-tires-line {
+.tires__line {
   position: absolute;
   left: 0;
   right: 0;
@@ -754,7 +586,7 @@
   z-index: 1;
 }
 
-.login-tires-cluster {
+.tires__cluster {
   position: relative;
   z-index: 2;
   display: flex;
@@ -765,13 +597,13 @@
 }
 
 @media (min-width: 640px) {
-  .login-tires-cluster {
+  .tires__cluster {
     gap: 0.75rem;
     padding: 0 1.5rem;
   }
 }
 
-.login-tire {
+.tires__item {
   position: relative;
   height: 42px;
   width: 42px;
@@ -781,221 +613,19 @@
 }
 
 @media (min-width: 480px) {
-  .login-tire {
+  .tires__item {
     height: 52px;
     width: 52px;
   }
 }
 
 @media (min-width: 640px) {
-  .login-tire {
+  .tires__item {
     height: 64px;
     width: 64px;
   }
 }
 
-.login-tire:hover {
+.tires__item:hover {
   transform: scale(1.12);
-}
-
-/* --- Footer Section (Screenshot Matching) --- */
-.login-footer {
-  width: 100%;
-  background-color: #000000;
-  padding: 2.5rem 1.25rem 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-@media (min-width: 640px) {
-  .login-footer {
-    padding: 3rem 1.5rem 1.5rem;
-  }
-}
-
-.login-footer-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-  .login-footer-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .login-footer-grid {
-    grid-template-columns: 1.2fr 1fr 1fr 1.6fr;
-    gap: 3rem;
-  }
-}
-
-/* Brand col */
-.login-footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.login-footer-logo {
-  position: relative;
-  height: 38px;
-  width: 135px;
-}
-
-.login-footer-details {
-  font-size: 11px;
-  color: #9ca3af;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.login-footer-socials {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.login-social-pill {
-  display: flex;
-  height: 24px;
-  width: 24px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: border-color 0.15s ease;
-}
-
-.login-social-pill:hover {
-  border-color: #ff1801;
-}
-
-/* Page link columns */
-.login-footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.login-footer-col-title {
-  font-size: 11px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #ff1801;
-}
-
-.login-footer-link {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.8);
-  transition: color 0.15s ease;
-}
-
-.login-footer-link:hover {
-  color: #ffffff;
-}
-
-/* Newsletter col */
-.login-footer-newsletter {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.login-newsletter-title {
-  font-size: 11px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #ff1801;
-}
-
-.login-newsletter-desc {
-  font-size: 11px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.login-newsletter-form {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  background-color: #0b0f17;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.login-newsletter-input {
-  flex: 1 1 0%;
-  background: transparent;
-  padding: 0.6rem 0.85rem;
-  font-size: 10px;
-  color: #ffffff;
-  outline: none;
-}
-
-.login-newsletter-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.login-newsletter-btn {
-  background-color: #ff1801;
-  color: #ffffff;
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.6rem 1rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.login-newsletter-btn:hover {
-  background-color: #d61200;
-}
-
-.login-newsletter-terms {
-  font-size: 9px;
-  line-height: 1.35;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-/* Bottom legal bar */
-.login-footer-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  max-width: 1400px;
-  margin: 2.5rem auto 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-@media (min-width: 640px) {
-  .login-footer-bottom {
-    flex-direction: row;
-  }
-}
-
-.login-footer-legal {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.login-footer-legal a:hover {
-  color: #ffffff;
 }

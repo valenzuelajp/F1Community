@@ -263,7 +263,7 @@
   color: #9ca3af;
 }
 
-.footer-container {
+.footer__inner {
   width: 100%;
   padding: 0 1.5rem;
   display: flex;
@@ -272,13 +272,13 @@
 }
 
 @media (min-width: 640px) {
-  .footer-container {
+  .footer__inner {
     padding: 0 2.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .footer-container {
+  .footer__inner {
     padding: 0 4rem;
   }
 }
@@ -327,7 +327,7 @@
   background-color: #ff1801;
 }
 
-.footer-header-brand-title {
+.footer__brand-title {
   font-size: 0.875rem;
   font-weight: 800;
   text-transform: uppercase;

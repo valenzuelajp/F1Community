@@ -13,7 +13,7 @@ import './layout.css';
 export function SiteFooter() {
   return (
     <footer className="site-footer" aria-label="Site footer">
-      <div className="footer-container">
+      <div className="footer__inner">
 
         {/* 4-column footer layout */}
         <div className="footer-main-grid">
@@ -21,7 +21,7 @@ export function SiteFooter() {
           <div className="footer-col-about">
             <div className="footer-brand">
               <div className="footer-brand-square" />
-              <span className="footer-brand-title">
+              <span className="footer__brand-title">
                 F1 SHOP
               </span>
             </div>
@@ -36,10 +36,10 @@ export function SiteFooter() {
               CUSTOMER SERVICE
             </h4>
             <ul className="footer-links-list">
-              <li><Link href="#contact" className="footer-nav-link">Contact Us</Link></li>
-              <li><Link href="#shipping" className="footer-nav-link">Shipping &amp; Delivery</Link></li>
-              <li><Link href="#returns" className="footer-nav-link">Returns &amp; Refunds</Link></li>
-              <li><Link href="#size-guide" className="footer-nav-link">Size Guide</Link></li>
+              <li><Link href="/home" className="footer-nav-link">Contact Us</Link></li>
+              <li><Link href="/home" className="footer-nav-link">Shipping &amp; Delivery</Link></li>
+              <li><Link href="/home" className="footer-nav-link">Returns &amp; Refunds</Link></li>
+              <li><Link href="/home" className="footer-nav-link">Size Guide</Link></li>
             </ul>
           </div>
 
@@ -49,10 +49,10 @@ export function SiteFooter() {
               ABOUT SHOP
             </h4>
             <ul className="footer-links-list">
-              <li><Link href="#heritage" className="footer-nav-link">Our Heritage</Link></li>
-              <li><Link href="#sustainability" className="footer-nav-link">Sustainability</Link></li>
-              <li><Link href="#careers" className="footer-nav-link">Careers</Link></li>
-              <li><Link href="#licensing" className="footer-nav-link">Official Licensing</Link></li>
+              <li><Link href="/home" className="footer-nav-link">Our Heritage</Link></li>
+              <li><Link href="/home" className="footer-nav-link">Sustainability</Link></li>
+              <li><Link href="/home" className="footer-nav-link">Careers</Link></li>
+              <li><Link href="/home" className="footer-nav-link">Official Licensing</Link></li>
             </ul>
           </div>
 
@@ -82,11 +82,11 @@ export function SiteFooter() {
 
         {/* Legal & copyright bar */}
         <div className="footer-bottom-bar">
-          <p>© 2026 Formula One Digital Media Limited. All Rights Reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Formula One Digital Media Limited. All Rights Reserved.</p>
           <nav className="footer-legal-links" aria-label="Legal links">
-            <Link href="#privacy" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
-            <Link href="#terms" className="hover:text-gray-400 transition-colors">Terms of Use</Link>
-            <Link href="#cookies" className="hover:text-gray-400 transition-colors">Cookies</Link>
+            <Link href="/home">Privacy Policy</Link>
+            <Link href="/home">Terms of Use</Link>
+            <Link href="/home">Cookies</Link>
           </nav>
         </div>
 
