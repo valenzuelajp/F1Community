@@ -1,0 +1,142 @@
+/* ==========================================================================
+   Home Page Styles
+   Cleanly separated for simple reading, editing, and teammate onboarding.
+   ========================================================================== */
+
+.home-page {
+  position: relative;
+  flex: 1 1 0%;
+  overflow: hidden;
+  background-color: #090b10;
+  color: #e5e7eb;
+}
+
+.home-radial-light {
+  pointer-events: none;
+  position: absolute;
+  left: 25%;
+  top: 0;
+  height: 24rem;
+  width: 24rem;
+  border-radius: 9999px;
+  background-color: rgba(220, 38, 38, 0.1);
+  filter: blur(48px);
+}
+
+.home-hero-section {
+  position: relative;
+}
+
+.home-hero-container {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 64rem;
+  padding: 5rem 1.5rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .home-hero-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-hero-container {
+    padding: 7rem 4rem;
+  }
+}
+
+.home-pill-badge {
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background-color: rgba(69, 10, 10, 0.8);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f87171;
+}
+
+.home-hero-headline {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 640px) {
+  .home-hero-headline {
+    font-size: 3.75rem;
+  }
+}
+
+.home-hero-subtext {
+  margin: 1.5rem auto 0;
+  max-width: 42rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: #9ca3af;
+}
+
+@media (min-width: 640px) {
+  .home-hero-subtext {
+    font-size: 1rem;
+  }
+}
+
+.home-actions-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 2rem;
+}
+
+.home-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, #ff1801, #e01500);
+  padding: 0.875rem 1.75rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3);
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+.home-btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.home-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.875rem 1.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  transition: background-color 0.15s ease;
+}
+
+.home-btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}

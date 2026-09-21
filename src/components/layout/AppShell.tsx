@@ -12,7 +12,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <>
       {!isAuthPage && <SiteHeader />}
       {children}
-      <SiteFooter />
+      {!isAuthPage && <SiteFooter />}
     </>
   );
 }

@@ -1,0 +1,308 @@
+/* ==========================================================================
+   Auth Forms Styles
+   Separated from TSX markup for clean, beginner-friendly maintenance.
+   Replicating Screenshot 2026-09-16 122645.png with pixel-accurate details.
+   ========================================================================== */
+
+.f1-figma-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+/* Header & Racing Slashes */
+.figma-form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.figma-form-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.figma-form-subtitle {
+  margin-top: 0.35rem;
+  font-size: 8.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.35;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.figma-racing-slashes {
+  display: flex;
+  gap: 0.2rem;
+  padding-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.figma-slash {
+  display: inline-block;
+  height: 1.1rem;
+  width: 0.3rem;
+  transform: skewX(-20deg);
+  background-color: #ff1801;
+}
+
+/* Status & Alert Banners */
+.auth-status-banner {
+  border-radius: 0.375rem;
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  background-color: rgba(6, 78, 59, 0.7);
+  padding: 0.5rem 0.75rem;
+  font-size: 11px;
+  color: #a7f3d0;
+}
+
+.auth-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  background-color: rgba(69, 10, 10, 0.8);
+  padding: 0.5rem 0.75rem;
+  font-size: 11px;
+  color: #fecaca;
+}
+
+.auth-error-icon {
+  height: 0.875rem;
+  width: 0.875rem;
+  flex-shrink: 0;
+  color: #f87171;
+}
+
+.auth-error-text {
+  font-size: 10px;
+  color: #f87171;
+  padding-left: 0.25rem;
+}
+
+/* Inputs Stack */
+.figma-inputs-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.figma-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 0.375rem;
+  background-color: #1a2332;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.figma-input-container:focus-within {
+  border-color: #ff1801;
+  box-shadow: 0 0 0 1px rgba(255, 24, 1, 0.4);
+}
+
+.figma-icon-slot {
+  position: absolute;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.figma-input-field {
+  width: 100%;
+  background: transparent;
+  padding: 0.6rem 2.25rem 0.6rem 2.25rem;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  outline: none;
+}
+
+.figma-input-field::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+}
+
+.figma-input-field.has-error {
+  color: #fca5a5;
+}
+
+.figma-password-eye {
+  position: absolute;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.figma-password-eye:hover {
+  color: #ffffff;
+}
+
+/* Options: Remember me & Forgot password */
+.figma-options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0;
+}
+
+.figma-remember-box {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+}
+
+.figma-checkbox {
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 2px;
+  background-color: #1a2332;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  accent-color: #ff1801;
+}
+
+.figma-forgot-text {
+  color: #ff1801;
+  font-weight: 700;
+  transition: color 0.15s ease;
+}
+
+.figma-forgot-text:hover {
+  color: #ff4d3d;
+}
+
+/* Buttons */
+.figma-btn-primary {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: none;
+  background: linear-gradient(90deg, #d31200 0%, #ff1801 100%);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 24, 1, 0.35);
+  transition: all 0.15s ease;
+}
+
+.figma-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.figma-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.figma-btn-secondary {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: #07090e;
+  border: 1px solid rgba(255, 24, 1, 0.6);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.figma-btn-secondary:hover {
+  background-color: #0d121c;
+  border-color: #ff1801;
+}
+
+.figma-btn-label {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #ffffff;
+}
+
+.figma-btn-circle-arrow {
+  position: absolute;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+}
+
+/* OR Divider */
+.figma-or-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0.1rem 0;
+}
+
+/* Footer Register Callout */
+.figma-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding-top: 0.4rem;
+}
+
+.figma-footer-note {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.figma-footer-register {
+  color: #ff1801;
+  font-weight: 900;
+  transition: color 0.15s ease;
+}
+
+.figma-footer-register:hover {
+  color: #ff4d3d;
+}
+
+/* Two column layout for registration */
+.auth-grid-two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .auth-grid-two-col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

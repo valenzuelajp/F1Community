@@ -2,7 +2,6 @@
 
 import { Prisma } from '@prisma/client';
 import { hash } from 'bcryptjs';
-import { redirect } from 'next/navigation';
 import { db } from '@/lib/db';
 import { registerSchema, type RegisterInput } from '@/lib/validations/auth';
 
@@ -12,7 +11,7 @@ import { registerSchema, type RegisterInput } from '@/lib/validations/auth';
  * into the `users` table. Unique violations (email/username) return a
  * user-facing error instead of throwing.
  */
-export async function registerUser(input: RegisterInput): Promise<{ error?: string }> {
+export async function registerUser(input: RegisterInput): Promise<{ error?: string; success?: true }> {
   const parsed = registerSchema.safeParse(input);
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? 'Please check your details.' };
@@ -37,5 +36,5 @@ export async function registerUser(input: RegisterInput): Promise<{ error?: stri
     return { error: 'Could not create your account right now. Please try again.' };
   }
 
-  redirect('/login?registered=1');
+  return { success: true };
 }
