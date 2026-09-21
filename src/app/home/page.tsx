@@ -13,8 +13,8 @@ export default function MemberHomePage() {
           <h1 className="f1-text-gradient text-4xl font-extrabold leading-none tracking-tight sm:text-6xl">GEAR UP.<br />BRAKE LATE. FINISH FIRST.</h1>
           <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-gray-400 sm:text-base">Premium replicas, race-week apparel, and collector essentials from your favourite constructors and drivers.</p>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-8">
-            <Link href="/new-arrivals" className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#ff1801] to-[#e01500] px-7 py-3.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-lg shadow-red-600/30 transition-colors hover:from-[#ff2d1a] hover:to-[#ff1801]"><ShoppingBag className="h-4 w-4" />Shop the collection</Link>
-            <Link href="/sale" className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-white/15"><Trophy className="h-4 w-4 text-red-500" />Race week deals</Link>
+            <Link href="/new-arrivals" className="home-cta-primary"><ShoppingBag className="h-4 w-4" />Shop the collection</Link>
+            <Link href="/sale" className="home-cta-secondary"><Trophy className="h-4 w-4 text-red-500" />Race week deals</Link>
           </div>
         </div>
       </section>

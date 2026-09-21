@@ -63,3 +63,179 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* ================================================
+   COMPONENT CLASSES — @apply for scannable HTML
+   ================================================ */
+@layer components {
+  /* --- Auth pages --- */
+  .auth-page {
+    @apply min-h-screen bg-[#050505] text-white selection:bg-[#ff1801] selection:text-white;
+  }
+  .auth-page__wrap {
+    @apply w-full overflow-hidden bg-[#050505];
+  }
+  .auth-header {
+    @apply relative border-b-2 border-white bg-[#06080d];
+  }
+  .auth-header__inner {
+    @apply relative z-10 flex h-[74px] items-center gap-4 px-5 sm:px-8 lg:h-[92px] lg:px-12;
+  }
+  .auth-nav {
+    @apply ml-auto hidden items-center gap-5 text-[10px] font-black uppercase tracking-[0.08em] text-white/80 lg:flex;
+  }
+  .auth-actions {
+    @apply ml-auto flex items-center gap-3 lg:ml-8;
+  }
+  .menu-btn {
+    @apply flex h-9 w-[78px] items-center justify-center gap-2 rounded-full bg-white text-[10px] font-bold uppercase tracking-wide text-[#121212];
+  }
+  .sale-pill {
+    @apply rounded bg-white px-6 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#0d1117] transition-transform hover:-translate-y-px;
+  }
+
+  /* --- Hero --- */
+  .hero {
+    @apply relative min-h-[620px] overflow-hidden border-b border-white/30 bg-[#090909] lg:min-h-[650px];
+  }
+  .hero__content {
+    @apply relative z-10 mx-auto flex min-h-[620px] max-w-[1320px] items-center px-5 py-8 sm:px-10 lg:min-h-[650px] lg:px-12;
+  }
+  .hero__title {
+    @apply f1-outline-title max-w-[600px] font-[family-name:var(--font-display)] text-[4.4rem] uppercase leading-[0.78] sm:text-[6.2rem] lg:text-[8.5rem];
+  }
+  .hero__deco-number {
+    @apply pointer-events-none absolute right-4 top-0 z-0 hidden select-none font-[family-name:var(--font-display)] text-[7rem] leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.72)] sm:block sm:text-[10rem] lg:right-8 lg:top-3 lg:text-[14rem];
+  }
+
+  /* --- Auth card --- */
+  .auth-card {
+    @apply relative border border-white/10 bg-[#050608]/95 px-7 pb-8 pt-8 shadow-[0_22px_45px_rgba(0,0,0,0.62)] backdrop-blur-xl [clip-path:polygon(0_0,100%_0,100%_90%,90%_100%,0_100%)] sm:px-9 sm:pt-9;
+  }
+  .auth-card--glass {
+    @apply relative border border-white/10 bg-[var(--f1-card-glass)] px-7 pb-8 pt-8 shadow-[0_18px_45px_rgba(0,0,0,0.5)] backdrop-blur-xl [clip-path:polygon(0_0,100%_0,100%_90%,90%_100%,0_100%)] sm:px-9 sm:pt-9;
+  }
+  .deco-skew {
+    @apply h-5 w-1.5 -skew-x-[20deg] bg-[#ff1801];
+  }
+
+  /* --- Register page --- */
+  .register-logo {
+    @apply relative ml-2 h-[42px] w-[180px] shrink-0 overflow-hidden sm:ml-4 sm:h-[46px] sm:w-[205px];
+  }
+
+  /* --- Live bar --- */
+  .live-bar {
+    @apply flex min-h-12 items-center overflow-x-auto border-b border-white/25 bg-black text-[10px] font-bold uppercase whitespace-nowrap;
+  }
+  .live-bar__status {
+    @apply flex h-12 items-center border-r border-white/20 px-7 text-white;
+  }
+  .live-bar__data {
+    @apply flex items-center gap-5 px-7 text-white/85;
+  }
+
+  /* --- Team list --- */
+  .team-list {
+    @apply flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] font-black uppercase tracking-[0.12em] text-white/50 sm:gap-x-12;
+  }
+
+  /* --- Site header --- */
+  .site-header {
+    @apply border-b border-white/10 bg-[#090b10]/95 backdrop-blur-md sticky top-0 z-50;
+  }
+  .site-header__inner {
+    @apply w-full px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between;
+  }
+  .site-header__actions {
+    @apply flex items-center gap-4 sm:gap-5;
+  }
+  .nav-link {
+    @apply hover:text-white transition-colors relative py-1 hover:after:w-full after:w-0 after:h-0.5 after:bg-[#ff1801] after:absolute after:bottom-0 after:left-0 after:transition-all;
+  }
+  .sale-badge {
+    @apply flex items-center gap-1 text-[#ff1801] hover:text-white px-2.5 py-0.5 bg-red-950/40 border border-red-500/30 rounded text-[11px] font-extrabold tracking-widest transition-all hover:bg-[#ff1801] shadow-sm shadow-red-500/20;
+  }
+  .search-input {
+    @apply w-44 lg:w-56 pl-9 pr-3.5 py-1.5 bg-[#12151f] border border-white/10 rounded-full text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-[#ff1801] focus:ring-1 focus:ring-[#ff1801]/30 transition-all;
+  }
+  .btn-signin {
+    @apply px-3.5 py-1.5 bg-[#141824] hover:bg-[#1a2030] border border-white/10 hover:border-red-500/30 rounded-md text-xs font-semibold text-white transition-all shadow-sm;
+  }
+
+  /* --- Site footer --- */
+  .site-footer {
+    @apply border-t border-white/10 bg-[#08090e] pt-12 pb-8 text-xs text-gray-400;
+  }
+  .site-footer__inner {
+    @apply w-full px-6 sm:px-10 lg:px-16 space-y-10;
+  }
+  .footer-link {
+    @apply hover:text-white transition-colors;
+  }
+  .footer-bottom {
+    @apply border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-[11px];
+  }
+  .newsletter-input {
+    @apply flex-1 px-3.5 py-2.5 bg-[#12151e] border border-white/10 rounded-md text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-[#ff1801] focus:ring-1 focus:ring-[#ff1801]/30 transition-all;
+  }
+  .subscribe-btn {
+    @apply px-4 py-2.5 bg-gradient-to-r from-[#ff1801] to-[#e01500] hover:from-[#ff2d1a] hover:to-[#ff1801] text-white font-extrabold text-xs uppercase tracking-wider rounded-md transition-all shadow-md shadow-red-600/30 hover:shadow-red-600/50 shrink-0 cursor-pointer;
+  }
+
+  /* --- Buttons --- */
+  .btn-primary {
+    @apply flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#ff1801] to-[#d91200] px-4 py-3 text-[10px] font-black uppercase tracking-[0.24em] text-white shadow-[0_0_18px_rgba(255,24,1,0.3)] transition-all hover:from-[#ff2d1a] hover:to-[#ff1801] disabled:opacity-60;
+  }
+  .btn-demo {
+    @apply flex w-full items-center justify-center gap-2 rounded-md border border-white/10 bg-[#0b1017] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 transition-colors hover:border-white/20 hover:text-white;
+  }
+  .btn-social {
+    @apply flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-semibold text-gray-200 transition-all hover:scale-[1.02];
+  }
+
+  /* --- Forms --- */
+  .form-field {
+    @apply w-full rounded-md border bg-[#0f1723] py-3 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff1801]/40;
+  }
+  .form-field--valid {
+    @apply border-white/10 hover:border-white/20;
+  }
+  .form-field--invalid {
+    @apply border-red-500;
+  }
+  .form-label {
+    @apply block text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400;
+  }
+  .form-error {
+    @apply pl-1 text-xs text-red-400;
+  }
+  .form-alert {
+    @apply flex items-center gap-2.5 rounded-lg border border-red-500/50 bg-red-950/80 p-3 text-xs text-red-200;
+  }
+
+  /* --- Auth header (used in AuthHeader.tsx) --- */
+  .auth-badge {
+    @apply inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-950/60 border border-red-500/30 text-red-400 text-xs font-semibold tracking-wider uppercase;
+  }
+  .tab-switcher {
+    @apply grid grid-cols-2 gap-1 p-1 bg-black/40 border border-white/10 rounded-xl max-w-xs mx-auto;
+  }
+  .tab-btn {
+    @apply flex items-center justify-center gap-2 py-2 px-3 text-xs font-semibold rounded-lg transition-all;
+  }
+  .tab-btn--active {
+    @apply bg-red-600 text-white shadow-lg shadow-red-600/30;
+  }
+  .tab-btn--inactive {
+    @apply text-gray-400 hover:text-white hover:bg-white/5;
+  }
+
+  /* --- Home page --- */
+  .home-cta-primary {
+    @apply inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#ff1801] to-[#e01500] px-7 py-3.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-lg shadow-red-600/30 transition-colors hover:from-[#ff2d1a] hover:to-[#ff1801];
+  }
+  .home-cta-secondary {
+    @apply inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-white/15;
+  }
+}

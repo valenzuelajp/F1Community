@@ -63,7 +63,7 @@ export function LoginForm() {
       </div>
 
       {authError && (
-        <div className="flex items-center gap-2.5 rounded-lg border border-red-500/50 bg-red-950/80 p-3 text-xs text-red-200">
+        <div className="form-alert">
           <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
           <span className="font-medium">{authError}</span>
         </div>
@@ -71,7 +71,7 @@ export function LoginForm() {
 
       <div className="space-y-4">
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400">
+          <label className="form-label">
             Email address
           </label>
           <div className="relative group">
@@ -82,16 +82,14 @@ export function LoginForm() {
               {...register('email')}
               type="email"
               placeholder="driver@yoursite.com"
-              className={`w-full rounded-md border bg-[#0f1723] py-3 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff1801]/40 ${
-                errors.email ? 'border-red-500' : 'border-white/10 hover:border-white/20'
-              }`}
+              className={`form-field ${errors.email ? 'form-field--invalid' : 'form-field--valid'}`}
             />
           </div>
-          {errors.email && <p className="pl-1 text-xs text-red-400">{errors.email.message}</p>}
+          {errors.email && <p className="form-error">{errors.email.message}</p>}
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400">
+          <label className="form-label">
             Password
           </label>
           <div className="relative group">
@@ -102,9 +100,7 @@ export function LoginForm() {
               {...register('password')}
               type={showPassword ? 'text' : 'password'}
               placeholder="••••••••••••"
-              className={`w-full rounded-md border bg-[#0f1723] py-3 pl-10 pr-11 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff1801]/40 ${
-                errors.password ? 'border-red-500' : 'border-white/10 hover:border-white/20'
-              }`}
+              className={`form-field pr-11 ${errors.password ? 'form-field--invalid' : 'form-field--valid'}`}
             />
             <button
               type="button"
@@ -116,7 +112,7 @@ export function LoginForm() {
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          {errors.password && <p className="pl-1 text-xs text-red-400">{errors.password.message}</p>}
+          {errors.password && <p className="form-error">{errors.password.message}</p>}
         </div>
       </div>
 
@@ -136,11 +132,7 @@ export function LoginForm() {
       </div>
 
       <div className="space-y-2.5 pt-2">
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="group flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#ff1801] to-[#d91200] px-4 py-3 text-[10px] font-black uppercase tracking-[0.24em] text-white shadow-[0_0_18px_rgba(255,24,1,0.3)] transition-all hover:from-[#ff2d1a] hover:to-[#ff1801] disabled:opacity-60"
-        >
+        <button type="submit" disabled={isLoading} className="group btn-primary">
           {isLoading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -160,7 +152,7 @@ export function LoginForm() {
             setValue('email', 'customer@f1store.com');
             setValue('password', 'customer123');
           }}
-          className="flex w-full items-center justify-center gap-2 rounded-md border border-white/10 bg-[#0b1017] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 transition-colors hover:border-white/20 hover:text-white"
+          className="btn-demo"
         >
           Demo credentials
         </button>

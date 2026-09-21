@@ -38,11 +38,6 @@ export function RegisterForm() {
     }
   };
 
-  const fieldClass = (invalid: boolean) =>
-    `w-full rounded-md border bg-[#0f1723] py-3 pl-10 pr-4 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff1801]/40 ${
-      invalid ? 'border-red-500' : 'border-white/10 hover:border-white/20'
-    }`;
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div className="mb-5 text-left">
@@ -55,7 +50,7 @@ export function RegisterForm() {
       </div>
 
       {authError && (
-        <div className="flex items-center gap-2.5 rounded-lg border border-red-500/50 bg-red-950/80 p-3 text-xs text-red-200">
+        <div className="form-alert">
           <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
           <span className="font-medium">{authError}</span>
         </div>
@@ -64,44 +59,44 @@ export function RegisterForm() {
       <div className="space-y-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400">
+            <label className="form-label">
               Display name <span className="text-gray-600">(optional)</span>
             </label>
             <div className="relative">
               <User className="pointer-events-none absolute inset-y-0 left-0 my-auto ml-3.5 h-4 w-4 text-gray-500" />
-              <input {...register('name')} type="text" placeholder="Your name" className={fieldClass(!!errors.name)} />
+              <input {...register('name')} type="text" placeholder="Your name" className={`form-field ${errors.name ? 'form-field--invalid' : 'form-field--valid'}`} />
             </div>
-            {errors.name && <p className="pl-1 text-xs text-red-400">{errors.name.message}</p>}
+            {errors.name && <p className="form-error">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400">Username</label>
+            <label className="form-label">Username</label>
             <div className="relative">
               <AtSign className="pointer-events-none absolute inset-y-0 left-0 my-auto ml-3.5 h-4 w-4 text-gray-500" />
-              <input {...register('username')} type="text" placeholder="champ_verstappen" className={fieldClass(!!errors.username)} />
+              <input {...register('username')} type="text" placeholder="champ_verstappen" className={`form-field ${errors.username ? 'form-field--invalid' : 'form-field--valid'}`} />
             </div>
-            {errors.username && <p className="pl-1 text-xs text-red-400">{errors.username.message}</p>}
+            {errors.username && <p className="form-error">{errors.username.message}</p>}
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400">Email address</label>
+          <label className="form-label">Email address</label>
           <div className="relative group">
             <Mail className="pointer-events-none absolute inset-y-0 left-0 my-auto ml-3.5 h-4 w-4 text-gray-500" />
-            <input {...register('email')} type="email" placeholder="driver@yoursite.com" className={fieldClass(!!errors.email)} />
+            <input {...register('email')} type="email" placeholder="driver@yoursite.com" className={`form-field ${errors.email ? 'form-field--invalid' : 'form-field--valid'}`} />
           </div>
-          {errors.email && <p className="pl-1 text-xs text-red-400">{errors.email.message}</p>}
+          {errors.email && <p className="form-error">{errors.email.message}</p>}
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-bold uppercase tracking-[0.24em] text-gray-400">Password</label>
+          <label className="form-label">Password</label>
           <div className="relative">
             <Lock className="pointer-events-none absolute inset-y-0 left-0 my-auto ml-3.5 h-4 w-4 text-gray-500" />
             <input
               {...register('password')}
               type={showPassword ? 'text' : 'password'}
               placeholder="At least 8 characters"
-              className={`${fieldClass(!!errors.password)} pr-11`}
+              className={`form-field pr-11 ${errors.password ? 'form-field--invalid' : 'form-field--valid'}`}
             />
             <button
               type="button"
@@ -113,15 +108,11 @@ export function RegisterForm() {
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          {errors.password && <p className="pl-1 text-xs text-red-400">{errors.password.message}</p>}
+          {errors.password && <p className="form-error">{errors.password.message}</p>}
         </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="group flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#ff1801] to-[#d91200] px-4 py-3 text-[10px] font-black uppercase tracking-[0.24em] text-white shadow-[0_0_18px_rgba(255,24,1,0.3)] transition-all hover:from-[#ff2d1a] hover:to-[#ff1801] disabled:opacity-60"
-      >
+      <button type="submit" disabled={isLoading} className="group btn-primary">
         {isLoading ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />

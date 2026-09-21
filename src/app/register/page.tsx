@@ -9,12 +9,12 @@ export default function RegisterPage() {
   return (
     <main className="min-h-screen bg-[#000000] text-white selection:bg-[#ff1801] selection:text-white">
       <div className="mx-auto max-w-[1600px] bg-[#000000]">
-        <header className="relative border-b border-white/10 bg-[#05090f]">
+        <header className="auth-header">
           <div className="absolute inset-x-0 top-0 h-[3px] bg-[#ff1801]" />
           <div className="absolute inset-0 bg-[#05090f]" />
 
           <div className="relative z-10 flex h-[70px] items-center gap-4 px-4 sm:px-6 lg:px-8">
-            <div className="relative ml-2 h-[42px] w-[180px] shrink-0 overflow-hidden sm:ml-4 sm:h-[46px] sm:w-[205px]">
+            <div className="register-logo">
               <Image
                 src="/imgLogoContainer.png"
                 alt="F1 logo"
@@ -39,11 +39,11 @@ export default function RegisterPage() {
 
           <div className="relative z-10 mx-auto w-full max-w-[1180px] px-4 py-10 sm:px-8 lg:px-12">
             <div className="relative mx-auto max-w-[470px]">
-              <div className="relative border border-white/10 bg-[var(--f1-card-glass)] px-7 pb-8 pt-8 shadow-[0_18px_45px_rgba(0,0,0,0.5)] backdrop-blur-xl [clip-path:polygon(0_0,100%_0,100%_90%,90%_100%,0_100%)] sm:px-9 sm:pt-9">
+              <div className="auth-card--glass">
                 <div className="absolute right-8 top-8 flex gap-1">
-                  <span className="h-5 w-1.5 -skew-x-[20deg] bg-[#ff1801]" />
-                  <span className="h-5 w-1.5 -skew-x-[20deg] bg-[#ff1801]" />
-                  <span className="h-5 w-1.5 -skew-x-[20deg] bg-[#ff1801]" />
+                  <span className="deco-skew" />
+                  <span className="deco-skew" />
+                  <span className="deco-skew" />
                 </div>
                 <RegisterForm />
               </div>
