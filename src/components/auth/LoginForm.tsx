@@ -66,23 +66,23 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="f1-figma-login-form" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
       {/* Top Header & Racing Slashes */}
-      <div className="figma-form-header">
+      <div className="login-form-header">
         <div>
-          <h2 className="figma-form-title">
+          <h2 className="login-form-title">
             WELCOME BACK, <span className="text-[#ff1801]">CHAMP</span>
           </h2>
-          <p className="figma-form-subtitle">
+          <p className="login-form-subtitle">
             LOG IN NOW TO UPDATE YOUR PREDICTIONS BEFORE <span className="text-[#ff1801]">F1</span> BEGINS
           </p>
         </div>
 
         {/* 3 Red diagonal slashes */}
-        <div className="figma-racing-slashes" aria-hidden="true">
-          <span className="figma-slash" />
-          <span className="figma-slash" />
-          <span className="figma-slash" />
+        <div className="login-form-slashes" aria-hidden="true">
+          <span className="login-form-slash" />
+          <span className="login-form-slash" />
+          <span className="login-form-slash" />
         </div>
       </div>
 
@@ -102,36 +102,36 @@ export function LoginForm() {
       )}
 
       {/* Inputs Stack */}
-      <div className="figma-inputs-stack">
+      <div className="login-form-inputs">
         {/* Email */}
-        <div className="figma-input-container">
-          <div className="figma-icon-slot">
+        <div className="login-input">
+          <div className="login-input-icon">
             <Mail className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
             {...register('email')}
             type="email"
             placeholder="EMAIL ADDRESS"
-            className={`figma-input-field ${errors.email ? 'has-error' : ''}`}
+            className={`login-input-field ${errors.email ? 'has-error' : ''}`}
           />
         </div>
         {errors.email && <p className="auth-error-text">{errors.email.message}</p>}
 
         {/* Password */}
-        <div className="figma-input-container">
-          <div className="figma-icon-slot">
+        <div className="login-input">
+          <div className="login-input-icon">
             <Lock className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
             {...register('password')}
             type={showPassword ? 'text' : 'password'}
             placeholder="PASSWORD"
-            className={`figma-input-field ${errors.password ? 'has-error' : ''}`}
+            className={`login-input-field ${errors.password ? 'has-error' : ''}`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="figma-password-eye"
+            className="login-password-toggle"
             tabIndex={-1}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
@@ -142,17 +142,17 @@ export function LoginForm() {
       </div>
 
       {/* Options Row */}
-      <div className="figma-options-row">
-        <label className="figma-remember-box">
+      <div className="login-form-options">
+        <label className="login-remember">
           <input
             {...register('rememberMe')}
             type="checkbox"
-            className="figma-checkbox"
+            className="login-checkbox"
           />
           <span>REMEMBER ME</span>
         </label>
 
-        <Link href="#forgot" className="figma-forgot-text">
+        <Link href="#forgot" className="login-forgot">
           FORGOT PASSWORD?
         </Link>
       </div>
@@ -161,7 +161,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="figma-btn-primary group"
+        className="login-btn-primary group"
       >
         {isLoading ? (
           <>
@@ -170,8 +170,8 @@ export function LoginForm() {
           </>
         ) : (
           <>
-            <span className="figma-btn-label">LOGIN</span>
-            <span className="figma-btn-circle-arrow">
+            <span className="login-btn-label">LOGIN</span>
+            <span className="login-btn-arrow">
               <Image src="/imgRectangle427.png" alt="arrow" width={16} height={16} />
             </span>
           </>
@@ -179,35 +179,35 @@ export function LoginForm() {
       </button>
 
       {/* OR Divider */}
-      <div className="figma-or-divider">
+      <div className="login-or-divider">
         <span>OR</span>
       </div>
 
       {/* Continue as Guest Button */}
-      <Link href="/home" className="figma-btn-secondary group">
-        <span className="figma-btn-label">CONTINUE AS GUEST</span>
-        <span className="figma-btn-circle-arrow">
+      <Link href="/home" className="login-btn-secondary group">
+        <span className="login-btn-label">CONTINUE AS GUEST</span>
+        <span className="login-btn-arrow">
           <Image src="/imgRectangle427.png" alt="arrow" width={16} height={16} />
         </span>
       </Link>
 
       {/* Bottom Switcher */}
-      <div className="figma-form-footer">
-        <span className="figma-footer-note">DON&apos;T HAVE AN ACCOUNT?</span>
-        <Link href="/register" className="figma-footer-register">
+      <div className="login-form-footer">
+        <span className="login-form-footer-note">DON&apos;T HAVE AN ACCOUNT?</span>
+        <Link href="/register" className="login-form-footer-link">
           REGISTER &gt;
         </Link>
       </div>
 
       {/* Demo Credentials quick button (helpful for testing) */}
-      <div className="pt-1 text-center">
+      <div className="login-demo-credentials">
         <button
           type="button"
           onClick={() => {
             setValue('email', 'customer@f1store.com');
             setValue('password', 'customer123');
           }}
-          className="text-[9px] uppercase tracking-wider text-gray-500 hover:text-gray-300 transition-colors cursor-pointer"
+          className="login-demo-btn"
         >
           Click to load demo credentials
         </button>

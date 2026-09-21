@@ -5,7 +5,7 @@ import { RegisterForm } from '@/components/auth/RegisterForm';
 import './register.css';
 
 export const metadata: Metadata = {
-  title: 'Create Account | F1 Hub',
+  title: 'Create Account',
   description: 'Join the grid and create your account for race predictions, live standings, and team gear.',
 };
 

@@ -4,7 +4,7 @@
    ========================================================================== */
 
 /* Overall Page */
-.figma-login-viewport {
+.login-viewport {
   position: relative;
   min-height: 100vh;
   width: 100%;
@@ -14,7 +14,7 @@
 }
 
 /* --- Top Navigation Header --- */
-.figma-top-header {
+.login-header {
   position: relative;
   z-index: 40;
   width: 100%;
@@ -22,7 +22,7 @@
   border-bottom: 2px solid #ffffff;
 }
 
-.figma-header-inner {
+.login-header-inner {
   display: flex;
   height: 58px;
   width: 100%;
@@ -34,46 +34,46 @@
 }
 
 @media (min-width: 640px) {
-  .figma-header-inner {
+  .login-header-inner {
     height: 64px;
     padding: 0 1.75rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .figma-header-inner {
+  .login-header-inner {
     height: 72px;
     padding: 0 3.5rem;
   }
 }
 
-.figma-logo-wrap {
+.login-logo {
   position: relative;
   height: 32px;
   width: 115px;
 }
 
 @media (min-width: 640px) {
-  .figma-logo-wrap {
+  .login-logo {
     height: 42px;
     width: 155px;
   }
 }
 
 /* Nav items centered or right */
-.figma-nav-cluster {
+.login-nav {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
 
 @media (min-width: 1024px) {
-  .figma-nav-cluster {
+  .login-nav {
     gap: 2.25rem;
   }
 }
 
-.figma-nav-items {
+.login-nav-items {
   display: none;
   align-items: center;
   gap: 1.25rem;
@@ -85,20 +85,20 @@
 }
 
 @media (min-width: 768px) {
-  .figma-nav-items {
+  .login-nav-items {
     display: flex;
   }
 }
 
-.figma-nav-link {
+.login-nav-link {
   transition: color 0.15s ease;
 }
 
-.figma-nav-link:hover {
+.login-nav-link:hover {
   color: #ff1801;
 }
 
-.figma-nav-bar-divider {
+.login-nav-divider {
   display: inline-block;
   height: 18px;
   width: 2px;
@@ -106,19 +106,19 @@
 }
 
 /* Buttons on right: SALE & MENU */
-.figma-header-btns {
+.login-header-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 @media (min-width: 640px) {
-  .figma-header-btns {
+  .login-header-actions {
     gap: 0.85rem;
   }
 }
 
-.figma-btn-sale-pill {
+.login-sale-pill {
   display: flex;
   height: 30px;
   min-width: 64px;
@@ -136,7 +136,7 @@
 }
 
 @media (min-width: 640px) {
-  .figma-btn-sale-pill {
+  .login-sale-pill {
     height: 34px;
     min-width: 80px;
     padding: 0 1.25rem;
@@ -145,12 +145,12 @@
   }
 }
 
-.figma-btn-sale-pill:hover {
+.login-sale-pill:hover {
   background-color: #f3f3f3;
   transform: translateY(-1px);
 }
 
-.figma-btn-menu-pill {
+.login-menu-pill {
   display: flex;
   height: 30px;
   align-items: center;
@@ -170,7 +170,7 @@
 }
 
 @media (min-width: 640px) {
-  .figma-btn-menu-pill {
+  .login-menu-pill {
     height: 34px;
     padding: 0 1.25rem;
     font-size: 11px;
@@ -178,13 +178,13 @@
   }
 }
 
-.figma-btn-menu-pill:hover {
+.login-menu-pill:hover {
   background-color: #f3f3f3;
   transform: translateY(-1px);
 }
 
 /* --- Hero Banner Section --- */
-.figma-hero-stage {
+.login-hero {
   position: relative;
   min-height: 580px;
   width: 100%;
@@ -194,13 +194,13 @@
 }
 
 @media (min-width: 1024px) {
-  .figma-hero-stage {
+  .login-hero {
     min-height: 640px;
   }
 }
 
 /* Crowd backdrop in red duo-tone */
-.figma-crowd-backdrop {
+.login-hero-backdrop {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -209,7 +209,7 @@
   pointer-events: none;
 }
 
-.figma-red-atmosphere-layer {
+.login-hero-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -220,7 +220,7 @@
 }
 
 /* Hero Content Area */
-.figma-hero-inner {
+.login-hero-inner {
   position: relative;
   z-index: 10;
   margin: 0 auto;
@@ -233,20 +233,20 @@
 }
 
 @media (min-width: 640px) {
-  .figma-hero-inner {
+  .login-hero-inner {
     min-height: 580px;
     padding: 2rem 1.75rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .figma-hero-inner {
+  .login-hero-inner {
     min-height: 640px;
     padding: 2.5rem 3.5rem;
   }
 }
 
-.figma-hero-columns {
+.login-hero-grid {
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
@@ -255,13 +255,13 @@
 }
 
 @media (min-width: 1024px) {
-  .figma-hero-columns {
+  .login-hero-grid {
     grid-template-columns: minmax(0, 1.15fr) minmax(360px, 420px);
   }
 }
 
 /* Left Hero Typography and Hooks */
-.figma-left-hero {
+.login-hero-left {
   position: relative;
   z-index: 15;
   display: flex;
@@ -271,19 +271,19 @@
 }
 
 @media (min-width: 640px) {
-  .figma-left-hero {
+  .login-hero-left {
     padding-bottom: 2rem;
   }
 }
 
 /* SPRINT QUALI Title & Oval orbit star */
-.figma-title-assembly {
+.login-hero-title-wrap {
   position: relative;
   width: 100%;
   max-width: 680px;
 }
 
-.figma-sprint-quali-h1 {
+.login-hero-title {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 12vw, 4.5rem);
   line-height: 0.85;
@@ -295,21 +295,21 @@
 }
 
 @media (min-width: 640px) {
-  .figma-sprint-quali-h1 {
+  .login-hero-title {
     font-size: 6.2rem;
     -webkit-text-stroke: 2px #ffffff;
   }
 }
 
 @media (min-width: 1024px) {
-  .figma-sprint-quali-h1 {
+  .login-hero-title {
     font-size: 8rem;
     -webkit-text-stroke: 2.5px #ffffff;
   }
 }
 
 /* 104 Star / Ellipse Ornament */
-.figma-star-orbit-art {
+.login-hero-star {
   position: absolute;
   top: -1rem;
   left: 3rem;
@@ -321,7 +321,7 @@
 }
 
 @media (min-width: 640px) {
-  .figma-star-orbit-art {
+  .login-hero-star {
     top: -2rem;
     left: 8rem;
     width: 340px;
@@ -330,7 +330,7 @@
 }
 
 @media (min-width: 1024px) {
-  .figma-star-orbit-art {
+  .login-hero-star {
     top: -2.5rem;
     left: 12rem;
     width: 440px;
@@ -339,7 +339,7 @@
 }
 
 /* Red F1 car shape logo */
-.figma-f1-red-badge {
+.login-hero-badge {
   position: relative;
   margin-top: 1.25rem;
   height: 24px;
@@ -347,20 +347,20 @@
 }
 
 @media (min-width: 640px) {
-  .figma-f1-red-badge {
+  .login-hero-badge {
     margin-top: 1.5rem;
   }
 }
 
 /* [TITLEHOOK] and details */
-.figma-hero-metadata {
+.login-hero-meta {
   margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.figma-hook-label {
+.login-meta-hook {
   font-size: clamp(1.1rem, 4.5vw, 1.35rem);
   font-weight: 900;
   text-transform: uppercase;
@@ -368,7 +368,7 @@
   color: #ff1801;
 }
 
-.figma-title-label {
+.login-meta-title {
   font-size: 1rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -376,7 +376,7 @@
   color: #ffffff;
 }
 
-.figma-details-label {
+.login-meta-details {
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -385,7 +385,7 @@
 }
 
 /* Stat row: [INTERACTIONDATA]+ and [PREDICTIONDATA]* */
-.figma-stats-row {
+.login-stats {
   margin-top: 1.25rem;
   display: flex;
   flex-wrap: wrap;
@@ -394,19 +394,19 @@
 }
 
 @media (min-width: 640px) {
-  .figma-stats-row {
+  .login-stats {
     margin-top: 1.5rem;
     gap: 2.5rem;
   }
 }
 
-.figma-stat-unit {
+.login-stat {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
 }
 
-.figma-stat-val-red {
+.login-stat-value--red {
   font-size: 1.25rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -414,7 +414,7 @@
   color: #ff1801;
 }
 
-.figma-stat-val-white {
+.login-stat-value {
   font-size: 1.25rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -422,7 +422,7 @@
   color: #ffffff;
 }
 
-.figma-stat-caption {
+.login-stat-label {
   font-size: 9.5px;
   font-weight: 800;
   text-transform: uppercase;
@@ -431,7 +431,7 @@
 }
 
 /* --- Graphic Layer: Watermark 01, Driver, and Plus Grid (Anchored beside Auth Card) --- */
-.figma-driver-silhouette {
+.login-driver {
   position: absolute;
   top: -100px;
   left: 50%;
@@ -443,7 +443,7 @@
   z-index: 5;
 }
 
-.figma-watermark-01 {
+.login-watermark {
   position: absolute;
   top: -75px;
   left: 50%;
@@ -458,30 +458,30 @@
   z-index: 4;
 }
 
-.figma-plus-cross-cluster {
+.login-plus-grid {
   display: none;
   pointer-events: none;
 }
 
 /* Tablet: Enhanced background presence */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .figma-driver-silhouette {
+  .login-driver {
     top: -120px;
     width: 380px;
     height: 420px;
     opacity: 0.45;
   }
 
-  .figma-watermark-01 {
+  .login-watermark {
     top: -100px;
     font-size: 11rem;
     -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.45);
   }
 }
 
-/* Desktop: Driver proudly positioned directly on the left side of class="figma-auth-chamfer-card" */
+/* Desktop: Driver proudly positioned directly on the left side of class="login-card" */
 @media (min-width: 1024px) {
-  .figma-driver-silhouette {
+  .login-driver {
     top: -20px;
     left: auto;
     right: calc(100% - 60px);
@@ -492,7 +492,7 @@
     z-index: 15;
   }
 
-  .figma-watermark-01 {
+  .login-watermark {
     top: -3.5rem;
     left: auto;
     right: calc(100% - 150px);
@@ -502,7 +502,7 @@
     z-index: 10;
   }
 
-  .figma-plus-cross-cluster {
+  .login-plus-grid {
     display: block;
     position: absolute;
     bottom: 1.5rem;
@@ -516,7 +516,7 @@
 }
 
 @media (min-width: 1440px) {
-  .figma-driver-silhouette {
+  .login-driver {
     width: 530px;
     height: 570px;
     right: calc(100% - 70px);
@@ -524,7 +524,7 @@
 }
 
 /* --- Right Side: Login Card --- */
-.figma-right-card-anchor {
+.login-card-anchor {
   position: relative;
   z-index: 20;
   margin-top: 1.5rem;
@@ -534,14 +534,14 @@
 }
 
 @media (min-width: 1024px) {
-  .figma-right-card-anchor {
+  .login-card-anchor {
     margin-top: 0;
     justify-self: end;
   }
 }
 
 /* Card Cutout Shape */
-.figma-auth-chamfer-card {
+.login-card {
   position: relative;
   background-color: #06080d;
   border: 1px solid rgba(255, 24, 1, 0.5);
@@ -554,13 +554,13 @@
 }
 
 @media (min-width: 640px) {
-  .figma-auth-chamfer-card {
+  .login-card {
     padding: 2.25rem 2rem;
   }
 }
 
 /* --- Live Telemetry Strip --- */
-.figma-telemetry-bar {
+.login-telemetry {
   display: flex;
   align-items: center;
   min-height: 44px;
@@ -577,18 +577,18 @@
   scrollbar-width: none;
 }
 
-.figma-telemetry-bar::-webkit-scrollbar {
+.login-telemetry::-webkit-scrollbar {
   display: none;
 }
 
 @media (min-width: 640px) {
-  .figma-telemetry-bar {
+  .login-telemetry {
     min-height: 48px;
     font-size: 11px;
   }
 }
 
-.figma-live-cell {
+.login-live-cell {
   display: flex;
   height: 44px;
   align-items: center;
@@ -600,14 +600,14 @@
 }
 
 @media (min-width: 640px) {
-  .figma-live-cell {
+  .login-live-cell {
     height: 48px;
     gap: 0.75rem;
     padding: 0 2rem;
   }
 }
 
-.figma-live-dot-solid {
+.login-live-dot {
   height: 14px;
   width: 14px;
   border-radius: 9999px;
@@ -616,13 +616,13 @@
 }
 
 @media (min-width: 640px) {
-  .figma-live-dot-solid {
+  .login-live-dot {
     height: 18px;
     width: 18px;
   }
 }
 
-.figma-telemetry-scroll {
+.login-telemetry-data {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -632,38 +632,38 @@
 }
 
 @media (min-width: 640px) {
-  .figma-telemetry-scroll {
+  .login-telemetry-data {
     gap: 1.5rem;
     padding: 0 2rem;
   }
 }
 
-.figma-telemetry-slash {
+.login-telemetry-slash {
   font-weight: 300;
   color: rgba(255, 255, 255, 0.6);
   font-size: 13px;
 }
 
 @media (min-width: 640px) {
-  .figma-telemetry-slash {
+  .login-telemetry-slash {
     font-size: 14px;
   }
 }
 
-.figma-phase-red {
+.login-telemetry-phase {
   color: #ff1801;
   font-weight: 900;
   margin-left: 1rem;
 }
 
 @media (min-width: 640px) {
-  .figma-phase-red {
+  .login-telemetry-phase {
     margin-left: 1.5rem;
   }
 }
 
 /* --- Trusted Teams Logo Strip --- */
-.figma-trusted-section {
+.login-teams {
   width: 100%;
   background-color: #000000;
   padding: 2rem 1rem 1.5rem;
@@ -671,12 +671,12 @@
 }
 
 @media (min-width: 640px) {
-  .figma-trusted-section {
+  .login-teams {
     padding: 2.5rem 1.5rem 2rem;
   }
 }
 
-.figma-trusted-heading {
+.login-teams-heading {
   font-size: clamp(10px, 2.8vw, 13px);
   font-weight: 900;
   text-transform: uppercase;
@@ -685,7 +685,7 @@
   margin-bottom: 1.5rem;
 }
 
-.figma-teams-row {
+.login-teams-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -696,18 +696,18 @@
 }
 
 @media (min-width: 640px) {
-  .figma-teams-row {
+  .login-teams-row {
     gap: 2rem 2.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .figma-teams-row {
+  .login-teams-row {
     gap: 3rem;
   }
 }
 
-.figma-team-logo-item {
+.login-team-logo {
   position: relative;
   height: 24px;
   width: 46px;
@@ -716,19 +716,19 @@
 }
 
 @media (min-width: 640px) {
-  .figma-team-logo-item {
+  .login-team-logo {
     height: 32px;
     width: 58px;
   }
 }
 
-.figma-team-logo-item:hover {
+.login-team-logo:hover {
   opacity: 1;
   transform: scale(1.08);
 }
 
 /* --- Pirelli Tire Strip Divider --- */
-.figma-tires-divider-section {
+.login-tires {
   position: relative;
   display: flex;
   align-items: center;
@@ -739,12 +739,12 @@
 }
 
 @media (min-width: 640px) {
-  .figma-tires-divider-section {
+  .login-tires {
     padding: 1.25rem 0 0.5rem;
   }
 }
 
-.figma-tires-line {
+.login-tires-line {
   position: absolute;
   left: 0;
   right: 0;
@@ -754,7 +754,7 @@
   z-index: 1;
 }
 
-.figma-tires-cluster {
+.login-tires-cluster {
   position: relative;
   z-index: 2;
   display: flex;
@@ -765,13 +765,13 @@
 }
 
 @media (min-width: 640px) {
-  .figma-tires-cluster {
+  .login-tires-cluster {
     gap: 0.75rem;
     padding: 0 1.5rem;
   }
 }
 
-.figma-tire-item {
+.login-tire {
   position: relative;
   height: 42px;
   width: 42px;
@@ -781,25 +781,25 @@
 }
 
 @media (min-width: 480px) {
-  .figma-tire-item {
+  .login-tire {
     height: 52px;
     width: 52px;
   }
 }
 
 @media (min-width: 640px) {
-  .figma-tire-item {
+  .login-tire {
     height: 64px;
     width: 64px;
   }
 }
 
-.figma-tire-item:hover {
+.login-tire:hover {
   transform: scale(1.12);
 }
 
 /* --- Footer Section (Screenshot Matching) --- */
-.figma-page-footer {
+.login-footer {
   width: 100%;
   background-color: #000000;
   padding: 2.5rem 1.25rem 1.5rem;
@@ -807,12 +807,12 @@
 }
 
 @media (min-width: 640px) {
-  .figma-page-footer {
+  .login-footer {
     padding: 3rem 1.5rem 1.5rem;
   }
 }
 
-.figma-footer-content-grid {
+.login-footer-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
@@ -821,46 +821,46 @@
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
-  .figma-footer-content-grid {
+  .login-footer-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 2.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .figma-footer-content-grid {
+  .login-footer-grid {
     grid-template-columns: 1.2fr 1fr 1fr 1.6fr;
     gap: 3rem;
   }
 }
 
 /* Brand col */
-.figma-footer-brand-col {
+.login-footer-brand {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
-.figma-footer-logo-box {
+.login-footer-logo {
   position: relative;
   height: 38px;
   width: 135px;
 }
 
-.figma-footer-details-txt {
+.login-footer-details {
   font-size: 11px;
   color: #9ca3af;
   text-transform: uppercase;
   font-weight: 700;
 }
 
-.figma-footer-socials {
+.login-footer-socials {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.figma-social-pill {
+.login-social-pill {
   display: flex;
   height: 24px;
   width: 24px;
@@ -871,18 +871,18 @@
   transition: border-color 0.15s ease;
 }
 
-.figma-social-pill:hover {
+.login-social-pill:hover {
   border-color: #ff1801;
 }
 
 /* Page link columns */
-.figma-footer-links-col {
+.login-footer-links {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
 }
 
-.figma-footer-col-title {
+.login-footer-col-title {
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
@@ -890,7 +890,7 @@
   color: #ff1801;
 }
 
-.figma-footer-link {
+.login-footer-link {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -898,18 +898,18 @@
   transition: color 0.15s ease;
 }
 
-.figma-footer-link:hover {
+.login-footer-link:hover {
   color: #ffffff;
 }
 
 /* Newsletter col */
-.figma-footer-newsletter-col {
+.login-footer-newsletter {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
 }
 
-.figma-newsletter-title {
+.login-newsletter-title {
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
@@ -917,13 +917,13 @@
   color: #ff1801;
 }
 
-.figma-newsletter-desc {
+.login-newsletter-desc {
   font-size: 11px;
   line-height: 1.45;
   color: rgba(255, 255, 255, 0.7);
 }
 
-.figma-newsletter-input-combo {
+.login-newsletter-form {
   display: flex;
   align-items: center;
   width: 100%;
@@ -933,7 +933,7 @@
   overflow: hidden;
 }
 
-.figma-newsletter-field {
+.login-newsletter-input {
   flex: 1 1 0%;
   background: transparent;
   padding: 0.6rem 0.85rem;
@@ -942,11 +942,11 @@
   outline: none;
 }
 
-.figma-newsletter-field::placeholder {
+.login-newsletter-input::placeholder {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.figma-newsletter-submit {
+.login-newsletter-btn {
   background-color: #ff1801;
   color: #ffffff;
   font-size: 10px;
@@ -959,18 +959,18 @@
   transition: background-color 0.15s ease;
 }
 
-.figma-newsletter-submit:hover {
+.login-newsletter-btn:hover {
   background-color: #d61200;
 }
 
-.figma-newsletter-terms {
+.login-newsletter-terms {
   font-size: 9px;
   line-height: 1.35;
   color: rgba(255, 255, 255, 0.5);
 }
 
 /* Bottom legal bar */
-.figma-footer-bottom-bar {
+.login-footer-bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -985,17 +985,17 @@
 }
 
 @media (min-width: 640px) {
-  .figma-footer-bottom-bar {
+  .login-footer-bottom {
     flex-direction: row;
   }
 }
 
-.figma-footer-legal-links {
+.login-footer-legal {
   display: flex;
   align-items: center;
   gap: 1.25rem;
 }
 
-.figma-footer-legal-links a:hover {
+.login-footer-legal a:hover {
   color: #ffffff;
 }

@@ -70,7 +70,7 @@ export function RegisterForm() {
       )}
 
       {/* Fields */}
-      <div className="space-y-4">
+      <div className="auth-fields-stack">
         {/* Name & Username grid */}
         <div className="auth-grid-two-col">
           <div className="auth-field-group">

@@ -7,7 +7,7 @@ import { LoginForm } from '@/components/auth/LoginForm';
 import './login.css';
 
 export const metadata: Metadata = {
-  title: 'Formula 1® - Login',
+  title: 'Login',
   description: 'Sign in to access live timing, race predictions, and exclusive team updates.',
 };
 
@@ -27,14 +27,14 @@ export const metadata: Metadata = {
  */
 export default function LoginPage() {
   return (
-    <main className="figma-login-viewport">
+    <main className="login-viewport">
       {/* =====================================================================
           1. TOP NAVIGATION HEADER
           ===================================================================== */}
-      <header className="figma-top-header">
-        <div className="figma-header-inner">
+      <header className="login-header">
+        <div className="login-header-inner">
           {/* F1 Official Logo */}
-          <Link href="/home" className="figma-logo-wrap" aria-label="Formula 1 Home">
+          <Link href="/home" className="login-logo" aria-label="Formula 1 Home">
             <Image
               src="/imgLogoContainer.png"
               alt="Formula 1 Logo"
@@ -46,25 +46,25 @@ export default function LoginPage() {
           </Link>
 
           {/* Primary Navigation Links with Vertical Dividers */}
-          <nav aria-label="Primary navigation" className="figma-nav-cluster">
-            <div className="figma-nav-items">
-              <Link href="/home" className="figma-nav-link">HOME</Link>
-              <span className="figma-nav-bar-divider" aria-hidden="true" />
-              <Link href="#schedules" className="figma-nav-link">SCHEDULES</Link>
-              <span className="figma-nav-bar-divider" aria-hidden="true" />
-              <Link href="#news" className="figma-nav-link">NEWS</Link>
-              <span className="figma-nav-bar-divider" aria-hidden="true" />
-              <Link href="#store" className="figma-nav-link">STORE</Link>
+          <nav aria-label="Primary navigation" className="login-nav">
+            <div className="login-nav-items">
+              <Link href="/home" className="login-nav-link">HOME</Link>
+              <span className="login-nav-divider" aria-hidden="true" />
+              <Link href="#schedules" className="login-nav-link">SCHEDULES</Link>
+              <span className="login-nav-divider" aria-hidden="true" />
+              <Link href="#news" className="login-nav-link">NEWS</Link>
+              <span className="login-nav-divider" aria-hidden="true" />
+              <Link href="#store" className="login-nav-link">STORE</Link>
             </div>
           </nav>
 
           {/* Header Action Buttons: SALE & MENU */}
-          <div className="figma-header-btns">
-            <Link href="#sale" className="figma-btn-sale-pill">SALE</Link>
+          <div className="login-header-actions">
+            <Link href="#sale" className="login-sale-pill">SALE</Link>
             <button
               type="button"
               aria-label="Open menu"
-              className="figma-btn-menu-pill"
+              className="login-menu-pill"
             >
               <Menu className="h-4 w-4" aria-hidden="true" />
               <span>MENU</span>
@@ -76,9 +76,9 @@ export default function LoginPage() {
       {/* =====================================================================
           2. HERO BANNER & LOGIN CARD STAGE
           ===================================================================== */}
-      <section className="figma-hero-stage">
+      <section className="login-hero">
         {/* Background Atmosphere Layers */}
-        <div className="figma-crowd-backdrop">
+        <div className="login-hero-backdrop">
           <Image
             src="/imgLogin.png"
             alt="Crowd cheering at the Grand Prix"
@@ -88,19 +88,19 @@ export default function LoginPage() {
             priority
           />
         </div>
-        <div className="figma-red-atmosphere-layer" aria-hidden="true" />
+        <div className="login-hero-overlay" aria-hidden="true" />
 
         {/* Hero Content Container */}
-        <div className="figma-hero-inner">
-          <div className="figma-hero-columns">
+        <div className="login-hero-inner">
+          <div className="login-hero-grid">
 
             {/* Left Column: SPRINT QUALI Title & Metadata Hooks */}
-            <div className="figma-left-hero">
-              <div className="figma-title-assembly">
-                <h1 className="figma-sprint-quali-h1">
+            <div className="login-hero-left">
+              <div className="login-hero-title-wrap">
+                <h1 className="login-hero-title">
                   SPRINT<br />QUALI!!!!
                 </h1>
-                <div className="figma-star-orbit-art" aria-hidden="true">
+                <div className="login-hero-star" aria-hidden="true">
                   <Image
                     src="/img104.svg"
                     alt="Sparkle star ornament"
@@ -111,7 +111,7 @@ export default function LoginPage() {
               </div>
 
               {/* F1 Car/Logo Badge */}
-              <div className="figma-f1-red-badge" aria-hidden="true">
+              <div className="login-hero-badge" aria-hidden="true">
                 <Image
                   src="/imgLogoContainer.png"
                   alt="F1 Logo"
@@ -121,32 +121,32 @@ export default function LoginPage() {
               </div>
 
               {/* Metadata Labels */}
-              <div className="figma-hero-metadata">
-                <span className="figma-hook-label">[TITLEHOOK]</span>
-                <span className="figma-title-label">[TITLE]</span>
-                <span className="figma-details-label">[DETAILS]</span>
+              <div className="login-hero-meta">
+                <span className="login-meta-hook">[TITLEHOOK]</span>
+                <span className="login-meta-title">[TITLE]</span>
+                <span className="login-meta-details">[DETAILS]</span>
               </div>
 
               {/* Real-time Interaction Statistics */}
-              <div className="figma-stats-row">
-                <div className="figma-stat-unit">
-                  <span className="figma-stat-val-red">[INTERACTIONDATA]+</span>
-                  <span className="figma-stat-caption">ACTIVE FANATICS</span>
+              <div className="login-stats">
+                <div className="login-stat">
+                  <span className="login-stat-value--red">[INTERACTIONDATA]+</span>
+                  <span className="login-stat-label">ACTIVE FANATICS</span>
                 </div>
-                <div className="figma-stat-unit">
-                  <span className="figma-stat-val-white">[PREDICTIONDATA]★</span>
-                  <span className="figma-stat-caption">PREDICTION RATING</span>
+                <div className="login-stat">
+                  <span className="login-stat-value">[PREDICTIONDATA]★</span>
+                  <span className="login-stat-label">PREDICTION RATING</span>
                 </div>
               </div>
             </div>
 
             {/* Right Column: Floating Chamfered Auth Card with Driver Composition */}
-            <div className="figma-right-card-anchor">
+            <div className="login-card-anchor">
               {/* "01" Watermark behind card & driver */}
-              <span className="figma-watermark-01" aria-hidden="true">01</span>
+              <span className="login-watermark" aria-hidden="true">01</span>
 
-              {/* Driver celebrating cutout positioned directly beside on the leftside of figma-auth-chamfer-card */}
-              <div className="figma-driver-silhouette" aria-hidden="true">
+              {/* Driver celebrating cutout positioned directly beside on the leftside of login-card */}
+              <div className="login-driver" aria-hidden="true">
                 <Image
                   src="/imgSticker1.png"
                   alt="Formula 1 champion celebrating with helmet"
@@ -158,7 +158,7 @@ export default function LoginPage() {
               </div>
 
               {/* Plus grid matrix positioned underneath driver beside card */}
-              <div className="figma-plus-cross-cluster" aria-hidden="true">
+              <div className="login-plus-grid" aria-hidden="true">
                 <Image
                   src="/imgOrnament24.svg"
                   alt="Decorative plus grid matrix"
@@ -168,7 +168,7 @@ export default function LoginPage() {
               </div>
 
               {/* The Login Card */}
-              <div className="figma-auth-chamfer-card">
+              <div className="login-card">
                 <Suspense fallback={<div className="h-72 animate-pulse rounded bg-white/5" />}>
                   <LoginForm />
                 </Suspense>
@@ -182,60 +182,60 @@ export default function LoginPage() {
       {/* =====================================================================
           3. LIVE TIMING TELEMETRY TICKER
           ===================================================================== */}
-      <section aria-label="Live race telemetry timing" className="figma-telemetry-bar">
-        <div className="figma-live-cell">
-          <span className="figma-live-dot-solid" />
+      <section aria-label="Live race telemetry timing" className="login-telemetry">
+        <div className="login-live-cell">
+          <span className="login-live-dot" />
           <span>LIVE</span>
         </div>
-        <div className="figma-telemetry-scroll">
+        <div className="login-telemetry-data">
           <span>LAP [TIMEDATA]</span>
-          <span className="figma-telemetry-slash">/</span>
+          <span className="login-telemetry-slash">/</span>
           <span>[NAM1] [TIMEDATA1]</span>
-          <span className="figma-telemetry-slash">/</span>
+          <span className="login-telemetry-slash">/</span>
           <span>[NAM2] [TIMEDATA2]</span>
-          <span className="figma-telemetry-slash">/</span>
+          <span className="login-telemetry-slash">/</span>
           <span>[NAM3] [TIMEDATA3]</span>
-          <span className="figma-telemetry-slash">/</span>
-          <span className="figma-phase-red">[PHASE]</span>
+          <span className="login-telemetry-slash">/</span>
+          <span className="login-telemetry-phase">[PHASE]</span>
         </div>
       </section>
 
       {/* =====================================================================
           4. TRUSTED TEAMS SPONSORS STRIP
           ===================================================================== */}
-      <section className="figma-trusted-section">
-        <h2 className="figma-trusted-heading">
+      <section className="login-teams">
+        <h2 className="login-teams-heading">
           TRUSTED BY THE WORLD&apos;S MOST INNOVATIVE TEAMS
         </h2>
-        <div className="figma-teams-row">
-          <div className="figma-team-logo-item">
+        <div className="login-teams-row">
+          <div className="login-team-logo">
             <Image src="/imgAlfa800X800.png" alt="Alfa Romeo" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgAlpha800X800.png" alt="AlphaTauri" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgAlpine800X800.png" alt="Alpine" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgAston800X800.png" alt="Aston Martin" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgFerrari800X800.png" alt="Ferrari" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgHaas800X800.png" alt="Haas" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgMcLaren800X800.png" alt="McLaren" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgMercedes800X800.png" alt="Mercedes" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgRedbull800X8001.png" alt="Red Bull Racing" fill className="object-contain" />
           </div>
-          <div className="figma-team-logo-item">
+          <div className="login-team-logo">
             <Image src="/imgTeamWilliams.png" alt="Williams" fill className="object-contain" />
           </div>
         </div>
@@ -244,22 +244,22 @@ export default function LoginPage() {
       {/* =====================================================================
           5. PIRELLI TIRE COMPOUNDS STRIP DIVIDER
           ===================================================================== */}
-      <section className="figma-tires-divider-section" aria-hidden="true">
-        <div className="figma-tires-line" />
-        <div className="figma-tires-cluster">
-          <div className="figma-tire-item">
+      <section className="login-tires" aria-hidden="true">
+        <div className="login-tires-line" />
+        <div className="login-tires-cluster">
+          <div className="login-tire">
             <Image src="/soft-red-tire-134-5892.png" alt="Pirelli Soft Red Compound" fill className="object-contain" />
           </div>
-          <div className="figma-tire-item">
+          <div className="login-tire">
             <Image src="/soft-yellow-tire-134-5985.png" alt="Pirelli Medium Yellow Compound" fill className="object-contain" />
           </div>
-          <div className="figma-tire-item">
+          <div className="login-tire">
             <Image src="/soft-white-tire-134-6078.png" alt="Pirelli Hard White Compound" fill className="object-contain" />
           </div>
-          <div className="figma-tire-item">
+          <div className="login-tire">
             <Image src="/soft-green-tire-134-6171.png" alt="Pirelli Intermediate Green Compound" fill className="object-contain" />
           </div>
-          <div className="figma-tire-item">
+          <div className="login-tire">
             <Image src="/soft-blue-tire-134-6264.png" alt="Pirelli Wet Blue Compound" fill className="object-contain" />
           </div>
         </div>
@@ -268,11 +268,11 @@ export default function LoginPage() {
       {/* =====================================================================
           6. WIREFRAME PROPOSAL FOOTER
           ===================================================================== */}
-      <footer className="figma-page-footer">
-        <div className="figma-footer-content-grid">
+      <footer className="login-footer">
+        <div className="login-footer-grid">
           {/* Brand Column */}
-          <div className="figma-footer-brand-col">
-            <div className="figma-footer-logo-box">
+          <div className="login-footer-brand">
+            <div className="login-footer-logo">
               <Image
                 src="/imgLogoContainer.png"
                 alt="Formula 1 Logo"
@@ -280,68 +280,68 @@ export default function LoginPage() {
                 className="object-contain object-left"
               />
             </div>
-            <span className="figma-footer-details-txt">[Details]</span>
-            <div className="figma-footer-socials">
-              <Link href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="figma-social-pill" aria-label="Facebook">
+            <span className="login-footer-details">[Details]</span>
+            <div className="login-footer-socials">
+              <Link href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="login-social-pill" aria-label="Facebook">
                 <Image src="/imgFacebook.svg" alt="Facebook" width={14} height={14} />
               </Link>
-              <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="figma-social-pill" aria-label="Twitter">
+              <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="login-social-pill" aria-label="Twitter">
                 <Image src="/imgTwitter.svg" alt="Twitter" width={14} height={14} />
               </Link>
-              <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="figma-social-pill" aria-label="Instagram">
+              <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="login-social-pill" aria-label="Instagram">
                 <Image src="/imgInstagram.svg" alt="Instagram" width={14} height={14} />
               </Link>
-              <Link href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="figma-social-pill" aria-label="YouTube">
+              <Link href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="login-social-pill" aria-label="YouTube">
                 <Image src="/imgYoutube.svg" alt="YouTube" width={14} height={14} />
               </Link>
             </div>
           </div>
 
           {/* Directory Column 1 */}
-          <div className="figma-footer-links-col">
-            <h3 className="figma-footer-col-title">[PAGE]</h3>
-            <Link href="#page1" className="figma-footer-link">[Page]</Link>
-            <Link href="#page2" className="figma-footer-link">[Page]</Link>
-            <Link href="#page3" className="figma-footer-link">[Page]</Link>
-            <Link href="#page4" className="figma-footer-link">[Page]</Link>
+          <div className="login-footer-links">
+            <h3 className="login-footer-col-title">[PAGE]</h3>
+            <Link href="#page1" className="login-footer-link">[Page]</Link>
+            <Link href="#page2" className="login-footer-link">[Page]</Link>
+            <Link href="#page3" className="login-footer-link">[Page]</Link>
+            <Link href="#page4" className="login-footer-link">[Page]</Link>
           </div>
 
           {/* Directory Column 2 */}
-          <div className="figma-footer-links-col">
-            <h3 className="figma-footer-col-title">[PAGE]</h3>
-            <Link href="#page1" className="figma-footer-link">[Page]</Link>
-            <Link href="#page2" className="figma-footer-link">[Page]</Link>
-            <Link href="#page3" className="figma-footer-link">[Page]</Link>
-            <Link href="#page4" className="figma-footer-link">[Page]</Link>
+          <div className="login-footer-links">
+            <h3 className="login-footer-col-title">[PAGE]</h3>
+            <Link href="#page1" className="login-footer-link">[Page]</Link>
+            <Link href="#page2" className="login-footer-link">[Page]</Link>
+            <Link href="#page3" className="login-footer-link">[Page]</Link>
+            <Link href="#page4" className="login-footer-link">[Page]</Link>
           </div>
 
           {/* Newsletter Column */}
-          <div className="figma-footer-newsletter-col">
-            <h3 className="figma-newsletter-title">JOIN THE NEWSLETTER</h3>
-            <p className="figma-newsletter-desc">
+          <div className="login-footer-newsletter">
+            <h3 className="login-newsletter-title">JOIN THE NEWSLETTER</h3>
+            <p className="login-newsletter-desc">
               Subscribe for exclusive drop access and pre-season testing details.
             </p>
-            <form action="#newsletter" className="figma-newsletter-input-combo">
+            <form action="#newsletter" className="login-newsletter-form">
               <input
                 type="email"
                 placeholder="Enter your email address..."
-                className="figma-newsletter-field"
+                className="login-newsletter-input"
                 aria-label="Email address for newsletter"
               />
-              <button type="submit" className="figma-newsletter-submit">
+              <button type="submit" className="login-newsletter-btn">
                 SUBSCRIBE
               </button>
             </form>
-            <p className="figma-newsletter-terms">
+            <p className="login-newsletter-terms">
               By subscribing, you agree to our Privacy Policy and Terms of Use.
             </p>
           </div>
         </div>
 
         {/* Bottom Legal Notice */}
-        <div className="figma-footer-bottom-bar">
+        <div className="login-footer-bottom">
           <p>© 2026 Formula One Digital Media Limited. Merchandise Wireframe Proposal. All Rights Reserved.</p>
-          <div className="figma-footer-legal-links">
+          <div className="login-footer-legal">
             <Link href="#privacy">Privacy Policy</Link>
             <span aria-hidden="true">.</span>
             <Link href="#terms">Terms of Use</Link>
