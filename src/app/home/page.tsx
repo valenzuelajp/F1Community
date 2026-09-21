@@ -5,7 +5,7 @@ import { Flag, ShoppingBag, Trophy } from 'lucide-react';
 import './home.css';
 
 export const metadata: Metadata = {
-  title: 'Home | F1 Community Philippines',
+  title: 'Home',
   description: 'Formula 1 community, race-week apparel, and collector essentials.',
 };
 

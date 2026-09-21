@@ -12,7 +12,7 @@ import './layout.css';
  */
 export function SiteFooter() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" aria-label="Site footer">
       <div className="footer-container">
 
         {/* 4-column footer layout */}
@@ -64,7 +64,7 @@ export function SiteFooter() {
             <p className="leading-relaxed text-gray-400">
               Subscribe for exclusive drop access and pre-season testing details.
             </p>
-            <form onSubmit={(e) => e.preventDefault()} className="newsletter-form">
+            <form onSubmit={(e) => e.preventDefault()} className="newsletter-form" aria-label="Newsletter subscription">
               <input
                 type="email"
                 placeholder="Enter your email address..."
@@ -83,11 +83,11 @@ export function SiteFooter() {
         {/* Legal & copyright bar */}
         <div className="footer-bottom-bar">
           <p>© 2026 Formula One Digital Media Limited. All Rights Reserved.</p>
-          <div className="footer-legal-links">
+          <nav className="footer-legal-links" aria-label="Legal links">
             <Link href="#privacy" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
             <Link href="#terms" className="hover:text-gray-400 transition-colors">Terms of Use</Link>
             <Link href="#cookies" className="hover:text-gray-400 transition-colors">Cookies</Link>
-          </div>
+          </nav>
         </div>
 
       </div>
