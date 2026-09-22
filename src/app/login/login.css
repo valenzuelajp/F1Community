@@ -1,24 +1,65 @@
 /* ==========================================================================
-   Login Page Styles (Matching Screenshot 2026-09-16 122645.png)
-   Cleanly separated CSS - fully responsive, pixel-matched.
+   F1 Login Page — Sections: Variables, Page, Header, Hero, Driver, Card,
+   Ticker, Teams, Tires, Footer, Responsive
    ========================================================================== */
 
-/* Overall Page */
+/* =========================================================
+   COLORS — edit these to re-style the whole page at once.
+   Each name says exactly what it affects.
+   ========================================================= */
+
+:root {
+  /* Main F1 red — badge, LIVE dot, headings, buttons */
+  --brand-red: #ff1801;
+
+  /* Near-black — dark sections (header, ticker, teams, footer) */
+  --black: #000000;
+
+  /* Darkest shade — the page background behind everything */
+  --page-background: #030407;
+
+  /* Inside color of the login card */
+  --card-background: #06080d;
+
+  /* Thin red outline around the login card */
+  --card-border-red: rgba(255, 24, 1, 0.5);
+
+  /* Soft red glow that shines around the login card */
+  --card-glow-red: rgba(255, 24, 1, 0.15);
+
+  /* ---- Driver image position (the celebrating driver) ----
+     The driver image is centered at these two spots:
+     --driver-left : bigger = moves RIGHT, smaller/negative = moves LEFT
+     --driver-top  : bigger = moves DOWN,   smaller            = moves UP    */
+  --driver-left: -10%;
+  --driver-top: 10%;
+
+  /* ---- Nav links horizontal nudge ----
+     Negative = moves the HOME/SCHEDULES/NEWS/STORE group LEFT (toward the logo).
+     --nav-left          : applied at tablet+ (640px)
+     --nav-left-desktop  : applied on desktop (extra nudge at 1024px+) */
+  --nav-left: -5rem;
+  --nav-left-desktop: -16rem;
+}
+
+/* --- Page --- */
+
 .login-viewport {
   position: relative;
   min-height: 100vh;
   width: 100%;
-  background-color: #030407;
+  background-color: var(--page-background);
   color: #ffffff;
   overflow-x: hidden;
 }
 
-/* --- Top Navigation Header --- */
+/* --- Header --- */
+
 .login-header {
   position: relative;
   z-index: 40;
   width: 100%;
-  background-color: #000000;
+  background-color: var(--black);
   border-bottom: 2px solid #ffffff;
 }
 
@@ -33,44 +74,17 @@
   padding: 0 1rem;
 }
 
-@media (min-width: 640px) {
-  .login-header-inner {
-    height: 64px;
-    padding: 0 1.75rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .login-header-inner {
-    height: 72px;
-    padding: 0 3.5rem;
-  }
-}
-
 .login-logo {
   position: relative;
-  height: 32px;
-  width: 115px;
+  height: 160px;
+  width: 600px;
+  flex-shrink: 0;
 }
 
-@media (min-width: 640px) {
-  .login-logo {
-    height: 42px;
-    width: 155px;
-  }
-}
-
-/* Nav items centered or right */
 .login-nav {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-}
-
-@media (min-width: 1024px) {
-  .login-nav {
-    gap: 2.25rem;
-  }
 }
 
 .login-nav-items {
@@ -84,18 +98,12 @@
   color: #ffffff;
 }
 
-@media (min-width: 768px) {
-  .login-nav-items {
-    display: flex;
-  }
-}
-
 .login-nav-link {
   transition: color 0.15s ease;
 }
 
 .login-nav-link:hover {
-  color: #ff1801;
+  color: var(--brand-red);
 }
 
 .login-nav-divider {
@@ -105,17 +113,10 @@
   background-color: #ffffff;
 }
 
-/* Buttons on right: SALE & MENU */
 .login-header-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .login-header-actions {
-    gap: 0.85rem;
-  }
 }
 
 .login-sale-pill {
@@ -131,18 +132,10 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #000000;
-  transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-@media (min-width: 640px) {
-  .login-sale-pill {
-    height: 34px;
-    min-width: 80px;
-    padding: 0 1.25rem;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-  }
+  color: var(--black);
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .login-sale-pill:hover {
@@ -163,19 +156,12 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #000000;
+  color: var(--black);
   cursor: pointer;
   border: none;
-  transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-@media (min-width: 640px) {
-  .login-menu-pill {
-    height: 34px;
-    padding: 0 1.25rem;
-    font-size: 11px;
-    gap: 0.5rem;
-  }
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .login-menu-pill:hover {
@@ -183,7 +169,8 @@
   transform: translateY(-1px);
 }
 
-/* --- Hero Banner Section --- */
+/* --- Hero --- */
+
 .login-hero {
   position: relative;
   min-height: 580px;
@@ -193,13 +180,6 @@
   border-bottom: 2px solid #ffffff;
 }
 
-@media (min-width: 1024px) {
-  .login-hero {
-    min-height: 640px;
-  }
-}
-
-/* Crowd backdrop in red duo-tone */
 .login-hero-backdrop {
   position: absolute;
   inset: 0;
@@ -213,13 +193,22 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: 
-    radial-gradient(ellipse at 70% 65%, rgba(225, 24, 1, 0.75) 0%, rgba(130, 10, 4, 0.45) 45%, transparent 75%),
-    linear-gradient(180deg, rgba(3, 4, 7, 0.92) 0%, rgba(18, 4, 4, 0.6) 40%, rgba(160, 15, 8, 0.55) 100%);
+  background:
+    radial-gradient(
+      ellipse at 70% 65%,
+      rgba(225, 24, 1, 0.75) 0%,
+      rgba(130, 10, 4, 0.45) 45%,
+      transparent 75%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(3, 4, 7, 0.92) 0%,
+      rgba(18, 4, 4, 0.6) 40%,
+      rgba(160, 15, 8, 0.55) 100%
+    );
   pointer-events: none;
 }
 
-/* Hero Content Area */
 .login-hero-inner {
   position: relative;
   z-index: 10;
@@ -232,20 +221,6 @@
   justify-content: center;
 }
 
-@media (min-width: 640px) {
-  .login-hero-inner {
-    min-height: 580px;
-    padding: 2rem 1.75rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .login-hero-inner {
-    min-height: 640px;
-    padding: 2.5rem 3.5rem;
-  }
-}
-
 .login-hero-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -254,13 +229,6 @@
   width: 100%;
 }
 
-@media (min-width: 1024px) {
-  .login-hero-grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(360px, 420px);
-  }
-}
-
-/* Left Hero Typography and Hooks */
 .login-hero-left {
   position: relative;
   z-index: 15;
@@ -270,13 +238,6 @@
   padding-bottom: 1.5rem;
 }
 
-@media (min-width: 640px) {
-  .login-hero-left {
-    padding-bottom: 2rem;
-  }
-}
-
-/* SPRINT QUALI Title & Oval orbit star */
 .login-hero-title-wrap {
   position: relative;
   width: 100%;
@@ -294,81 +255,63 @@
   user-select: none;
 }
 
-@media (min-width: 640px) {
-  .login-hero-title {
-    font-size: 6.2rem;
-    -webkit-text-stroke: 2px #ffffff;
-  }
+/* Auto-applied when a title word needs more room (e.g. "SHOOTOUT!", "COMPLETE!") */
+.login-hero-title--compact {
+  font-size: clamp(2.2rem, 9.5vw, 3.6rem);
 }
 
-@media (min-width: 1024px) {
-  .login-hero-title {
-    font-size: 8rem;
-    -webkit-text-stroke: 2.5px #ffffff;
-  }
-}
-
-/* 104 Star / Ellipse Ornament */
-.login-hero-star {
-  position: absolute;
-  top: -1rem;
-  left: 3rem;
-  width: 220px;
-  height: 220px;
-  pointer-events: none;
-  opacity: 0.85;
-  z-index: 1;
-}
-
-@media (min-width: 640px) {
-  .login-hero-star {
-    top: -2rem;
-    left: 8rem;
-    width: 340px;
-    height: 340px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .login-hero-star {
-    top: -2.5rem;
-    left: 12rem;
-    width: 440px;
-    height: 440px;
-  }
-}
-
-/* Red F1 car shape logo */
-.login-hero-badge {
-  position: relative;
+.login-round-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 1.25rem;
-  height: 24px;
-  width: 60px;
+  height: 26px;
+  padding: 0 0.75rem;
+  background-color: var(--brand-red);
+  color: #ffffff;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
-@media (min-width: 640px) {
-  .login-hero-badge {
-    margin-top: 1.5rem;
-  }
+.login-countdown {
+  display: inline-block;
+  color: var(--brand-red);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
 }
 
-/* [TITLEHOOK] and details */
-.login-hero-meta {
+/* Catch the countdown's second line: local start time + detected time zone.
+   Kept quiet so the big red countdown stays the focal point. */
+.login-countdown-start {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-variant-numeric: normal;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+}
+
+.login-race-meta {
   margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.login-meta-hook {
+.login-session-label {
   font-size: clamp(1.1rem, 4.5vw, 1.35rem);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #ff1801;
+  color: var(--brand-red);
 }
 
-.login-meta-title {
+.login-race-name {
   font-size: 1rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -376,7 +319,7 @@
   color: #ffffff;
 }
 
-.login-meta-details {
+.login-race-info {
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -384,20 +327,12 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Stat row: [INTERACTIONDATA]+ and [PREDICTIONDATA]* */
-.login-stats {
+.login-season-stats {
   margin-top: 1.25rem;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 1.5rem;
-}
-
-@media (min-width: 640px) {
-  .login-stats {
-    margin-top: 1.5rem;
-    gap: 2.5rem;
-  }
 }
 
 .login-stat {
@@ -411,7 +346,7 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  color: #ff1801;
+  color: var(--brand-red);
 }
 
 .login-stat-value {
@@ -430,32 +365,38 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* --- Graphic Layer: Watermark 01, Driver, and Plus Grid (Anchored beside Auth Card) --- */
+/* --- Driver Image (behind login card) ---
+   z-index: 0 = watermark + plus grid
+   z-index: 1 = driver image
+   z-index: 10 = login card (on top)
+   Move with the --driver-left / --driver-top variables at the top of this file */
+
 .login-driver {
   position: absolute;
-  top: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: clamp(260px, 68vw, 360px);
-  height: clamp(280px, 72vw, 380px);
-  opacity: 0.38;
+  top: var(--driver-top);
+  left: var(--driver-left);
+  transform: translate(-50%, -50%);
+  width: clamp(300px, 80vw, 420px);
+  height: clamp(320px, 85vw, 440px);
+  opacity: 1;
   pointer-events: none;
-  z-index: 5;
+  z-index: 1;
+  filter: drop-shadow(0 0 40px rgba(255, 24, 1, 0.2));
 }
 
 .login-watermark {
   position: absolute;
-  top: -75px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: var(--driver-top);
+  left: var(--driver-left);
+  transform: translate(-50%, -50%);
   font-family: var(--font-display);
   font-size: clamp(6.5rem, 20vw, 10rem);
   line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
   user-select: none;
   pointer-events: none;
-  z-index: 4;
+  z-index: 0;
 }
 
 .login-plus-grid {
@@ -463,109 +404,41 @@
   pointer-events: none;
 }
 
-/* Tablet: Enhanced background presence */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .login-driver {
-    top: -120px;
-    width: 380px;
-    height: 420px;
-    opacity: 0.45;
-  }
+/* --- Login Card --- */
 
-  .login-watermark {
-    top: -100px;
-    font-size: 11rem;
-    -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.45);
-  }
-}
-
-/* Desktop: Driver proudly positioned directly on the left side of class="login-card" */
-@media (min-width: 1024px) {
-  .login-driver {
-    top: -20px;
-    left: auto;
-    right: calc(100% - 60px);
-    transform: none;
-    width: 490px;
-    height: 530px;
-    opacity: 1;
-    z-index: 15;
-  }
-
-  .login-watermark {
-    top: -3.5rem;
-    left: auto;
-    right: calc(100% - 150px);
-    transform: none;
-    font-size: 14.5rem;
-    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.55);
-    z-index: 10;
-  }
-
-  .login-plus-grid {
-    display: block;
-    position: absolute;
-    bottom: 1.5rem;
-    left: auto;
-    right: calc(100% - 25px);
-    width: 155px;
-    height: 120px;
-    opacity: 0.9;
-    z-index: 11;
-  }
-}
-
-@media (min-width: 1440px) {
-  .login-driver {
-    width: 530px;
-    height: 570px;
-    right: calc(100% - 70px);
-  }
-}
-
-/* --- Right Side: Login Card --- */
-.login-card-anchor {
+.login-card-stage {
   position: relative;
   z-index: 20;
   margin-top: 1.5rem;
   width: 100%;
   max-width: 420px;
   justify-self: center;
+  overflow: visible;
 }
 
-@media (min-width: 1024px) {
-  .login-card-anchor {
-    margin-top: 0;
-    justify-self: end;
-  }
-}
-
-/* Card Cutout Shape */
 .login-card {
   position: relative;
-  background-color: #06080d;
-  border: 1px solid rgba(255, 24, 1, 0.5);
+  z-index: 10;
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border-red);
   border-radius: 4px;
   padding: 1.5rem 1.25rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 24, 1, 0.15);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.8),
+    0 0 30px var(--card-glow-red);
   clip-path: polygon(0 0, 85% 0, 100% 12%, 100% 100%, 0 100%);
   width: 100%;
   box-sizing: border-box;
 }
 
-@media (min-width: 640px) {
-  .login-card {
-    padding: 2.25rem 2rem;
-  }
-}
+/* --- Telemetry Ticker --- */
 
-/* --- Live Telemetry Strip --- */
 .login-telemetry {
   display: flex;
   align-items: center;
   min-height: 44px;
   width: 100%;
-  background-color: #000000;
+  background-color: var(--black);
   border-bottom: 2px solid #ffffff;
   overflow-x: auto;
   white-space: nowrap;
@@ -573,7 +446,6 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 
@@ -581,45 +453,23 @@
   display: none;
 }
 
-@media (min-width: 640px) {
-  .login-telemetry {
-    min-height: 48px;
-    font-size: 11px;
-  }
-}
-
 .login-live-cell {
   display: flex;
   height: 44px;
   align-items: center;
   gap: 0.5rem;
-  border-right: 2px solid rgba(255, 255, 255, 0.3);
+  border-right: 2px solid rgba(255, 255, 255, 0.6);
   padding: 0 1.25rem;
-  color: #ff1801;
+  color: var(--brand-red);
   flex-shrink: 0;
-}
-
-@media (min-width: 640px) {
-  .login-live-cell {
-    height: 48px;
-    gap: 0.75rem;
-    padding: 0 2rem;
-  }
 }
 
 .login-live-dot {
   height: 14px;
   width: 14px;
   border-radius: 9999px;
-  background-color: #ff1801;
-  box-shadow: 0 0 10px #ff1801;
-}
-
-@media (min-width: 640px) {
-  .login-live-dot {
-    height: 18px;
-    width: 18px;
-  }
+  background-color: var(--brand-red);
+  box-shadow: 0 0 10px var(--brand-red);
 }
 
 .login-telemetry-data {
@@ -631,49 +481,25 @@
   flex-shrink: 0;
 }
 
-@media (min-width: 640px) {
-  .login-telemetry-data {
-    gap: 1.5rem;
-    padding: 0 2rem;
-  }
-}
-
 .login-telemetry-slash {
   font-weight: 300;
   color: rgba(255, 255, 255, 0.6);
   font-size: 13px;
 }
 
-@media (min-width: 640px) {
-  .login-telemetry-slash {
-    font-size: 14px;
-  }
-}
-
 .login-telemetry-phase {
-  color: #ff1801;
+  color: var(--brand-red);
   font-weight: 900;
   margin-left: 1rem;
 }
 
-@media (min-width: 640px) {
-  .login-telemetry-phase {
-    margin-left: 1.5rem;
-  }
-}
+/* --- Teams Strip --- */
 
-/* --- Trusted Teams Logo Strip --- */
 .login-teams {
   width: 100%;
-  background-color: #000000;
+  background-color: var(--black);
   padding: 2rem 1rem 1.5rem;
   text-align: center;
-}
-
-@media (min-width: 640px) {
-  .login-teams {
-    padding: 2.5rem 1.5rem 2rem;
-  }
 }
 
 .login-teams-heading {
@@ -695,31 +521,14 @@
   margin: 0 auto;
 }
 
-@media (min-width: 640px) {
-  .login-teams-row {
-    gap: 2rem 2.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .login-teams-row {
-    gap: 3rem;
-  }
-}
-
 .login-team-logo {
   position: relative;
   height: 24px;
   width: 46px;
   opacity: 0.95;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-@media (min-width: 640px) {
-  .login-team-logo {
-    height: 32px;
-    width: 58px;
-  }
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .login-team-logo:hover {
@@ -727,21 +536,16 @@
   transform: scale(1.08);
 }
 
-/* --- Pirelli Tire Strip Divider --- */
+/* --- Tire Divider --- */
+
 .login-tires {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  background-color: #000000;
+  background-color: var(--black);
   padding: 1rem 0 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .login-tires {
-    padding: 1.25rem 0 0.5rem;
-  }
 }
 
 .login-tires-line {
@@ -760,15 +564,8 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background-color: #000000;
+  background-color: var(--black);
   padding: 0 0.65rem;
-}
-
-@media (min-width: 640px) {
-  .login-tires-cluster {
-    gap: 0.75rem;
-    padding: 0 1.5rem;
-  }
 }
 
 .login-tire {
@@ -780,36 +577,17 @@
   transition: transform 0.15s ease;
 }
 
-@media (min-width: 480px) {
-  .login-tire {
-    height: 52px;
-    width: 52px;
-  }
-}
-
-@media (min-width: 640px) {
-  .login-tire {
-    height: 64px;
-    width: 64px;
-  }
-}
-
 .login-tire:hover {
   transform: scale(1.12);
 }
 
-/* --- Footer Section (Screenshot Matching) --- */
+/* --- Footer --- */
+
 .login-footer {
   width: 100%;
-  background-color: #000000;
+  background-color: var(--black);
   padding: 2.5rem 1.25rem 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-@media (min-width: 640px) {
-  .login-footer {
-    padding: 3rem 1.5rem 1.5rem;
-  }
 }
 
 .login-footer-grid {
@@ -820,21 +598,6 @@
   margin: 0 auto;
 }
 
-@media (min-width: 640px) and (max-width: 1023px) {
-  .login-footer-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .login-footer-grid {
-    grid-template-columns: 1.2fr 1fr 1fr 1.6fr;
-    gap: 3rem;
-  }
-}
-
-/* Brand col */
 .login-footer-brand {
   display: flex;
   flex-direction: column;
@@ -872,10 +635,9 @@
 }
 
 .login-social-pill:hover {
-  border-color: #ff1801;
+  border-color: var(--brand-red);
 }
 
-/* Page link columns */
 .login-footer-links {
   display: flex;
   flex-direction: column;
@@ -887,7 +649,7 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #ff1801;
+  color: var(--brand-red);
 }
 
 .login-footer-link {
@@ -902,7 +664,6 @@
   color: #ffffff;
 }
 
-/* Newsletter col */
 .login-footer-newsletter {
   display: flex;
   flex-direction: column;
@@ -914,7 +675,7 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #ff1801;
+  color: var(--brand-red);
 }
 
 .login-newsletter-desc {
@@ -943,11 +704,11 @@
 }
 
 .login-newsletter-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .login-newsletter-btn {
-  background-color: #ff1801;
+  background-color: var(--brand-red);
   color: #ffffff;
   font-size: 10px;
   font-weight: 900;
@@ -969,7 +730,6 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Bottom legal bar */
 .login-footer-bottom {
   display: flex;
   flex-direction: column;
@@ -984,12 +744,6 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-@media (min-width: 640px) {
-  .login-footer-bottom {
-    flex-direction: row;
-  }
-}
-
 .login-footer-legal {
   display: flex;
   align-items: center;
@@ -998,4 +752,211 @@
 
 .login-footer-legal a:hover {
   color: #ffffff;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+/* Tablet+ */
+@media (min-width: 640px) {
+  .login-header-inner {
+    height: 64px;
+    padding: 0 1.75rem;
+  }
+  .login-logo {
+    height: 200px;
+    width: 750px;
+  }
+  .login-nav {
+    gap: 2.25rem;
+  }
+  .login-header-actions {
+    gap: 0.85rem;
+  }
+  .login-nav-items {
+    display: flex;
+    position: relative;
+    left: var(--nav-left);
+  }
+
+  .login-sale-pill {
+    height: 34px;
+    min-width: 80px;
+    padding: 0 1.25rem;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  .login-menu-pill {
+    height: 34px;
+    padding: 0 1.25rem;
+    font-size: 11px;
+    gap: 0.5rem;
+  }
+
+  .login-hero-inner {
+    min-height: 580px;
+    padding: 2rem 1.75rem;
+  }
+  .login-hero-title {
+    font-size: 6.2rem;
+    -webkit-text-stroke: 2px #ffffff;
+  }
+  .login-hero-title--compact {
+    font-size: 5.2rem;
+    -webkit-text-stroke: 2px #ffffff;
+  }
+  .login-round-badge {
+    margin-top: 1.5rem;
+  }
+  .login-season-stats {
+    margin-top: 1.5rem;
+    gap: 2.5rem;
+  }
+  .login-card {
+    padding: 2.25rem 2rem;
+  }
+
+  .login-driver {
+    width: 400px;
+    height: 440px;
+  }
+  .login-watermark {
+    font-size: 11rem;
+    -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.2);
+  }
+
+  .login-telemetry {
+    min-height: 48px;
+    font-size: 11px;
+  }
+  .login-live-cell {
+    height: 48px;
+    gap: 0.75rem;
+    padding: 0 2rem;
+  }
+  .login-live-dot {
+    height: 18px;
+    width: 18px;
+  }
+  .login-telemetry-data {
+    gap: 1.5rem;
+    padding: 0 2rem;
+  }
+  .login-telemetry-slash {
+    font-size: 14px;
+  }
+  .login-telemetry-phase {
+    margin-left: 1.5rem;
+  }
+
+  .login-teams {
+    padding: 2.5rem 1.5rem 2rem;
+  }
+  .login-team-logo {
+    height: 32px;
+    width: 58px;
+  }
+  .login-tires {
+    padding: 1.25rem 0 0.5rem;
+  }
+  .login-tires-cluster {
+    gap: 0.75rem;
+    padding: 0 1.5rem;
+  }
+  .login-tire {
+    height: 52px;
+    width: 52px;
+  }
+
+  .login-footer {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+  .login-footer-bottom {
+    flex-direction: row;
+  }
+}
+
+/* Tablet only (footer grid) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .login-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+/* Desktop+ */
+@media (min-width: 1024px) {
+  .login-header-inner {
+    height: 72px;
+    padding: 0 3.5rem;
+  }
+  .login-hero {
+    min-height: 640px;
+  }
+  .login-hero-inner {
+    min-height: 640px;
+    padding: 2.5rem 3.5rem;
+  }
+  .login-hero-grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(360px, 420px);
+  }
+  .login-hero-title {
+    font-size: 8rem;
+    -webkit-text-stroke: 2.5px #ffffff;
+  }
+  .login-hero-title--compact {
+    font-size: 6.6rem;
+    -webkit-text-stroke: 2.5px #ffffff;
+  }
+  .login-card-stage {
+    margin-top: 0;
+    justify-self: end;
+  }
+
+  .login-nav-items {
+    position: relative;
+    left: var(--nav-left-desktop);
+  }
+
+  .login-driver {
+    width: 460px;
+    height: 500px;
+    filter: drop-shadow(0 0 50px rgba(255, 24, 1, 0.25));
+  }
+  .login-watermark {
+    font-size: 14.5rem;
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.2);
+  }
+  .login-plus-grid {
+    display: block;
+    position: absolute;
+    top: var(--driver-top);
+    left: var(--driver-left);
+    transform: translate(-50%, -50%);
+    width: 155px;
+    height: 120px;
+    opacity: 0.6;
+    z-index: 0;
+  }
+
+  .login-teams-row {
+    gap: 3rem;
+  }
+  .login-tire {
+    height: 64px;
+    width: 64px;
+  }
+  .login-footer-grid {
+    grid-template-columns: 1.2fr 1fr 1fr 1.6fr;
+    gap: 3rem;
+  }
+}
+
+/* Wide screens */
+@media (min-width: 1440px) {
+  .login-driver {
+    width: 500px;
+    height: 540px;
+  }
 }
