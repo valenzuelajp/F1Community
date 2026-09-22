@@ -8,7 +8,7 @@ import {
   Dropdown,
   Accordion,
   useInteractions,
-} from '@/components/interactions/InteractionCollection';
+} from '@/components/InteractionCollection';
 import './components.css';
 
 function ComponentsShowcase() {
