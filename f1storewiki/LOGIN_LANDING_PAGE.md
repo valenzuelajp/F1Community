@@ -60,9 +60,11 @@ Make the F1-styled login screen the first page visitors see, using the supplied 
   `src/lib/f1/jolpica.ts` client (`getNextF1Event()`, ISR revalidate 1h, static
   fallback when the API is down).
 - New `src/components/f1/Countdown.tsx` (client component) for the ticking timer.
-  It detects the visitor's time zone and shows the session start in local time
-  (e.g. `Thu 24 Sep 16:30 · Asia/Manila (GMT+8)`) so dates/times can be checked.
+  It detects the visitor's time zone (client-side only, privacy-safe) and shows the
+  session start in local time on a **12-hour clock**, e.g. `Thu 24 Sep 4:30 PM · <device zone> (GMT+8)`.
   The countdown targets the **next** session (FP1 before a weekend), not the race.
+- The login **race info line sits above the countdown block** (countdown is its own
+  flex child below `.login-race-info` in `.login-race-meta`).
 - The giant outline hero title now **auto-adjusts** by session type
   (`GRAND PRIX!` / `FREE PRACTICE!` / `QUALI TIME!` / `SPRINT SHOOTOUT!` /
   `SEASON COMPLETE!`) with an auto `--compact` size for long words.

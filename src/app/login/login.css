@@ -38,8 +38,8 @@
      Negative = moves the HOME/SCHEDULES/NEWS/STORE group LEFT (toward the logo).
      --nav-left          : applied at tablet+ (640px)
      --nav-left-desktop  : applied on desktop (extra nudge at 1024px+) */
-  --nav-left: -3rem;
-  --nav-left-desktop: -12rem;
+  --nav-left: -5rem;
+  --nav-left-desktop: -16rem;
 }
 
 /* --- Page --- */
