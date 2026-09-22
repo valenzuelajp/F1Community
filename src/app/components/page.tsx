@@ -9,6 +9,7 @@ import {
   Accordion,
   useInteractions,
 } from '@/components/interactions/InteractionCollection';
+import './components.css';
 
 function ComponentsShowcase() {
   const { openModal, showToast } = useInteractions();
@@ -26,25 +27,18 @@ function ComponentsShowcase() {
   ];
 
   return (
-    <main style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', color: '#fff' }}>
+    <main className="components-page">
+      <h1 className="components-title">
         Components Showcase
       </h1>
 
-      <section style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1rem', color: '#d1d5db' }}>
+      <section className="components-section">
+        <h2 className="components-section-title">
           Modal
         </h2>
         <button
+          className="components-btn components-btn--primary"
           onClick={() => openModal('demo')}
-          style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: '#ff1801',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '0.375rem',
-            cursor: 'pointer',
-          }}
         >
           Open Modal
         </button>
@@ -53,35 +47,26 @@ function ComponentsShowcase() {
         </Modal>
       </section>
 
-      <section style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1rem', color: '#d1d5db' }}>
+      <section className="components-section">
+        <h2 className="components-section-title">
           Tooltip
         </h2>
         <Tooltip content="This is a tooltip">
-          <button
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#141824',
-              color: '#fff',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '0.375rem',
-              cursor: 'pointer',
-            }}
-          >
+          <button className="components-btn components-btn--secondary">
             Hover me
           </button>
         </Tooltip>
       </section>
 
-      <section style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1rem', color: '#d1d5db' }}>
+      <section className="components-section">
+        <h2 className="components-section-title">
           Dropdown
         </h2>
         <Dropdown trigger="Menu" items={dropdownItems} />
       </section>
 
-      <section style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1rem', color: '#d1d5db' }}>
+      <section className="components-section">
+        <h2 className="components-section-title">
           Accordion
         </h2>
         <Accordion items={accordionItems} />
