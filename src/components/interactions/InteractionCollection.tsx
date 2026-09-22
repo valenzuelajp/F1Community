@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { X, ChevronDown, CheckCircle } from 'lucide-react';
-import './interactions.css';
 
 /* ==========================================================================
    Interaction Context
