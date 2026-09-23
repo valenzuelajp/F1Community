@@ -1,3 +1,18 @@
+---
+title: "F1 API Reference & Recommendations"
+aliases:
+  - F1 API
+  - API Reference
+  - Jolpica
+tags:
+  - f1-community
+  - wiki
+  - api
+  - f1
+date: 2026-09-23
+status: active
+---
+
 # F1 API Reference & Recommendations
 
 ## Overview

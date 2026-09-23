@@ -1,18 +1,47 @@
-# Database Guide: How It Works & How to Control It
+---
+title: "Database Guide: How It Works & How to Control It"
+aliases:
+  - Database
+  - Database Guide
+  - Prisma
+tags:
+  - f1-community
+  - wiki
+  - database
+  - prisma
+  - neon
+date: 2026-09-23
+status: active
+---
 
-> **Stack**: PostgreSQL on Neon (managed, serverless) + Prisma ORM.
-> Live DB used by every environment: `neondb` on project `morning-shadow-27344830`
-> (`.neon` file, branch **production**). All Schema-to-DB control flows through Prisma — never hand-write DDL onto the live cluster.
+# 🗄️ Database Guide: How It Works & How to Control It
+
+> [!abstract] Stack
+> **PostgreSQL on Neon (managed, serverless) + Prisma ORM.** Live DB used by every
+> environment: `neondb` on project `morning-shadow-27344830` (`.neon` file, branch
+> **production**). All schema-to-DB control flows through Prisma — never hand-write
+> DDL onto the live cluster.
+
+[[WELCOME|🏁 Welcome]] · [[README|📚 Wiki Index]] · [[SECURITY|Security Plan]] · [[GAPS|Gaps & Missing Work]]
+
+---
+
+## Important: this DB is for user + store data, NOT the F1 content
+
+> [!warning] Two data layers — don't mix them
+> The login page's F1 hero (schedule, countdown, standings) comes from the
+> **Jolpica F1 API**, not this database. This Postgres layer holds **accounts,
+> store catalog, carts, orders** — plus future F1 models (Race, Circuit,
+> NewsArticle) once Phase 1a adds them. See [[WELCOME|How the website works]].
 
 ## Architecture
 
-```
-   Code (TS)                Prisma Engine                   Neon (Postgres)
-┌──────────────┐    ┌─────────────────────────┐    ┌───────────────────────────┐
-│ src/lib/db.ts│ →  │ schema.prisma defines   │ →  │ neondb database (branch:  │
-│ (singleton)  │    │ models → generated       │    │  production, pooler)     │
-│ src/lib/*    │    │ client in node_modules/  │    │ ep-jolly-morning…neon.tech│
-└──────────────┘    └─────────────────────────┘    └───────────────────────────┘
+```mermaid
+flowchart LR
+    A[src/lib/db.ts<br/>Prisma singleton] --> B[schema.prisma<br/>defines models]
+    B --> C[Generated client<br/>node_modules/.prisma]
+    A --> C
+    C --> D[(Neon Postgres<br/>neondb · branch production)]
 ```
 
 - **ORM**: Prisma 5 (client `@prisma/client`, CLI `prisma`). One shared instance in
@@ -23,6 +52,21 @@
 - **Migrations**: version-controlled SQL in `prisma/migrations/`. The baseline
   `20260915024910_community_init` matches the live schema. Local DB is verified in sync
   (`prisma migrate status` → "up to date").
+
+## Local vs Production
+
+| Aspect | Local (dev) | Production |
+| :----- | :---------- | :--------- |
+| **Database** | Docker Postgres 16 (`docker-compose.yml`) **or** Neon | Neon `neondb` (branch `production`) |
+| **Connection** | `DATABASE_URL` in `.env.local` → `localhost:5432` or Neon | Vercel env secret `DATABASE_URL` (pooled) |
+| **Migrations** | `pnpm db:migrate` (creates SQL) | CI `pnpm db:migrate deploy` (replays in order) |
+| **Seed** | `pnpm db:seed` — **destructive**, local only | Never run against prod with real users |
+| **Inspecting** | `pnpm db:studio` / `psql` | Neon console SQL editor (read-only) |
+
+> [!note] Which one is pointed to?
+> Check `.env.local`. If `DATABASE_URL` starts with `postgresql://...neon.tech` you're
+> on the cloud DB even in dev. Use the Docker local URL (`.env.example`) when you want
+> an isolated sandbox, or Neon when you want parity with production.
 
 ## The `users` Table (auth-critical)
 
@@ -62,8 +106,9 @@ pnpm db:seed       # Reset teams/drivers/products + admin/customer demo users (b
 3. `pnpm db:generate` → client matches schema.
 4. Commit schema + migration together. CI `pnpm db:migrate deploy` replays it in order.
 
-> Rule (DEVELOPMENT.md): **never edit generated migration SQL by hand**, never DDL straight
-> onto the DB. Migration history is the single source of truth.
+> [!warning] Don't hand-edit
+> Per [[DEVELOPMENT|Development Guidelines]]: **never edit generated migration SQL by
+> hand**, never DDL straight onto the DB. Migration history is the single source of truth.
 
 ### Inspecting the DB
 
@@ -105,3 +150,7 @@ psql "$env:DATABASE_URL" -c 'select * from users;'
 - The baseline migration was regenerated from the live schema on 2026-09-18 (username was
   added to `User` to match the already-migrated Neon table) — DB, schema, and client are
   now in agreement.
+
+---
+
+*Last updated: 2026-09-23 · Part of the [[README|F1Store Wiki]]*

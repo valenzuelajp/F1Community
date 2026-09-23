@@ -1,7 +1,33 @@
-# Security Plan: F1Community (Website + Store)
+---
+title: "Security Plan: F1Community"
+aliases:
+  - Security
+  - Security Plan
+tags:
+  - f1-community
+  - wiki
+  - security
+date: 2026-09-23
+status: active
+---
 
-> **Status**: Active baseline — hardening checklist for the auth flow now in production code.
-> Covers the current state (2026-09-18: DB-backed credentials login + registration) and staged hardening.
+# 🛡️ Security Plan: F1Community
+
+> [!abstract] Status
+> **Active baseline** — hardening checklist for the auth flow now in production
+> code. Covers the current state (2026-09-18: DB-backed credentials login +
+> registration) and staged hardening across all three experiences
+> ([[WELCOME|Community hub, Store Community, Official Store]]).
+
+[[WELCOME|🏁 Welcome]] · [[README|📚 Wiki Index]] · [[GAPS|Gaps & Missing Work]] · [[DATABASE|Database Guide]]
+
+---
+
+## One account, many surfaces
+
+All **three experiences** (F1 Community hub, F1 Store Community, F1 Official
+Store) share **one account**. That concentrates value in the session cookie and
+password — which is exactly why the threat model below exists.
 
 ## Threat Model (What we're defending)
 
@@ -14,6 +40,16 @@
 | Database (Neon Postgres) | Data exfiltration, deletion |
 
 ## Already Implemented (2026-09-18)
+
+```mermaid
+flowchart LR
+    U[User] --> F[LoginForm / RegisterForm]
+    F --> V[Zod validation]
+    V --> A[authorize in lib/auth.ts]
+    A --> D[(Prisma + Postgres)]
+    A --> B[bcrypt.compare cost 12]
+    B --> J[JWT session via NEXTAUTH_SECRET]
+```
 
 - **Password hashing**: bcrypt (cost 12) via `bcryptjs` on both seed and registration
   (`src/app/actions/auth.ts`). `passwordHash` is the only stored credential — never plaintext.
@@ -40,6 +76,7 @@
 ## Staged Hardening (next, in priority order)
 
 ### P0 — before first real users
+
 - [ ] **Rate limiting on auth endpoints** — `/api/auth/callback/credentials` and `/register`
       (e.g. `@upstash/ratelimit` on Vercel or an in-process limiter; block ~5 attempts/min/IP).
 - [ ] **Production `NEXTAUTH_SECRET`** — the dev fallback in `src/lib/auth.ts` is for local
@@ -50,7 +87,14 @@
 - [ ] **Cookie hardening** — NextAuth `httpOnly` (default), `sameSite`, and consider `secure` in prod.
 - [ ] **Email verification** on registration (optional for launch, gated behind `emailVerified`).
 
+> [!warning] Known leak in place today
+> The login page renders a **"Continue as guest" / demo credentials** button that
+> reveals `customer123`. It exists so reviewers can enter without registering —
+> but it must be removed (or gated to dev only) before real users arrive.
+> Tracked in [[GAPS|Gaps & Missing Work]].
+
 ### P1 — before scale / real traffic
+
 - [ ] **Forget the mock**: remove the anonymous demo fallback checks anywhere they remain.
 - [ ] **Password reset flow** (secure token in `VerificationToken` table, single-use, 1h expiry).
 - [ ] **OAuth providers** (Google/Apple) — replace `SocialAuth` `alert()` stubs; lock down
@@ -61,6 +105,7 @@
 - [ ] **`npm audit` + Dependabot** enabled in CI.
 
 ### P2 — polish
+
 - [ ] Audit logging for admin actions (who changed what, when).
 - [ ] GDPR: data export, account deletion endpoint, consent records.
 - [ ] Pen-test the checkout + webhook flows before launching payments.
@@ -70,10 +115,12 @@
 - **Lint currently broken at repo level**: `eslint-config-next@16` (flat-config, eslint 9)
   is incompatible with the installed `eslint@8` + Next 14. `pnpm lint` fails before reaching
   app code. Fix: pin `eslint-config-next@^14` (or upgrade eslint to 9 + adapt).
-  See `TASKS.md`.
+  See [[TASKS|Task Board]].
 - **No test suite yet** — Vitest/Playwright installed but zero tests. Auth paths deserve
   automated coverage once the framework config is settled.
 - **No secret rotation schedule** — pick a cadence once staging deploys.
+
+The full, living inventory of missing work lives in [[GAPS|Gaps & Missing Work]].
 
 ## References
 
@@ -81,4 +128,8 @@
 - `src/app/actions/auth.ts` — registration server action
 - `src/lib/validations/auth.ts` — Zod schemas
 - `prisma/schema.prisma` — User/Account/Session/VerificationToken
-- `DATABASE.md` — operating and controlling the database
+- [[DATABASE|Database Guide]] — operating and controlling the database
+
+---
+
+*Last updated: 2026-09-23 · Part of the [[README|F1Store Wiki]]*

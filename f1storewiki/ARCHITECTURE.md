@@ -1,3 +1,17 @@
+---
+title: "Architecture Decision Records (ADR)"
+aliases:
+  - Architecture
+  - ADR
+tags:
+  - f1-community
+  - wiki
+  - architecture
+  - adr
+date: 2026-09-23
+status: active
+---
+
 # Architecture Decision Records (ADR): F1Store
 
 ## Format

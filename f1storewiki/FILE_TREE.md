@@ -1,3 +1,16 @@
+---
+title: "Current Repository File Tree"
+aliases:
+  - File Tree
+  - Files
+tags:
+  - f1-community
+  - wiki
+  - reference
+date: 2026-09-23
+status: active
+---
+
 # Current Repository File Tree
 
 > Snapshot of the F1Community repository as of 2026-09-16.

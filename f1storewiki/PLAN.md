@@ -1,3 +1,17 @@
+---
+title: "3D Cinematic Login Experience: Plan"
+aliases:
+  - 3D Login Plan
+  - Login Plan
+tags:
+  - f1-community
+  - wiki
+  - login
+  - plan
+date: 2026-09-23
+status: draft
+---
+
 # 3D Cinematic Login Experience: Design & Implementation Plan
 
 > **Status**: ⏳ Not Implemented (as of 2026-09-16). The shipped login page (`src/app/login/page.tsx`) is a static F1 Philippines split-pane layout - no Three.js/3D canvas yet. Plan kept for future execution; re-prioritize after Phase 0 cleanup (registration + DB auth).

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "PROGRESS.md",
+                "file": "DEVELOPMENT.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PROGRESS"
+              "title": "DEVELOPMENT"
             }
           }
         ]
@@ -188,16 +188,24 @@
       "bases:Create new base": false
     }
   },
-  "active": "4f210b7728eaeb44",
+  "active": "33183520b261f599",
   "lastOpenFiles": [
-    "ARCHITECTURE.md",
+    "COMMUNITY_HUB.md",
+    "GAPS.md",
+    "F1_API_REFERENCE.md",
+    "FIGMA_MCP_SETUP.md",
+    "SEO.md",
+    "WELCOME.md",
     "DEVELOPMENT.md",
-    "DrawingBoardWiki/Phase-5-State.md",
+    "DATABASE.md",
+    "DrawingBoardWiki/Phase-1-Setup.md",
+    "DrawingBoardWiki/Phase-2-Server.md",
     "DrawingBoardWiki/Phase-4-Tools.md",
     "DrawingBoardWiki/Phase-3-Canvas.md",
-    "DrawingBoardWiki/Phase-2-Server.md",
-    "DrawingBoardWiki/Phase-1-Setup.md",
     "DrawingBoardWiki/Home.md",
+    "PROGRESS.md",
+    "ARCHITECTURE.md",
+    "DrawingBoardWiki/Phase-5-State.md",
     "DrawingBoardWiki"
   ]
 }

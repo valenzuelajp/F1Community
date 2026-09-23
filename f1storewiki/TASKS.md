@@ -1,3 +1,16 @@
+---
+title: "Task Board: F1Community"
+aliases:
+  - Tasks
+  - Task Board
+tags:
+  - f1-community
+  - wiki
+  - tasks
+date: 2026-09-23
+status: active
+---
+
 # Task Board: F1 Platform (Website + Store)
 
 ## Task Management System

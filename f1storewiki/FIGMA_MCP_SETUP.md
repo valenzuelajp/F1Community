@@ -1,3 +1,17 @@
+---
+title: "Figma MCP Setup Guide"
+aliases:
+  - Figma
+  - Figma MCP
+tags:
+  - f1-community
+  - wiki
+  - figma
+  - mcp
+date: 2026-09-23
+status: active
+---
+
 # Figma MCP Setup Guide
 
 ## Overview

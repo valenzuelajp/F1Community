@@ -1,3 +1,17 @@
+---
+title: "Session Memory — Login Page Work (2026-09-22)"
+aliases:
+  - Session Memory
+  - Pick Up Here
+tags:
+  - f1-community
+  - wiki
+  - login
+  - session
+date: 2026-09-23
+status: active
+---
+
 # Session Memory — Login Page Work (2026-09-22)
 
 > **What this file is:** the single memory of what was done to `/login` on

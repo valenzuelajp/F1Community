@@ -1,6 +1,23 @@
+---
+title: "Progress Tracker: F1Community"
+aliases:
+  - Progress
+  - Progress Tracker
+tags:
+  - f1-community
+  - wiki
+  - progress
+date: 2026-09-23
+status: active
+---
+
 # Progress Tracker: F1 Platform (Website + Store)
 
-> Project renamed from **F1Store** → **F1Community** (used here as reference repo `valenzuelajp/F1Community`).
+> [!info] Naming
+> Project renamed from **F1Store** → **F1Community** (reference repo
+> `valenzuelajp/F1Community`). It hosts **three experiences**: the F1 Community
+> hub, the F1 Store Community, and the F1 Official Store (see [[WELCOME|Welcome]]).
+> Older sections below still say "F1 Website / F1 Store".
 
 ## Overall Progress
 
