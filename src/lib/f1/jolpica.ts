@@ -49,6 +49,75 @@ interface JolpicaResponse {
   };
 }
 
+/* Standings API response (subset) + normalized model */
+interface JolpicaStandingsResponse {
+  MRData: {
+    StandingsTable: {
+      season: string;
+      round: string;
+      StandingsLists: [
+        {
+          season: string;
+          round: string;
+          DriverStandings: JDriverStanding[];
+        },
+      ];
+    };
+  };
+}
+
+interface JDriverStanding {
+  position: string;
+  points: string;
+  wins: string;
+  Driver: {
+    code: string;
+    givenName: string;
+    familyName: string;
+  };
+  Constructors: [{ name: string }];
+}
+
+/** A row in the championship leaderboard (from /current/driverstandings/). */
+export interface F1StandingDriver {
+  position: number;
+  code: string;
+  name: string;
+  team: string;
+  points: number;
+  wins: number;
+  /** Local portrait asset for the driver (public/imgDrivers*.png), if we have one. */
+  photo: string | null;
+}
+
+/* Driver code -> local portrait asset (public/). All 2026 grid drivers that
+   have a photo in the repo are listed; missing ones fall back to null and the
+   podium simply hides the avatar for them. */
+const DRIVER_PHOTO_BY_CODE: Record<string, string> = {
+  ANT: "/imgDriversAntonelli12.png",
+  RUS: "/imgDriversRussel63.png",
+  HAM: "/imgDriversHamilton44.png",
+  NOR: "/imgDriversNorris4.png",
+  LEC: "/imgDriversLeclerc16.png",
+  VER: "/imgDriversVerstappen3.png",
+  PIA: "/imgDriversPiastri81.png",
+  HAD: "/imgDriversHadjar6.png",
+  LAW: "/imgDriversLawson30.png",
+  GAS: "/imgDriversGasly10.png",
+  LIN: "/imgDriversLindblad41.png",
+  COL: "/imgDriversColapinto43.png",
+  BEA: "/imgDriversBearman87.png",
+  BOR: "/imgDriversBortoleto5.png",
+  HUL: "/imgDriversHulkenberg27.png",
+  SAI: "/imgDriversSainz55.png",
+  ALB: "/imgDriversAlbon23.png",
+  OCO: "/imgDriversOcon31.png",
+  ALO: "/imgDriversAlonso14.png",
+  STR: "/imgDriversStroll18.png",
+  BOT: "/imgDriversBottas77.png",
+  PER: "/imgDriversPerez11.png",
+};
+
 /* -------------------------------------------------------------------------- */
 /*  Our normalized model                                                      */
 /* -------------------------------------------------------------------------- */
@@ -98,6 +167,33 @@ async function fetchCurrentRaces(): Promise<JRace[]> {
 
   const data = (await res.json()) as JolpicaResponse;
   return data.MRData.RaceTable.Races ?? [];
+}
+
+/**
+ * Returns the championship drivers ranked by points (default: top 3).
+ * Same ISR caching + fallback pattern as the races fetch.
+ */
+export async function getTopDrivers(limit = 3): Promise<F1StandingDriver[]> {
+  const res = await fetch(`${JOLPICA_BASE_URL}/current/driverstandings/`, {
+    headers: { Accept: "application/json" },
+    next: { revalidate: REVALIDATE_SECONDS },
+  });
+
+  if (!res.ok) throw new Error(`Jolpica standings error: ${res.status}`);
+
+  const data = (await res.json()) as JolpicaStandingsResponse;
+  const standings =
+    data.MRData.StandingsTable.StandingsLists[0]?.DriverStandings ?? [];
+
+  return standings.slice(0, limit).map((s) => ({
+    position: Number(s.position),
+    code: s.Driver.code,
+    name: `${s.Driver.givenName} ${s.Driver.familyName}`,
+    team: s.Constructors[0]?.name ?? "—",
+    points: Number(s.points),
+    wins: Number(s.wins),
+    photo: DRIVER_PHOTO_BY_CODE[s.Driver.code] ?? null,
+  }));
 }
 
 /* -------------------------------------------------------------------------- */

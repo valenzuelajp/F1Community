@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Countdown } from "@/components/f1/Countdown";
-import { fallbackF1Event, getNextF1Event } from "@/lib/f1/jolpica";
+import { fallbackF1Event, getNextF1Event, getTopDrivers } from "@/lib/f1/jolpica";
+import type { F1StandingDriver } from "@/lib/f1/jolpica";
 import "./login.css";
 
 export const metadata: Metadata = {
@@ -37,6 +38,15 @@ export default async function LoginPage() {
     event = await getNextF1Event();
   } catch {
     // keep fallback
+  }
+
+  // Championship top 3 by points (same Jolpica client, same ISR caching).
+  // Empty array on failure → the leaderboard section hides itself.
+  let topDrivers: F1StandingDriver[] = [];
+  try {
+    topDrivers = await getTopDrivers(3);
+  } catch {
+    // keep empty
   }
 
   const roundLabel = `ROUND ${String(event.round).padStart(2, "0")}`;
@@ -243,27 +253,101 @@ export default async function LoginPage() {
 
       {/* =====================================================================
           3. LIVE TIMING TELEMETRY TICKER
+          The LIVE badge follows the real F1 schedule: it shows "LIVE" only
+          while a session is actually running (event.isLive from Jolpica).
+          Outside a session it reads OFFLINE; after the last race it reads
+          OFF SEASON. When offline the ticker shows the next session instead
+          of placeholder telemetry.
           ===================================================================== */}
       <section
-        aria-label="Live race telemetry timing"
+        aria-label={
+          event.isLive
+            ? "Live race telemetry timing"
+            : "Race telemetry offline"
+        }
         className="login-telemetry"
       >
-        <div className="login-live-cell">
+        <div
+          className={`login-live-cell${
+            event.isLive ? "" : " login-live-cell--off"
+          }`}
+        >
           <span className="login-live-dot" />
-          <span>LIVE</span>
+          <span>{event.isLive ? "LIVE" : "OFFLINE"}</span>
         </div>
+
         <div className="login-telemetry-data">
-          <span>LAP [TIMEDATA]</span>
-          <span className="login-telemetry-slash">/</span>
-          <span>[NAM1] [TIMEDATA1]</span>
-          <span className="login-telemetry-slash">/</span>
-          <span>[NAM2] [TIMEDATA2]</span>
-          <span className="login-telemetry-slash">/</span>
-          <span>[NAM3] [TIMEDATA3]</span>
-          <span className="login-telemetry-slash">/</span>
-          <span className="login-telemetry-phase">[PHASE]</span>
+          {event.isLive ? (
+            <>
+              <span>LAP [TIMEDATA]</span>
+              <span className="login-telemetry-slash">/</span>
+              <span>[NAM1] [TIMEDATA1]</span>
+              <span className="login-telemetry-slash">/</span>
+              <span>[NAM2] [TIMEDATA2]</span>
+              <span className="login-telemetry-slash">/</span>
+              <span>[NAM3] [TIMEDATA3]</span>
+              <span className="login-telemetry-slash">/</span>
+              <span className="login-telemetry-phase">
+                {event.headline}
+              </span>
+            </>
+          ) : (
+            <>
+              <span>NO LIVE SESSION</span>
+              <span className="login-telemetry-slash">/</span>
+              <span>{event.raceName}</span>
+              <span className="login-telemetry-slash">/</span>
+              <span className="login-telemetry-phase">
+                {event.seasonOver
+                  ? "SEASON COMPLETE"
+                  : `NEXT: ${event.headline}`}
+              </span>
+            </>
+          )}
         </div>
       </section>
+
+      {/* =====================================================================
+          3b. CHAMPIONSHIP LEADERBOARD (TOP 3 BY POINTS)
+          Live driver standings from the Jolpica schedule API (ISR hourly).
+          Hidden entirely when the API is unavailable.
+          ===================================================================== */}
+      {topDrivers.length > 0 && (
+        <section aria-label="Top 3 championship drivers" className="login-podium">
+          <h2 className="login-podium-title">
+            TOP 3 — {event.season} CHAMPIONSHIP
+          </h2>
+          <div className="login-podium-row">
+            {topDrivers.map((driver) => (
+              <div
+                key={driver.code}
+                className={`login-podium-cell login-podium-cell--${driver.position}`}
+              >
+                <span className="login-podium-info">
+                  <span className="login-podium-name">
+                    {driver.name.toUpperCase()}
+                  </span>
+                  <span className="login-podium-team">{driver.team.toUpperCase()}</span>
+                  <span className="login-podium-points">
+                    {driver.points} <span className="login-podium-pts">PTS</span>
+                  </span>
+                </span>
+                {driver.photo && (
+                  <span className="login-podium-photo">
+                    <Image
+                      src={driver.photo}
+                      alt={`${driver.name} portrait`}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 112px, (min-width: 640px) 96px, 72px"
+                    />
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* =====================================================================
           4. TRUSTED TEAMS SPONSORS STRIP
@@ -272,87 +356,148 @@ export default async function LoginPage() {
         <h2 className="login-teams-heading">
           TRUSTED BY THE WORLD&apos;S MOST INNOVATIVE TEAMS
         </h2>
+        {/* Each logo links to its official team website (external, new tab). */}
         <div className="login-teams-row">
-          <div className="login-team-logo">
+          <a
+            href="https://audif1.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Audi F1 Team official website"
+          >
             <Image
-              src="/imgAlfa800X800.png"
-              alt="Alfa Romeo"
+              src="/imgAudi800X800.png"
+              alt="Audi F1 Team"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.visacashapprb.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Racing Bulls official website"
+          >
             <Image
-              src="/imgAlpha800X800.png"
-              alt="AlphaTauri"
+              src="/imgVcarb800X800.png"
+              alt="Racing Bulls"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.alpinecars.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Alpine official website"
+          >
             <Image
               src="/imgAlpine800X800.png"
               alt="Alpine"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.astonmartinf1.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Aston Martin official website"
+          >
             <Image
               src="/imgAston800X800.png"
               alt="Aston Martin"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.ferrari.com/en-EN/formula1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Ferrari official website"
+          >
             <Image
               src="/imgFerrari800X800.png"
               alt="Ferrari"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.haasf1team.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Haas official website"
+          >
             <Image
               src="/imgHaas800X800.png"
               alt="Haas"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.mclaren.com/racing/formula-1/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit McLaren official website"
+          >
             <Image
               src="/imgMcLaren800X800.png"
               alt="McLaren"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.mercedesamgf1.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Mercedes official website"
+          >
             <Image
               src="/imgMercedes800X800.png"
               alt="Mercedes"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.redbullracing.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Red Bull Racing official website"
+          >
             <Image
               src="/imgRedbull800X8001.png"
               alt="Red Bull Racing"
               fill
               className="object-contain"
             />
-          </div>
-          <div className="login-team-logo">
+          </a>
+          <a
+            href="https://www.williamsf1.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="login-team-logo"
+            aria-label="Visit Williams official website"
+          >
             <Image
               src="/imgTeamWilliams.png"
               alt="Williams"
               fill
               className="object-contain"
             />
-          </div>
+          </a>
         </div>
       </section>
 
