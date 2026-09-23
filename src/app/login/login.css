@@ -79,6 +79,14 @@
   height: 160px;
   width: 600px;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 0 12px rgba(225, 24, 1, 0.45));
+  transition: filter 0.2s ease;
+}
+
+.login-logo:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))
+    drop-shadow(0 0 20px rgba(225, 24, 1, 0.75));
 }
 
 .login-nav {
@@ -183,16 +191,14 @@
 .login-hero-backdrop {
   position: absolute;
   inset: 0;
-  z-index: 1;
-  opacity: 0.38;
-  mix-blend-mode: luminosity;
+  z-index: 2;
   pointer-events: none;
 }
 
 .login-hero-overlay {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
   background:
     radial-gradient(
       ellipse at 70% 65%,
@@ -464,6 +470,17 @@
   flex-shrink: 0;
 }
 
+/* Offline state — no live session (connected to the F1 schedule).
+   Gray dot without glow + muted text instead of red "LIVE". */
+.login-live-cell--off {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.login-live-cell--off .login-live-dot {
+  background-color: #6b7280;
+  box-shadow: none;
+}
+
 .login-live-dot {
   height: 14px;
   width: 14px;
@@ -491,6 +508,107 @@
   color: var(--brand-red);
   font-weight: 900;
   margin-left: 1rem;
+}
+
+/* --- Championship Podium (Top 3 by points) --- */
+
+.login-podium {
+  width: 100%;
+  background-color: var(--black);
+  padding: 1.5rem 1rem 1.75rem;
+  border-bottom: 2px solid #ffffff;
+}
+
+.login-podium-title {
+  text-align: center;
+  font-size: clamp(10px, 2.8vw, 13px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--brand-red);
+  margin-bottom: 1.25rem;
+}
+
+.login-podium-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.login-podium-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #0b0f17;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid rgba(255, 255, 255, 0.35);
+  border-radius: 3px;
+}
+
+/* Position accent: gold / silver / bronze */
+.login-podium-cell--1 {
+  border-left-color: #ffd700;
+}
+.login-podium-cell--2 {
+  border-left-color: #c0c0c0;
+}
+.login-podium-cell--3 {
+  border-left-color: #cd7f32;
+}
+
+/* Driver portrait: plain portrait crop, no circle/ring, sits on the RIGHT of
+   the card while name / team / points stay on the LEFT (info flex: 1 pushes
+   the photo to the far edge). */
+.login-podium-photo {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: #06080d;
+}
+.login-podium-info {
+  display: grid;
+  gap: 0.15rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+
+.login-podium-name {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+}
+
+.login-podium-team {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.login-podium-points {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--brand-red);
+  font-variant-numeric: tabular-nums;
+}
+
+.login-podium-pts {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* --- Teams Strip --- */
@@ -523,7 +641,10 @@
 
 .login-team-logo {
   position: relative;
-  height: 24px;
+  display: block;
+  /* Source logos are 800×800 squares; height sets the visible size.
+     Kept nearly square so 10 logos still fit on one row. */
+  height: 40px;
   width: 46px;
   opacity: 0.95;
   transition:
@@ -534,6 +655,13 @@
 .login-team-logo:hover {
   opacity: 1;
   transform: scale(1.08);
+}
+
+/* Visible focus ring for keyboard users (each logo is a link now). */
+.login-team-logo:focus-visible {
+  outline: 2px solid var(--brand-red);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 /* --- Tire Divider --- */
@@ -830,6 +958,9 @@
     min-height: 48px;
     font-size: 11px;
   }
+  .login-podium-photo {
+    width: 112px;
+  }
   .login-live-cell {
     height: 48px;
     gap: 0.75rem;
@@ -850,12 +981,30 @@
     margin-left: 1.5rem;
   }
 
+  .login-podium-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .login-podium-cell {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .login-podium-photo {
+    width: 96px;
+  }
+  .login-podium-info {
+    min-width: 0;
+  }
+  .login-podium-name {
+    font-size: 13px;
+  }
+
   .login-teams {
     padding: 2.5rem 1.5rem 2rem;
   }
   .login-team-logo {
-    height: 32px;
-    width: 58px;
+    height: 56px;
+    width: 64px;
   }
   .login-tires {
     padding: 1.25rem 0 0.5rem;
@@ -942,6 +1091,11 @@
 
   .login-teams-row {
     gap: 3rem;
+    max-width: 1600px;
+  }
+  .login-team-logo {
+    height: 80px;
+    width: 92px;
   }
   .login-tire {
     height: 64px;
