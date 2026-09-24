@@ -1,3 +1,16 @@
+---
+title: "Development Guidelines: F1Community"
+aliases:
+  - Development
+  - Development Guidelines
+tags:
+  - f1-community
+  - wiki
+  - development
+date: 2026-09-23
+status: active
+---
+
 # Development Guidelines: F1 Platform (Website + Store)
 
 ## Code Style & Conventions

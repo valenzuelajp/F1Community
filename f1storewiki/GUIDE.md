@@ -1,11 +1,28 @@
+---
+title: "Developer & Architecture Guide"
+aliases:
+  - Guide
+  - Developer Guide
+  - Tutorial
+tags:
+  - f1-community
+  - wiki
+  - guide
+date: 2026-09-23
+status: active
+---
+
 # Formula 1 Platform: Developer & Architecture Guide
 
-Welcome to the development guide for the **Formula 1 Platform (F1 Website + F1 Store)**. This document serves as a tutorial, explaining how each system works, how the code is structured, and the key concepts you need to learn.
+> [!abstract] What this is
+> The beginner-friendly deep dive — how each system works, how the code is
+> structured, and the key concepts. **Three experiences ([[WELCOME|Community hub,
+> Store Community, Official Store]]) share one Next.js project and one account.**
 
 ---
 
 ## Table of Contents
-1. [Platform Architecture & Dual-Domain Vision](#1-platform-architecture--dual-domain-vision)
+1. [Platform Architecture & Multi-Experience Vision](#1-platform-architecture--multi-experience-vision)
 2. [Authentication Flow (NextAuth v4 + Next.js 14)](#2-authentication-flow-nextauth-v4--nextjs-14)
 3. [Data Validation with Zod](#3-data-validation-with-zod)
 4. [Client Components vs. Server Components](#4-client-components-vs-server-components)
@@ -15,9 +32,31 @@ Welcome to the development guide for the **Formula 1 Platform (F1 Website + F1 S
 
 ---
 
-## 1. Platform Architecture & Dual-Domain Vision
+## 1. Platform Architecture & Multi-Experience Vision
 
-Our application unifies two different web experiences into a single Next.js project:
+Our application unifies **three experiences** into a single Next.js project, all
+behind **one account**:
+
+```mermaid
+flowchart TD
+    Root[F1Community Root<br/>Shared Auth & Nav] --> Hub[F1 Community hub]
+    Root --> SC[F1 Store Community]
+    Root --> OS[F1 Official Store]
+    Hub --> H1[Schedule]
+    Hub --> H2[Discussion · Reddit-style]
+    Hub --> H3[Leaderboard]
+    Hub --> H4[News]
+    SC --> S1[Community-driven store experience]
+    OS --> S2[Product Catalog & Teams]
+    OS --> S3[Cart & Checkout / Stripe]
+    Hub -. one account .- SC
+    SC -. one account .- OS
+    OS -. one account .- Hub
+```
+
+A user logs in **once** and gains access to the hub (schedule, discussion,
+leaderboard, news), the community store, and the official store. See
+[[COMMUNITY_HUB|Hub scope & notes]].
 
 ```
                      ┌─────────────────────────────────────────┐

@@ -1,25 +1,43 @@
+---
+title: "Progress Tracker: F1Community"
+aliases:
+  - Progress
+  - Progress Tracker
+tags:
+  - f1-community
+  - wiki
+  - progress
+date: 2026-09-23
+status: active
+---
+
 # Progress Tracker: F1 Platform (Website + Store)
 
-> Project renamed from **F1Store** → **F1Community** (used here as reference repo `valenzuelajp/F1Community`).
+> [!info] Naming
+> Project renamed from **F1Store** → **F1Community** (reference repo
+> `valenzuelajp/F1Community`). It hosts **three experiences**: the F1 Community
+> hub, the F1 Store Community, and the F1 Official Store (see [[WELCOME|Welcome]]).
+> Older sections below still say "F1 Website / F1 Store".
 
 ## Overall Progress
 
-| Phase | Status | Completion | Target Date |
-|-------|--------|------------|-------------|
-| **Phase 0: Foundation** | 🟡 In Progress | 40% | 2026-09-25 |
-| Phase 1a: F1 Schedule & Standings | ⏳ Not Started | 0% | 2026-10-16 |
-| Phase 1b: F1 News & Live | ⏳ Not Started | 0% | 2026-11-06 |
-| Phase 2a: Store Core Catalog | ⏳ Not Started | 0% | 2026-12-04 |
-| Phase 2b: Cart & Checkout | ⏳ Not Started | 0% | 2027-01-01 |
-| Phase 3: User Accounts | 🟡 In Progress (early auth only) | 10% | 2027-01-29 |
-| Phase 4: Admin Dashboard | ⏳ Not Started | 0% | 2027-02-26 |
-| Phase 5: Polish & Launch | ⏳ Not Started | 0% | 2027-03-26 |
+| Phase                             | Status                           | Completion | Target Date |
+| --------------------------------- | -------------------------------- | ---------- | ----------- |
+| **Phase 0: Foundation**           | 🟡 In Progress                   | 40%        | 2026-09-25  |
+| Phase 1a: F1 Schedule & Standings | ⏳ Not Started                   | 0%         | 2026-10-16  |
+| Phase 1b: F1 News & Live          | ⏳ Not Started                   | 0%         | 2026-11-06  |
+| Phase 2a: Store Core Catalog      | ⏳ Not Started                   | 0%         | 2026-12-04  |
+| Phase 2b: Cart & Checkout         | ⏳ Not Started                   | 0%         | 2027-01-01  |
+| Phase 3: User Accounts            | 🟡 In Progress (early auth only) | 10%        | 2027-01-29  |
+| Phase 4: Admin Dashboard          | ⏳ Not Started                   | 0%         | 2027-02-26  |
+| Phase 5: Polish & Launch          | ⏳ Not Started                   | 0%         | 2027-03-26  |
 
 > Phase 3 pulled forward: a working (demo) credentials login + F1 Philippines auth UI were built ahead of the store catalog.
 
 ## Phase 0: Foundation - Detailed Progress
 
 ### Infrastructure Setup
+
 - [x] Git repository initialized (repo now `A:\Github\F1Community`)
 - [x] Wiki structure created (`A:\Github\F1Community\f1storewiki`)
 - [x] Package.json & dependencies configured
@@ -31,6 +49,7 @@
 - [x] CI/CD pipeline (GitHub Actions - lint, typecheck, test, build, e2e, Vercel deploy)
 
 ### Project Configuration
+
 - [x] Project overview documented (dual platform)
 - [x] Technical stack finalized (incl. F1 APIs)
 - [x] Database schema designed (store models: User, Account, Session, Category, Team, Driver, Product, ProductVariant, ProductImage, Cart, CartItem, Order, OrderItem, Address, WishlistItem, Collection, CollectionProduct)
@@ -44,6 +63,7 @@
 - [x] **Auth UI**: F1-branded login page (`/login`), LoginForm (demo quick-fill now seeded `customer@f1store.com`), RegisterForm, SocialAuth, AuthHeader
 - [x] **Login visual pass**: angular black login tile, elevated two-column composition, and `imgSticker1.png` driver artwork beside the form
 - [x] **Login landing page delivered**: `/` redirects to `/login`; the F1 race-week login experience is full-width on desktop with hero, ticker, and partner bar. Successful login defaults to `/home` (2026-09-20; see `LOGIN_LANDING_PAGE.md`)
+- [x] **Login page made dynamic (Jolpica)**: hero badge, race info, per-second countdown, season stats, and auto-adjusting title now come from the real F1 schedule via `src/lib/f1/jolpica.ts` + `src/components/f1/Countdown.tsx`; login CSS variables/classes renamed to match their content (2026-09-22; see `LOGIN_DYNAMIC_F1_CONTENT.md`)
 - [x] **Repository documentation**: current file tree added in `FILE_TREE.md`
 - [x] **Security plan + database guide documented**: `SECURITY.md`, `DATABASE.md`
 - [x] Figma design exports added (`assets/figma/...` - login, store, account, schedules/standings, admin screens)
@@ -54,7 +74,8 @@
 - [ ] Route groups created ((f1), (shop))
 
 ### Development Environment
-- [ ] Local dev server verified (*login + register verified end-to-end 2026-09-18*)
+
+- [ ] Local dev server verified (_login + register verified end-to-end 2026-09-18_)
 - [x] Database migrations folder created (`prisma/migrations` + baseline `community_init` — CI `db:migrate deploy` can now run)
 - [ ] Lint green at repo level (**blocked**: `eslint-config-next@16` vs `eslint@8`/Next 14 mismatch — see TASKS.md)
 - [ ] Storybook configured
@@ -65,6 +86,7 @@
 ## Phase 3 (Pulled Forward): Auth Flow - Detailed Progress
 
 ### Done (merged to `main`)
+
 - [x] NextAuth credentials provider with Zod `loginSchema` validation
 - [x] `src/lib/auth.ts` (JWT strategy, role on token/session)
 - [x] **DB-backed `authorize()`** — Prisma user lookup + `bcrypt.compare` (seeded creds login verified live)
@@ -80,6 +102,7 @@
 - [x] Full-width F1 login landing page, root redirect, and safe post-login `/home` destination (2026-09-20)
 
 ### Unfinished / Open
+
 - [ ] Social buttons still `alert()` stubs; "Forgot password" link is `#forgot`; store nav links (new-arrivals, teams, drivers, accessories, sale) have no pages.
 - [ ] NextAuth version mismatch: package.json = **v4**, GUIDE.md aligns with **v4** after doc pass.
 - [ ] **Lint infra broken** (pre-existing): `eslint-config-next@16.3.4` requires eslint 9/flat config; repo pins `eslint@8` + Next 14.2. `pnpm lint` fails before app code. Fix: pin `eslint-config-next@^14` or move to eslint 9. `pnpm typecheck` passes.
@@ -87,24 +110,25 @@
 
 ## Milestone Tracker
 
-| Milestone | Target | Actual | Status |
-|-----------|--------|--------|--------|
-| Repo + Wiki initialized | 2026-08-28 | 2026-08-28 | ✅ Done |
-| Auth scaffold + login UI | 2026-09-02 | 2026-09-02 | ✅ Done |
-| Registration flow (incl. assets) | 2026-09-15 | 2026-09-15 (assets) / **2026-09-18 (code: /register + server action)** | ✅ Done |
-| DB-backed login (authorize → Prisma + bcrypt) | 2026-09-15 | 2026-09-18 | ✅ Done |
-| Migrations folder (CI `db:migrate deploy`) | 2026-09-05 | 2026-09-18 | ✅ Done |
-| Dev environment ready | 2026-09-05 | — | 🟡 In Progress |
-| F1 APIs integrated (Jolpica, Live, News) | 2026-09-15 | — | ⏳ Pending |
-| First deploy (staging) | 2026-09-20 | — | ⏳ Pending |
-| F1 Website MVP (Schedule + News) | 2026-11-06 | — | ⏳ Pending |
-| Store MVP (Catalog + Checkout) | 2027-01-01 | — | ⏳ Pending |
-| Full Platform feature complete | 2027-02-26 | — | ⏳ Pending |
-| Production launch | 2027-03-26 | — | ⏳ Pending |
+| Milestone                                     | Target     | Actual                                                                 | Status         |
+| --------------------------------------------- | ---------- | ---------------------------------------------------------------------- | -------------- |
+| Repo + Wiki initialized                       | 2026-08-28 | 2026-08-28                                                             | ✅ Done        |
+| Auth scaffold + login UI                      | 2026-09-02 | 2026-09-02                                                             | ✅ Done        |
+| Registration flow (incl. assets)              | 2026-09-15 | 2026-09-15 (assets) / **2026-09-18 (code: /register + server action)** | ✅ Done        |
+| DB-backed login (authorize → Prisma + bcrypt) | 2026-09-15 | 2026-09-18                                                             | ✅ Done        |
+| Migrations folder (CI `db:migrate deploy`)    | 2026-09-05 | 2026-09-18                                                             | ✅ Done        |
+| Dev environment ready                         | 2026-09-05 | —                                                                      | 🟡 In Progress |
+| F1 APIs integrated (Jolpica, Live, News)      | 2026-09-15 | —                                                                      | ⏳ Pending     |
+| First deploy (staging)                        | 2026-09-20 | —                                                                      | ⏳ Pending     |
+| F1 Website MVP (Schedule + News)              | 2026-11-06 | —                                                                      | ⏳ Pending     |
+| Store MVP (Catalog + Checkout)                | 2027-01-01 | —                                                                      | ⏳ Pending     |
+| Full Platform feature complete                | 2027-02-26 | —                                                                      | ⏳ Pending     |
+| Production launch                             | 2027-03-26 | —                                                                      | ⏳ Pending     |
 
 ## Current Sprint (Week of 2026-09-16) — Review 2026-09-18
 
 ### Goals
+
 - [x] Fix `prisma/seed.ts` + schema typecheck drift (`username` reconciled across schema/client/DB)
 - [x] Create `prisma/migrations/` so CI `db:migrate deploy` passes (baseline `community_init`)
 - [x] Build `/register` page + registration server action with bcrypt + DB (`src/app/actions/auth.ts`)
@@ -115,21 +139,23 @@
 - [ ] Add security hardening items (rate limit, CSP, cookie flags) per `SECURITY.md`
 
 ### Blockers (2026-09-18 status)
+
 - ~~`prisma/seed.ts` typecheck drift~~ → **resolved**
 - ~~`prisma/migrations` missing~~ → **resolved**
 - **`pnpm lint` fails pre-existing**: `eslint-config-next@16.3.4` (flat-config/eslint 9) vs installed `eslint@8.57.1` + Next 14.2.35. Need dep pin fix in a dedicated PR.
 
 ## Velocity & Metrics
 
-| Week | Planned Tasks | Completed | Carryover |
-|------|---------------|-----------|-----------|
-| 2026-W35 | 12 | 3 | 9 |
-| 2026-W36-W37 | Auth scaffold + login UI | 4 | 6 |
-| 2026-W38 | Registration (code) + DB-auth + migrations | 3 | 0 |
+| Week         | Planned Tasks                              | Completed | Carryover |
+| ------------ | ------------------------------------------ | --------- | --------- |
+| 2026-W35     | 12                                         | 3         | 9         |
+| 2026-W36-W37 | Auth scaffold + login UI                   | 4         | 6         |
+| 2026-W38     | Registration (code) + DB-auth + migrations | 3         | 0         |
 
 ## Definition of Done
 
 A task is **Done** when:
+
 - [ ] Code written and self-reviewed
 - [ ] TypeScript compiles without errors
 - [ ] Linting passes

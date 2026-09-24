@@ -1,16 +1,38 @@
+---
+title: "Project Overview: F1Community"
+aliases:
+  - Project Overview
+  - Overview
+tags:
+  - f1-community
+  - wiki
+  - overview
+date: 2026-09-23
+status: active
+---
+
 # Project Overview: F1 Platform
 
 ## Vision
 
-Build a comprehensive Formula 1 platform combining **F1 Website** (schedule, news, live timing, standings) with **F1 Store** (official merchandise e-commerce), providing fans a complete F1 digital experience.
+Build a comprehensive **F1 Community website** combining three experiences under
+**one account**: the **F1 Community** hub (schedule, news, live timing, standings),
+the **F1 Store Community**, and the **F1 Official Store** — giving fans a complete
+F1 digital experience.
+
+> [!note] Three experiences, one account
+> 1. **F1 Community** — schedule, standings, news, live timing (the hub)
+> 2. **F1 Store Community** — community-driven store experience
+> 3. **F1 Official Store** — official merchandise e-commerce
+> One sign-in grants access to all three. See [[WELCOME|How the website works]].
 
 ## Core Objectives
 
 1. **Authentic F1 Experience** - Official branding, team colors, driver collections, real-time data
 2. **High Performance** - Fast load times, optimized for global CDN delivery, race-weekend scale
-3. **Scalable Architecture** - Handle traffic spikes during race weekends across both properties
+3. **Scalable Architecture** - Handle traffic spikes during race weekends across all three experiences
 4. **Developer Experience** - Clean codebase, easy to maintain and extend
-5. **Unified Platform** - Shared auth, design system, infrastructure across website and store
+5. **Unified Platform** - Shared auth, design system, infrastructure across the hub + both stores
 
 ## Target Audience
 
@@ -53,6 +75,10 @@ Build a comprehensive Formula 1 platform combining **F1 Website** (schedule, new
 3. **Scalable Architecture** - Handle traffic spikes during race weekends across both properties
 4. **Developer Experience** - Clean codebase, easy to maintain and extend
 5. **Unified Platform** - Shared auth, design system, infrastructure across website and store
+
+> The vision above (F1 Community hub + **Store Community** + **Official Store**)
+> matches the naming in [[WELCOME|Welcome]]. Section headers still use the older
+> "F1 Website / F1 Store" labels — treat them as the hub and the two store experiences.
 
 ## Technical Stack (Proposed)
 
