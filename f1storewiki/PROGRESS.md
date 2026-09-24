@@ -48,7 +48,7 @@
 - [x] **Security plan + database guide documented**: `SECURITY.md`, `DATABASE.md`
 - [x] Figma design exports added (`assets/figma/...` - login, store, account, schedules/standings, admin screens)
 - [ ] API contract defined (OpenAPI)
-- [ ] Component library chosen/created
+- [x] Component library chosen/created — interaction primitives + `/components-wynn` showcase (2026-09-24; see Components Showcase below)
 - [ ] Design system tokens defined
 - [ ] F1 API clients created (Jolpica, Live, News) - **NO CODE YET**
 - [ ] Route groups created ((f1), (shop))
@@ -142,4 +142,40 @@ A task is **Done** when:
 
 ---
 
-*Last updated: 2026-09-20 | Next review: 2026-09-25*
+## Components Showcase Report — `components` branch (2026-09-24)
+
+**Route:** `/components-wynn` (`src/app/components-wynn/page.tsx` + `components.css`)  
+**Aesthetic:** Pit Wall Telemetry (full-width, racing-grid bg, Anton display type, F1 red accents, staggered card entrance).
+
+### Layout
+- Removed centered max-width layout; full-width page.
+- **3-column specimen grid** for short-form components; each card labeled with ID, name, and category tag (no card description/footer).
+- Split sections with legends: **Short-form content** vs **Long-form content**.
+- Card hover glow (`box-shadow`) removed; border highlight + lift only.
+
+### Short-form specimens (P01–P07)
+| ID | Component | Interaction |
+|----|-----------|-------------|
+| P01 | Modal | Open/close overlay dialog |
+| P02 | Tooltip | Hover hint |
+| P03 | Toast | Auto-dismiss feedback |
+| P04 | Dropdown | Anchored menu select |
+| P05 | Toggle | On/off switch |
+| P06 | Loading | Async button (idle → loading → done + toast) |
+| P07 | Segmented | Q1/Q2/Q3 group select |
+
+### Long-form specimens (P08–P10)
+| ID | Component | Interaction |
+|----|-----------|-------------|
+| P08 | Accordion | Vertical disclosure, long body copy |
+| P09 | Tabs | Race/Quali/Setup panels with long text |
+| P10 | Horizontal | Horizontal accordion — collapsed strips expand side-by-side |
+
+### Related
+- Global interaction styles live in `src/app/globals.css` (modal, tooltip, toast, accordion).
+- Frontend skill applied: `.opencode/skills/frontend/SKILL.md`.
+- Typecheck: only pre-existing Prisma `username` errors (unrelated).
+
+---
+
+*Last updated: 2026-09-24 | Next review: 2026-09-25*
