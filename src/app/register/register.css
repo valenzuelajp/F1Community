@@ -3,26 +3,26 @@
    Separated from TSX markup for clean, beginner-friendly maintenance.
    ========================================================================== */
 
-.register-page {
+.page {
   min-height: 100vh;
   background-color: #000000;
   color: #ffffff;
 }
 
-.register-container {
+.register__shell {
   margin: 0 auto;
   max-width: 1600px;
   background-color: #000000;
 }
 
 /* Header bar */
-.register-header {
+.register__header {
   position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   background-color: #05090f;
 }
 
-.register-header-topline {
+.register__header-topline {
   position: absolute;
   top: 0;
   left: 0;
@@ -31,7 +31,7 @@
   background-color: #ff1801;
 }
 
-.register-header-content {
+.register__header-inner {
   position: relative;
   z-index: 10;
   display: flex;
@@ -42,18 +42,18 @@
 }
 
 @media (min-width: 640px) {
-  .register-header-content {
+  .register__header-inner {
     padding: 0 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .register-header-content {
+  .register__header-inner {
     padding: 0 2rem;
   }
 }
 
-.register-logo-box {
+.register__logo {
   position: relative;
   margin-left: 0.5rem;
   height: 42px;
@@ -63,14 +63,14 @@
 }
 
 @media (min-width: 640px) {
-  .register-logo-box {
+  .register__logo {
     margin-left: 1rem;
     height: 46px;
     width: 205px;
   }
 }
 
-.register-badge-pill {
+.register__badge {
   margin-left: auto;
   display: none;
   align-items: center;
@@ -83,12 +83,12 @@
 }
 
 @media (min-width: 640px) {
-  .register-badge-pill {
+  .register__badge {
     display: flex;
   }
 }
 
-.register-status-dot {
+.register__dot {
   height: 6px;
   width: 6px;
   border-radius: 9999px;
@@ -96,7 +96,7 @@
 }
 
 /* Form Section */
-.register-form-section {
+.register__form-area {
   position: relative;
   display: flex;
   min-height: calc(100vh - 70px);
@@ -105,14 +105,14 @@
   background-color: #0a0e14;
 }
 
-.register-glow-layer {
+.register__glow {
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at 85% 15%, rgba(113, 20, 16, 0.6), transparent 45%),
               linear-gradient(135deg, #0a0e14 0%, #10151f 55%, #190807 100%);
 }
 
-.register-content-wrapper {
+.register__content {
   position: relative;
   z-index: 10;
   margin: 0 auto;
@@ -122,24 +122,24 @@
 }
 
 @media (min-width: 640px) {
-  .register-content-wrapper {
+  .register__content {
     padding: 2.5rem 2rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .register-content-wrapper {
+  .register__content {
     padding: 2.5rem 3rem;
   }
 }
 
-.register-card-wrapper {
+.register__card-wrap {
   position: relative;
   margin: 0 auto;
   max-width: 470px;
 }
 
-.register-card {
+.register__card {
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background-color: var(--f1-card-glass);
@@ -150,7 +150,7 @@
 }
 
 @media (min-width: 640px) {
-  .register-card {
+  .register__card {
     padding: 2.25rem;
   }
 }

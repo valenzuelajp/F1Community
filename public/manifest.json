@@ -1,0 +1,16 @@
+{
+  "name": "F1Store - Official Formula 1 Merchandise",
+  "short_name": "F1Store",
+  "description": "Shop official Formula 1 team and driver merchandise. Authentic F1 apparel, accessories, and collectibles.",
+  "start_url": "/login",
+  "display": "standalone",
+  "background_color": "#0b0e14",
+  "theme_color": "#ff1801",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
