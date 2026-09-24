@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, AlertCircle, Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import Image from 'next/image';
-import { loginSchema, type LoginInput } from '@/lib/validations/auth';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import './auth-forms.css';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, AlertCircle, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import Image from "next/image";
+import { loginSchema, type LoginInput } from "@/lib/validations/auth";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import "./auth-forms.css";
 
 /**
  * Login Form Component
@@ -30,13 +30,12 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       rememberMe: false,
     },
   });
@@ -46,20 +45,24 @@ export function LoginForm() {
     setAuthError(null);
 
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
       });
 
       if (result?.error) {
-        setAuthError('Invalid credentials. Please check your email and password.');
+        setAuthError(
+          "Invalid credentials. Please check your email and password.",
+        );
       } else {
-        const callbackUrl = new URLSearchParams(window.location.search).get('callbackUrl') || '/home';
+        const callbackUrl =
+          new URLSearchParams(window.location.search).get("callbackUrl") ||
+          "/home";
         window.location.assign(callbackUrl);
       }
     } catch {
-      setAuthError('An unexpected error occurred. Please try again.');
+      setAuthError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +77,8 @@ export function LoginForm() {
             WELCOME BACK, <span className="text-[#ff1801]">CHAMP</span>
           </h2>
           <p className="login-form-subtitle">
-            LOG IN NOW TO UPDATE YOUR PREDICTIONS BEFORE <span className="text-[#ff1801]">F1</span> BEGINS
+            LOG IN NOW TO UPDATE YOUR PREDICTIONS BEFORE{" "}
+            <span className="text-[#ff1801]">F1</span> BEGINS
           </p>
         </div>
 
@@ -87,7 +91,7 @@ export function LoginForm() {
       </div>
 
       {/* Account created notification */}
-      {searchParams.get('registered') === '1' && (
+      {searchParams.get("registered") === "1" && (
         <p className="auth-status-banner" role="status">
           Account created. Log in to join the grid.
         </p>
@@ -109,13 +113,15 @@ export function LoginForm() {
             <Mail className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
-            {...register('email')}
+            {...register("email")}
             type="email"
             placeholder="EMAIL ADDRESS"
-            className={`login-input-field ${errors.email ? 'has-error' : ''}`}
+            className={`login-input-field ${errors.email ? "has-error" : ""}`}
           />
         </div>
-        {errors.email && <p className="auth-error-text">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="auth-error-text">{errors.email.message}</p>
+        )}
 
         {/* Password */}
         <div className="login-input">
@@ -123,29 +129,35 @@ export function LoginForm() {
             <Lock className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
-            {...register('password')}
-            type={showPassword ? 'text' : 'password'}
+            {...register("password")}
+            type={showPassword ? "text" : "password"}
             placeholder="PASSWORD"
-            className={`login-input-field ${errors.password ? 'has-error' : ''}`}
+            className={`login-input-field ${errors.password ? "has-error" : ""}`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="login-password-toggle"
             tabIndex={-1}
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+            {showPassword ? (
+              <EyeOff className="h-3.5 w-3.5" />
+            ) : (
+              <Eye className="h-3.5 w-3.5" />
+            )}
           </button>
         </div>
-        {errors.password && <p className="auth-error-text">{errors.password.message}</p>}
+        {errors.password && (
+          <p className="auth-error-text">{errors.password.message}</p>
+        )}
       </div>
 
       {/* Options Row */}
       <div className="login-form-options">
         <label className="login-remember">
           <input
-            {...register('rememberMe')}
+            {...register("rememberMe")}
             type="checkbox"
             className="login-checkbox"
           />
@@ -172,7 +184,12 @@ export function LoginForm() {
           <>
             <span className="login-btn-label">LOGIN</span>
             <span className="login-btn-arrow">
-              <Image src="/imgRectangle427.png" alt="arrow" width={16} height={16} />
+              <Image
+                src="/imgRectangle427.png"
+                alt="arrow"
+                width={16}
+                height={16}
+              />
             </span>
           </>
         )}
@@ -187,30 +204,23 @@ export function LoginForm() {
       <Link href="/home" className="login-btn-secondary group">
         <span className="login-btn-label">CONTINUE AS GUEST</span>
         <span className="login-btn-arrow">
-          <Image src="/imgRectangle427.png" alt="arrow" width={16} height={16} />
+          <Image
+            src="/imgRectangle427.png"
+            alt="arrow"
+            width={16}
+            height={16}
+          />
         </span>
       </Link>
 
       {/* Bottom Switcher */}
       <div className="login-form-footer">
-        <span className="login-form-footer-note">DON&apos;T HAVE AN ACCOUNT?</span>
+        <span className="login-form-footer-note">
+          DON&apos;T HAVE AN ACCOUNT?
+        </span>
         <Link href="/register" className="login-form-footer-link">
           REGISTER &gt;
         </Link>
-      </div>
-
-      {/* Demo Credentials quick button (helpful for testing) */}
-      <div className="login-demo-credentials">
-        <button
-          type="button"
-          onClick={() => {
-            setValue('email', 'customer@f1store.com');
-            setValue('password', 'customer123');
-          }}
-          className="login-demo-btn"
-        >
-          Click to load demo credentials
-        </button>
       </div>
     </form>
   );

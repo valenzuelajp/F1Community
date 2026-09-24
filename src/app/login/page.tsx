@@ -2,10 +2,13 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu } from "lucide-react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Countdown } from "@/components/f1/Countdown";
-import { fallbackF1Event, getNextF1Event, getTopDrivers } from "@/lib/f1/jolpica";
+import {
+  fallbackF1Event,
+  getNextF1Event,
+  getTopDrivers,
+} from "@/lib/f1/jolpica";
 import type { F1StandingDriver } from "@/lib/f1/jolpica";
 import "./login.css";
 
@@ -73,41 +76,10 @@ export default async function LoginPage() {
               priority
             />
           </Link>
-
-          {/* Primary Navigation Links with Vertical Dividers */}
-          <nav aria-label="Primary navigation" className="login-nav">
-            <div className="login-nav-items">
-              <Link href="/home" className="login-nav-link">
-                HOME
-              </Link>
-              <span className="login-nav-divider" aria-hidden="true" />
-              <Link href="#schedules" className="login-nav-link">
-                SCHEDULES
-              </Link>
-              <span className="login-nav-divider" aria-hidden="true" />
-              <Link href="#news" className="login-nav-link">
-                NEWS
-              </Link>
-              <span className="login-nav-divider" aria-hidden="true" />
-              <Link href="#store" className="login-nav-link">
-                STORE
-              </Link>
-            </div>
-          </nav>
-
-          {/* Header Action Buttons: SALE & MENU */}
           <div className="login-header-actions">
-            <Link href="#sale" className="login-sale-pill">
-              SALE
+            <Link href="/register" className="login-sale-pill">
+              JOIN THE GRID
             </Link>
-            <button
-              type="button"
-              aria-label="Open menu"
-              className="login-menu-pill"
-            >
-              <Menu className="h-4 w-4" aria-hidden="true" />
-              <span>MENU</span>
-            </button>
           </div>
         </div>
       </header>
@@ -261,9 +233,7 @@ export default async function LoginPage() {
           ===================================================================== */}
       <section
         aria-label={
-          event.isLive
-            ? "Live race telemetry timing"
-            : "Race telemetry offline"
+          event.isLive ? "Live race telemetry timing" : "Race telemetry offline"
         }
         className="login-telemetry"
       >
@@ -287,9 +257,7 @@ export default async function LoginPage() {
               <span className="login-telemetry-slash">/</span>
               <span>[NAM3] [TIMEDATA3]</span>
               <span className="login-telemetry-slash">/</span>
-              <span className="login-telemetry-phase">
-                {event.headline}
-              </span>
+              <span className="login-telemetry-phase">{event.headline}</span>
             </>
           ) : (
             <>
@@ -313,7 +281,10 @@ export default async function LoginPage() {
           Hidden entirely when the API is unavailable.
           ===================================================================== */}
       {topDrivers.length > 0 && (
-        <section aria-label="Top 3 championship drivers" className="login-podium">
+        <section
+          aria-label="Top 3 championship drivers"
+          className="login-podium"
+        >
           <h2 className="login-podium-title">
             TOP 3 — {event.season} CHAMPIONSHIP
           </h2>
@@ -327,9 +298,12 @@ export default async function LoginPage() {
                   <span className="login-podium-name">
                     {driver.name.toUpperCase()}
                   </span>
-                  <span className="login-podium-team">{driver.team.toUpperCase()}</span>
+                  <span className="login-podium-team">
+                    {driver.team.toUpperCase()}
+                  </span>
                   <span className="login-podium-points">
-                    {driver.points} <span className="login-podium-pts">PTS</span>
+                    {driver.points}{" "}
+                    <span className="login-podium-pts">PTS</span>
                   </span>
                 </span>
                 {driver.photo && (
