@@ -173,7 +173,6 @@ A task is **Done** when:
 
 ### Related
 - Global interaction styles live in `src/app/globals.css` (modal, tooltip, toast, accordion).
-- Frontend skill applied: `.opencode/skills/frontend/SKILL.md`.
 - Typecheck: only pre-existing Prisma `username` errors (unrelated).
 
 ---
