@@ -16,3 +16,16 @@ Rules the AI assistant MUST always follow when working in this repository.
 - Document what you did in `f1storewiki/` when the user asks (they like a
   written memory record on disk).
 - Follow the existing conventions in `f1storewiki/DEVELOPMENT.md`.
+
+## Progress → Wiki (Wynn)
+
+Every time progress is made (feature, fix, refactor, UI change), update the
+wiki (`f1storewiki/PROGRESS.md` and any other relevant page) with **what was
+adjusted**.
+
+- Tag Wynn’s changes with the special identifier **`Wynn`** so other
+  developers know what was interacted with or changed by Wynn.
+- Example: `**Wynn:** rebuilt /components-wynn grid; removed card glow`
+- Prefer a short bullet list under a dated section/heading for each progress pass.
+- Keep shared files (login, PROGRESS, etc.) in sync with `main` when possible
+  to reduce merge conflicts.

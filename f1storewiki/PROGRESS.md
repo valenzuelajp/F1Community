@@ -68,7 +68,7 @@ status: active
 - [x] **Security plan + database guide documented**: `SECURITY.md`, `DATABASE.md`
 - [x] Figma design exports added (`assets/figma/...` - login, store, account, schedules/standings, admin screens)
 - [ ] API contract defined (OpenAPI)
-- [x] Component library chosen/created — interaction primitives + `/components-wynn` showcase (2026-09-24; see Components Showcase below)
+- [x] Component library chosen/created — interaction primitives + `/components-wynn` showcase (2026-09-24; includes **Wynn** login/auth set; see report below)
 - [ ] Design system tokens defined
 - [ ] F1 API clients created (Jolpica, Live, News) - **NO CODE YET**
 - [ ] Route groups created ((f1), (shop))
@@ -170,16 +170,17 @@ A task is **Done** when:
 
 ## Components Showcase Report — `components` branch (2026-09-24)
 
-**Route:** `/components-wynn` (`src/app/components-wynn/page.tsx` + `components.css`)  
+**Wynn** · Route: `/components-wynn` (`src/app/components-wynn/page.tsx` + `components.css`)  
 **Aesthetic:** Pit Wall Telemetry (full-width, racing-grid bg, Anton display type, F1 red accents, staggered card entrance).
 
-### Layout
+### Layout — **Wynn**
 - Removed centered max-width layout; full-width page.
-- **3-column specimen grid** for short-form components; each card labeled with ID, name, and category tag (no card description/footer).
+- **3-column specimen grid** for short-form components (responsive: **1-col &lt;640px · 2-col 640–1023px · 3-col ≥1024px**); each card labeled with ID, name, and category tag (no card description/footer).
 - Split sections with legends: **Short-form content** vs **Long-form content**.
 - Card hover glow (`box-shadow`) removed; border highlight + lift only.
+- Grouped existing specimens under a **Basic interaction** `fieldset`/`legend` with indented contents.
 
-### Short-form specimens (P01–P07)
+### Short-form specimens (P01–P07) — **Wynn**
 | ID | Component | Interaction |
 |----|-----------|-------------|
 | P01 | Modal | Open/close overlay dialog |
@@ -190,17 +191,31 @@ A task is **Done** when:
 | P06 | Loading | Async button (idle → loading → done + toast) |
 | P07 | Segmented | Q1/Q2/Q3 group select |
 
-### Long-form specimens (P08–P10)
+### Long-form specimens (P08–P10) — **Wynn**
 | ID | Component | Interaction |
 |----|-----------|-------------|
 | P08 | Accordion | Vertical disclosure, long body copy |
 | P09 | Tabs | Race/Quali/Setup panels with long text |
 | P10 | Horizontal | Horizontal accordion — collapsed strips expand side-by-side |
 
-### Related
+### Related — **Wynn**
+- Horizontal accordion: full-width fill, content-height sizing, slower expand + label fade on trigger.
 - Global interaction styles live in `src/app/globals.css` (modal, tooltip, toast, accordion).
 - Typecheck: only pre-existing Prisma `username` errors (unrelated).
 
+### Login / auth set on `/components-wynn` — **Wynn** (2026-09-24)
+- Added as a second fieldset **Auth interaction** on the same page (no separate route).
+- Short-form **L01–L12** (responsive grid): Text Input, Password, Error Banner, Status Banner, Remember Row, Login Button, Guest Button, OR Divider, Platform Tabs, Social Auth, Form Header, Footer Callout.
+- Long-form **L13–L14** (1-col): Mini Login composite, Auth Header + platform tabs.
+- Previews reuse `src/components/auth/auth-forms.css` (imported only in `components-wynn`).
+- **Wynn:** Mini Login **composes the same field-control components** as L01–L12 (shared React components) — edits to those components update both the cards and Mini Login.
+- **Wynn:** Mini Login has a **drag resize bar** under the form (pointer drag + arrow keys) to change form width (240–520px).
+- **Wynn:** Primary LOGIN button uses **`/public/login-btn.svg?v=2`** (`preserveAspectRatio="none"`, `#ce1503`, evenodd tip cut) via `.components-login-svg-btn` — stretched to **38px** to match Classic.
+- **Wynn:** L06 card has a **Variant** dropdown **below the specimen** (inside the card, not in the header) switching **Classic** (gradient) vs **Variant 2** (user SVG) designs.
+- **Wynn:** L07 Guest Button has the same **Variant** dropdown **below the specimen** — **Classic** (outline) vs **Variant 2** (`/public/guest-btn.svg`, `preserveAspectRatio="none"`, `#ff1801`).
+- **Wynn:** OR Divider (L08) shows **`[line] OR [line]`** via `.auth__divider::before/::after` (also applies to real login form).
+- **Wynn:** Mini Login (L13) is an **edit-in-place builder**: click a form section (or chip row) to open inline controls — show/hide sections, **Login/Guest** variants (**Classic** / **Variant 2**), CTA labels, footer note/link, password reveal, **accent color** swatches. Hidden sections become dashed “+ Section” ghosts; Resize bar still works; **Reset** restores defaults.
+
 ---
 
-*Last updated: 2026-09-24 | Next review: 2026-09-25*
+*Last updated: 2026-09-24 (Wynn) | Next review: 2026-09-25*
