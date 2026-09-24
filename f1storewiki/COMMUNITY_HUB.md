@@ -55,6 +55,8 @@ The F1 Community hub consists of four pillars:
 | Date | Note |
 | :--- | :--- |
 | 2026-09-23 | Hub = schedule + discussion (Reddit-style, anonymous-or-username, **no chat**) + updated leaderboard + updated news. Focus login/register first. Stores later. |
+| 2026-09-23 | Tooling: moved **all opencode skills + plugins to the A: HDD** (`A:\opencode-memory\skills` = 22 skills, `A:\opencode-memory\plugins` = 3 local plugin dirs via `plugins` in `opencode.jsonc`). All 5 configured plugins were **already broken** (V1 plugin API fails V2 schema check; `opencode-notificator`/`opencode-type-inject` don't exist on npm — 404), so removal/nothing lost. |
+| 2026-09-23 | Tooling: researched + installed **4 new plugins** to `A:\opencode-memory\plugins`. **Verified working on V2.0.14**: `superpowers` v6.4.1 (git clone — 15 skills now live: brainstorming, systematic-debugging, writing-plans, TDD, etc.) and `opencode-dcp` 3.2.0 (context pruning; needed full devDeps install for `@opencode-ai/plugin`). **Dead on V2 (V1 API, removed from config, dirs kept)**: `opencode-notify` 0.3.1 + `opencode-plugin-updates` 1.0.2 — both export async `(input) => hooks`, which V2 rejects; plugin-updates also had no root entry file. Gotcha learned: opencode's local-dir loader needs a root `server.js`/`index.js` shim (dcp ships one; superpowers' `index.js` is its shim). |
 
 > [!tip] Adding a note
 > Append to the table above with today's date any time the product decision changes.

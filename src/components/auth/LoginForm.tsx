@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, AlertCircle, Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import Image from 'next/image';
-import { loginSchema, type LoginInput } from '@/lib/validations/auth';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import './auth-forms.css';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, AlertCircle, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import Image from "next/image";
+import { loginSchema, type LoginInput } from "@/lib/validations/auth";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import "./auth-forms.css";
 
 /**
  * Login Form Component
@@ -30,13 +30,12 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       rememberMe: false,
     },
   });
@@ -46,20 +45,24 @@ export function LoginForm() {
     setAuthError(null);
 
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
       });
 
       if (result?.error) {
-        setAuthError('Invalid credentials. Please check your email and password.');
+        setAuthError(
+          "Invalid credentials. Please check your email and password.",
+        );
       } else {
-        const callbackUrl = new URLSearchParams(window.location.search).get('callbackUrl') || '/home';
+        const callbackUrl =
+          new URLSearchParams(window.location.search).get("callbackUrl") ||
+          "/home";
         window.location.assign(callbackUrl);
       }
     } catch {
-      setAuthError('An unexpected error occurred. Please try again.');
+      setAuthError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +90,7 @@ export function LoginForm() {
       </div>
 
       {/* Account created notification */}
-      {searchParams.get('registered') === '1' && (
+      {searchParams.get("registered") === "1" && (
         <p className="auth-status-banner" role="status">
           Account created. Log in to join the grid.
         </p>
@@ -109,13 +112,15 @@ export function LoginForm() {
             <Mail className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
-            {...register('email')}
+            {...register("email")}
             type="email"
             placeholder="EMAIL ADDRESS"
             className={`auth__input-field ${errors.email ? 'has-error' : ''}`}
           />
         </div>
-        {errors.email && <p className="auth-error-text">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="auth-error-text">{errors.email.message}</p>
+        )}
 
         {/* Password */}
         <div className="auth__input">
@@ -123,8 +128,8 @@ export function LoginForm() {
             <Lock className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
-            {...register('password')}
-            type={showPassword ? 'text' : 'password'}
+            {...register("password")}
+            type={showPassword ? "text" : "password"}
             placeholder="PASSWORD"
             className={`auth__input-field ${errors.password ? 'has-error' : ''}`}
           />
@@ -133,19 +138,25 @@ export function LoginForm() {
             onClick={() => setShowPassword(!showPassword)}
             className="auth__password-toggle"
             tabIndex={-1}
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+            {showPassword ? (
+              <EyeOff className="h-3.5 w-3.5" />
+            ) : (
+              <Eye className="h-3.5 w-3.5" />
+            )}
           </button>
         </div>
-        {errors.password && <p className="auth-error-text">{errors.password.message}</p>}
+        {errors.password && (
+          <p className="auth-error-text">{errors.password.message}</p>
+        )}
       </div>
 
       {/* Options Row */}
       <div className="auth__form-options">
         <label className="auth__remember">
           <input
-            {...register('rememberMe')}
+            {...register("rememberMe")}
             type="checkbox"
             className="auth__checkbox"
           />
