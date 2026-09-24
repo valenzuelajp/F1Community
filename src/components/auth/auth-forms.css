@@ -4,7 +4,7 @@
    Replicating Screenshot 2026-09-16 122645.png with pixel-accurate details.
    ========================================================================== */
 
-.login-form {
+.auth {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
@@ -12,7 +12,7 @@
 }
 
 /* Header & Racing Slashes */
-.login-form-header {
+.auth__form-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -20,7 +20,7 @@
   margin-bottom: 0.5rem;
 }
 
-.login-form-title {
+.auth__form-title {
   font-size: 1.15rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -29,7 +29,7 @@
   color: #ffffff;
 }
 
-.login-form-subtitle {
+.auth__form-subtitle {
   margin-top: 0.35rem;
   font-size: 8.5px;
   font-weight: 700;
@@ -39,14 +39,14 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.login-form-slashes {
+.auth__form-slashes {
   display: flex;
   gap: 0.2rem;
   padding-top: 0.15rem;
   flex-shrink: 0;
 }
 
-.login-form-slash {
+.auth__form-slash {
   display: inline-block;
   height: 1.1rem;
   width: 0.3rem;
@@ -90,13 +90,13 @@
 }
 
 /* Inputs Stack */
-.login-form-inputs {
+.auth__form-inputs {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
 }
 
-.login-input {
+.auth__input {
   position: relative;
   display: flex;
   align-items: center;
@@ -107,12 +107,12 @@
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.login-input:focus-within {
+.auth__input:focus-within {
   border-color: #ff1801;
   box-shadow: 0 0 0 1px rgba(255, 24, 1, 0.4);
 }
 
-.login-input-icon {
+.auth__input-icon {
   position: absolute;
   left: 0.75rem;
   display: flex;
@@ -120,7 +120,7 @@
   pointer-events: none;
 }
 
-.login-input-field {
+.auth__input-field {
   width: 100%;
   background: transparent;
   padding: 0.6rem 2.25rem 0.6rem 2.25rem;
@@ -131,17 +131,17 @@
   outline: none;
 }
 
-.login-input-field::placeholder {
+.auth__input-field::placeholder {
   color: rgba(255, 255, 255, 0.45);
   font-size: 9.5px;
   letter-spacing: 0.08em;
 }
 
-.login-input-field.has-error {
+.auth__input-field.has-error {
   color: #fca5a5;
 }
 
-.login-password-toggle {
+.auth__password-toggle {
   position: absolute;
   right: 0.75rem;
   display: flex;
@@ -153,12 +153,12 @@
   transition: color 0.15s ease;
 }
 
-.login-password-toggle:hover {
+.auth__password-toggle:hover {
   color: #ffffff;
 }
 
 /* Options: Remember me & Forgot password */
-.login-form-options {
+.auth__form-options {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -167,7 +167,7 @@
   padding: 0.15rem 0;
 }
 
-.login-remember {
+.auth__remember {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -175,7 +175,7 @@
   cursor: pointer;
 }
 
-.login-checkbox {
+.auth__checkbox {
   height: 0.75rem;
   width: 0.75rem;
   border-radius: 2px;
@@ -184,18 +184,18 @@
   accent-color: #ff1801;
 }
 
-.login-forgot {
+.auth__forgot {
   color: #ff1801;
   font-weight: 700;
   transition: color 0.15s ease;
 }
 
-.login-forgot:hover {
+.auth__forgot:hover {
   color: #ff4d3d;
 }
 
 /* Buttons */
-.login-btn-primary {
+.auth__btn--primary {
   position: relative;
   display: flex;
   width: 100%;
@@ -210,17 +210,17 @@
   transition: all 0.15s ease;
 }
 
-.login-btn-primary:hover:not(:disabled) {
+.auth__btn--primary:hover:not(:disabled) {
   filter: brightness(1.1);
   transform: translateY(-1px);
 }
 
-.login-btn-primary:disabled {
+.auth__btn--primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.login-btn-secondary {
+.auth__btn--secondary {
   position: relative;
   display: flex;
   width: 100%;
@@ -234,12 +234,12 @@
   transition: all 0.15s ease;
 }
 
-.login-btn-secondary:hover {
+.auth__btn--secondary:hover {
   background-color: #0d121c;
   border-color: #ff1801;
 }
 
-.login-btn-label {
+.auth__btn-label {
   font-size: 10.5px;
   font-weight: 900;
   text-transform: uppercase;
@@ -247,7 +247,7 @@
   color: #ffffff;
 }
 
-.login-btn-arrow {
+.auth__btn-arrow {
   position: absolute;
   right: 0.75rem;
   display: flex;
@@ -258,7 +258,7 @@
 }
 
 /* OR Divider */
-.login-or-divider {
+.auth__divider {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -270,7 +270,7 @@
 }
 
 /* Footer Register Callout */
-.login-form-footer {
+.auth__form-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -280,17 +280,17 @@
   padding-top: 0.4rem;
 }
 
-.login-form-footer-note {
+.auth__footer-note {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.login-form-footer-link {
+.auth__footer-link {
   color: #ff1801;
   font-weight: 900;
   transition: color 0.15s ease;
 }
 
-.login-form-footer-link:hover {
+.auth__footer-link:hover {
   color: #ff4d3d;
 }
 
@@ -467,12 +467,12 @@
   padding-top: 0.5rem;
 }
 
-.login-demo-credentials {
+.auth__demo-wrap {
   padding-top: 0.25rem;
   text-align: center;
 }
 
-.login-demo-btn {
+.auth__demo-btn {
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -481,6 +481,6 @@
   cursor: pointer;
 }
 
-.login-demo-btn:hover {
+.auth__demo-btn:hover {
   color: #d1d5db;
 }

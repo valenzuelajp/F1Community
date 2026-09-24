@@ -69,24 +69,23 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="auth" noValidate>
       {/* Top Header & Racing Slashes */}
-      <div className="login-form-header">
+      <div className="auth__form-header">
         <div>
-          <h2 className="login-form-title">
+          <h2 className="auth__form-title">
             WELCOME BACK, <span className="text-[#ff1801]">CHAMP</span>
           </h2>
-          <p className="login-form-subtitle">
-            LOG IN NOW TO UPDATE YOUR PREDICTIONS BEFORE{" "}
-            <span className="text-[#ff1801]">F1</span> BEGINS
+          <p className="auth__form-subtitle">
+            LOG IN NOW TO UPDATE YOUR PREDICTIONS BEFORE <span className="text-[#ff1801]">F1</span> BEGINS
           </p>
         </div>
 
         {/* 3 Red diagonal slashes */}
-        <div className="login-form-slashes" aria-hidden="true">
-          <span className="login-form-slash" />
-          <span className="login-form-slash" />
-          <span className="login-form-slash" />
+        <div className="auth__form-slashes" aria-hidden="true">
+          <span className="auth__form-slash" />
+          <span className="auth__form-slash" />
+          <span className="auth__form-slash" />
         </div>
       </div>
 
@@ -106,17 +105,17 @@ export function LoginForm() {
       )}
 
       {/* Inputs Stack */}
-      <div className="login-form-inputs">
+      <div className="auth__form-inputs">
         {/* Email */}
-        <div className="login-input">
-          <div className="login-input-icon">
+        <div className="auth__input">
+          <div className="auth__input-icon">
             <Mail className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
             {...register("email")}
             type="email"
             placeholder="EMAIL ADDRESS"
-            className={`login-input-field ${errors.email ? "has-error" : ""}`}
+            className={`auth__input-field ${errors.email ? 'has-error' : ''}`}
           />
         </div>
         {errors.email && (
@@ -124,20 +123,20 @@ export function LoginForm() {
         )}
 
         {/* Password */}
-        <div className="login-input">
-          <div className="login-input-icon">
+        <div className="auth__input">
+          <div className="auth__input-icon">
             <Lock className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
             {...register("password")}
             type={showPassword ? "text" : "password"}
             placeholder="PASSWORD"
-            className={`login-input-field ${errors.password ? "has-error" : ""}`}
+            className={`auth__input-field ${errors.password ? 'has-error' : ''}`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="login-password-toggle"
+            className="auth__password-toggle"
             tabIndex={-1}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
@@ -154,17 +153,17 @@ export function LoginForm() {
       </div>
 
       {/* Options Row */}
-      <div className="login-form-options">
-        <label className="login-remember">
+      <div className="auth__form-options">
+        <label className="auth__remember">
           <input
             {...register("rememberMe")}
             type="checkbox"
-            className="login-checkbox"
+            className="auth__checkbox"
           />
           <span>REMEMBER ME</span>
         </label>
 
-        <Link href="#forgot" className="login-forgot">
+        <Link href="/register" className="auth__forgot">
           FORGOT PASSWORD?
         </Link>
       </div>
@@ -173,7 +172,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="login-btn-primary group"
+        className="auth__btn--primary group"
       >
         {isLoading ? (
           <>
@@ -182,45 +181,47 @@ export function LoginForm() {
           </>
         ) : (
           <>
-            <span className="login-btn-label">LOGIN</span>
-            <span className="login-btn-arrow">
-              <Image
-                src="/imgRectangle427.png"
-                alt="arrow"
-                width={16}
-                height={16}
-              />
+            <span className="auth__btn-label">LOGIN</span>
+            <span className="auth__btn-arrow">
+              <Image src="/imgRectangle427.png" alt="arrow" width={32} height={32} />
             </span>
           </>
         )}
       </button>
 
       {/* OR Divider */}
-      <div className="login-or-divider">
+      <div className="auth__divider">
         <span>OR</span>
       </div>
 
       {/* Continue as Guest Button */}
-      <Link href="/home" className="login-btn-secondary group">
-        <span className="login-btn-label">CONTINUE AS GUEST</span>
-        <span className="login-btn-arrow">
-          <Image
-            src="/imgRectangle427.png"
-            alt="arrow"
-            width={16}
-            height={16}
-          />
+      <Link href="/home" className="auth__btn--secondary group">
+        <span className="auth__btn-label">CONTINUE AS GUEST</span>
+        <span className="auth__btn-arrow">
+          <Image src="/imgRectangle427.png" alt="arrow" width={32} height={32} />
         </span>
       </Link>
 
       {/* Bottom Switcher */}
-      <div className="login-form-footer">
-        <span className="login-form-footer-note">
-          DON&apos;T HAVE AN ACCOUNT?
-        </span>
-        <Link href="/register" className="login-form-footer-link">
+      <div className="auth__form-footer">
+        <span className="auth__footer-note">DON&apos;T HAVE AN ACCOUNT?</span>
+        <Link href="/register" className="auth__footer-link">
           REGISTER &gt;
         </Link>
+      </div>
+
+      {/* Demo Credentials quick button (helpful for testing) */}
+      <div className="auth__demo-wrap">
+        <button
+          type="button"
+          onClick={() => {
+            setValue('email', 'customer@f1store.com');
+            setValue('password', 'customer123');
+          }}
+          className="auth__demo-btn"
+        >
+          Click to load demo credentials
+        </button>
       </div>
     </form>
   );
