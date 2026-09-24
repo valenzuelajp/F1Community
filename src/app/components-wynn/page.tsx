@@ -265,7 +265,7 @@ function LongTabs() {
 
 /* Horizontal accordion — panels expand side-by-side */
 function HorizontalAccordion() {
-  const [openIdx, setOpenIdx] = useState(0);
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
   const rows = [
     {
       title: 'Front wing',
@@ -348,85 +348,89 @@ function ComponentsShowcase() {
         </div>
         <div className="components-meta">
           <span className="components-meta-dot" aria-hidden />
-          <span>07 compact · 03 long-form</span>
+          <span>Basic interaction · 07 short · 03 long</span>
         </div>
       </header>
 
-      <section className="components-section components-section--first">
-        <div className="components-section-head">
-          <span className="components-section-label">Short-form content</span>
-          <span className="components-section-rule" aria-hidden />
-        </div>
+      <fieldset className="components-fieldset">
+        <legend className="components-legend">Basic interaction</legend>
 
-        <div className="components-grid">
-        <ComponentCard id="P01 · Overlay" name="Modal" tag="Overlay">
-          <button className="components-btn components-btn--primary" onClick={() => openModal('demo')}>
-            Open Modal
-          </button>
-          <Modal id="demo" title="Box Box Box">
-            <p style={{ color: '#9ca3af' }}>Pit window is open. Clear on exit.</p>
-          </Modal>
-        </ComponentCard>
+        <div className="components-section components-section--nested">
+          <div className="components-section-head">
+            <span className="components-section-label">Short-form content</span>
+            <span className="components-section-rule" aria-hidden />
+          </div>
 
-        <ComponentCard id="P02 · Hover" name="Tooltip" tag="Hover">
-          <Tooltip content="DRS enabled — +0.2s">
-            <button className="components-btn components-btn--secondary">Hover me</button>
-          </Tooltip>
-        </ComponentCard>
-
-        <ComponentCard id="P03 · Feedback" name="Toast" tag="Feedback">
-          <button
-            className="components-btn components-btn--secondary"
-            onClick={() => showToast('Lap time deleted — track limits')}
-          >
-            Fire Toast
-          </button>
-        </ComponentCard>
-
-        <ComponentCard id="P04 · Menu" name="Dropdown" tag="Menu">
-          <Dropdown label="Compound" items={['Soft', 'Medium', 'Intermediate', 'Wet']} />
-        </ComponentCard>
-
-        <ComponentCard id="P05 · Switch" name="Toggle" tag="Switch">
-          <ToggleButton />
-        </ComponentCard>
-
-        <ComponentCard id="P06 · Async" name="Loading" tag="Async">
-          <LoadingButton showToast={showToast} />
-        </ComponentCard>
-
-        <ComponentCard id="P07 · Select" name="Segmented" tag="Group">
-          <Segmented />
-        </ComponentCard>
-        </div>
-      </section>
-
-      <section className="components-section">
-        <div className="components-section-head">
-          <span className="components-section-label">Long-form content</span>
-          <span className="components-section-rule" aria-hidden />
-        </div>
-
-        <div className="components-grid components-grid--wide">
-          <ComponentCard id="P08 · Disclosure" name="Accordion" tag="Disclosure">
-            <div style={{ width: '100%' }}>
-              <Accordion />
-            </div>
+          <div className="components-grid">
+          <ComponentCard id="P01 · Overlay" name="Modal" tag="Overlay">
+            <button className="components-btn components-btn--primary" onClick={() => openModal('demo')}>
+              Open Modal
+            </button>
+            <Modal id="demo" title="Box Box Box">
+              <p style={{ color: '#9ca3af' }}>Pit window is open. Clear on exit.</p>
+            </Modal>
           </ComponentCard>
 
-          <ComponentCard id="P09 · Tabs" name="Tabs" tag="Switch">
-            <div style={{ width: '100%' }}>
-              <LongTabs />
-            </div>
+          <ComponentCard id="P02 · Hover" name="Tooltip" tag="Hover">
+            <Tooltip content="DRS enabled — +0.2s">
+              <button className="components-btn components-btn--secondary">Hover me</button>
+            </Tooltip>
           </ComponentCard>
 
-          <ComponentCard id="P10 · Disclosure" name="Horizontal" tag="H. Accordion">
-            <div style={{ width: '100%' }}>
-              <HorizontalAccordion />
-            </div>
+          <ComponentCard id="P03 · Feedback" name="Toast" tag="Feedback">
+            <button
+              className="components-btn components-btn--secondary"
+              onClick={() => showToast('Lap time deleted — track limits')}
+            >
+              Fire Toast
+            </button>
           </ComponentCard>
+
+          <ComponentCard id="P04 · Menu" name="Dropdown" tag="Menu">
+            <Dropdown label="Compound" items={['Soft', 'Medium', 'Intermediate', 'Wet']} />
+          </ComponentCard>
+
+          <ComponentCard id="P05 · Switch" name="Toggle" tag="Switch">
+            <ToggleButton />
+          </ComponentCard>
+
+          <ComponentCard id="P06 · Async" name="Loading" tag="Async">
+            <LoadingButton showToast={showToast} />
+          </ComponentCard>
+
+          <ComponentCard id="P07 · Select" name="Segmented" tag="Group">
+            <Segmented />
+          </ComponentCard>
+          </div>
         </div>
-      </section>
+
+        <div className="components-section components-section--nested">
+          <div className="components-section-head">
+            <span className="components-section-label">Long-form content</span>
+            <span className="components-section-rule" aria-hidden />
+          </div>
+
+          <div className="components-grid components-grid--wide">
+            <ComponentCard id="P08 · Disclosure" name="Accordion" tag="Disclosure">
+              <div style={{ width: '100%' }}>
+                <Accordion />
+              </div>
+            </ComponentCard>
+
+            <ComponentCard id="P09 · Tabs" name="Tabs" tag="Switch">
+              <div style={{ width: '100%' }}>
+                <LongTabs />
+              </div>
+            </ComponentCard>
+
+            <ComponentCard id="P10 · Disclosure" name="Horizontal" tag="H. Accordion">
+              <div style={{ width: '100%' }}>
+                <HorizontalAccordion />
+              </div>
+            </ComponentCard>
+          </div>
+        </div>
+      </fieldset>
     </main>
   );
 }
