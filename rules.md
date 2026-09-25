@@ -29,3 +29,24 @@ adjusted**.
 - Prefer a short bullet list under a dated section/heading for each progress pass.
 - Keep shared files (login, PROGRESS, etc.) in sync with `main` when possible
   to reduce merge conflicts.
+
+## Copy TSX / Copy CSS exports
+
+When generating paste-ready **Copy TSX** / **Copy CSS** (or similar export chips):
+
+- **Bake** decisions already resolved at copy time (variant, labels, accent,
+  background, block order) into the final output.
+- Emit the final `className` / CSS rules — **do not** emit runtime branches the
+  recipient does not need (e.g. no `const isSvg = true` + ternary when the
+  variant is fixed for that copy).
+- Copy CSS should include **only** rules that apply to the selected variant.
+- Live showcase components may keep runtime props; **exports should not**.
+- **TSX must be a single module**: at most one `'use client'`, one import block
+  at the top, no mid-file directives/imports after component bodies.
+- **Import hygiene**: emit only imports the selected blocks/variant need
+  (no unused `useRef` / `MouseEvent` / lucide icons).
+- **CSS width must match the TSX width** baked at copy time (no hard-coded
+  default that fights the inline style).
+- Dedupe shared CSS rules when composing Mini Login blocks (e.g. `.auth__input`
+  once for email+password; `.auth__btn-label` / `.auth__btn-arrow` /
+  `.components-auth-arrow` once for login+guest).

@@ -4,6 +4,8 @@ import React, { createContext, useContext, useState, useCallback, useEffect, Rea
 import { X, CheckCircle, ChevronDown, Plus, Minus, Loader2, Check, AlertCircle, Eye, EyeOff, Flag, Lock, Mail, ShoppingBag } from 'lucide-react';
 import '@/components/auth/auth-forms.css';
 import './components.css';
+import { buildLoginTsx, buildLoginCss, buildMiniLoginTsx, buildMiniLoginCss } from './export-code';
+import { MiniLogin } from './MiniLoginExport';
 
 /* Context */
 interface InteractionContextType {
@@ -443,6 +445,7 @@ function AuthRememberRow() {
 }
 
 type LoginBtnVariant = 'Classic' | 'Variant 2';
+type AuthBgVariant = 'Classic' | 'Variant 2' | 'Variant 3';
 
 function AuthPrimaryBtn({
   variant = 'Classic',
@@ -552,6 +555,172 @@ function GuestButtonSpecimen() {
   );
 }
 
+async function copyTextToClipboard(text: string) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  }
+}
+
+function LoginCardControls({
+  def,
+  variant,
+  onVariantChange,
+  exportOpts,
+  num,
+  onNumChange,
+}: {
+  def: {
+    id: string;
+    name: string;
+    tag: string;
+    paletteLabel: string;
+    type: string;
+    variants?: string[];
+    usage?: string;
+    defaultInMini?: boolean;
+  };
+  variant: string;
+  onVariantChange?: (v: string) => void;
+  exportOpts?: { label?: string; note?: string; link?: string; num?: string };
+  num?: string;
+  onNumChange?: (v: string) => void;
+}) {
+  const [copied, setCopied] = useState<'tsx' | 'css' | null>(null);
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasVariants = (def.variants?.length ?? 0) > 1;
+
+  React.useEffect(
+    () => () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    },
+    [],
+  );
+
+  const flashCopied = (kind: 'tsx' | 'css') => {
+    setCopied(kind);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(null), 1600);
+  };
+
+  const copyTsx = async () => {
+    await copyTextToClipboard(buildLoginTsx(def, variant, exportOpts));
+    flashCopied('tsx');
+  };
+
+  const copyCss = async () => {
+    await copyTextToClipboard(buildLoginCss(def, variant, exportOpts));
+    flashCopied('css');
+  };
+
+  return (
+    <div className="components-card-meta">
+      {hasVariants ? (
+        <Dropdown
+          label="Variant"
+          items={def.variants ?? ['Classic']}
+          value={variant}
+          onChange={(v) => onVariantChange?.(v)}
+        />
+      ) : (
+        <button
+          type="button"
+          className="components-variant-readonly"
+          disabled
+          title="No variants"
+          aria-disabled="true"
+        >
+          Classic
+        </button>
+      )}
+      {onNumChange ? (
+        <label
+          className="components-builder-field components-card-num"
+          title="Watermark number — accepts 2 digits (00–99)"
+        >
+          <span className="components-card-num__label" aria-hidden="true">
+            №
+          </span>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={num ?? ''}
+            maxLength={2}
+            placeholder="01"
+            aria-label="Watermark number, 00 to 99"
+            onChange={(e) => onNumChange(e.target.value.replace(/\D/g, '').slice(0, 2))}
+          />
+        </label>
+      ) : null}
+      <button
+        type="button"
+        className={`components-builder-chip components-builder-chip--copy ${copied === 'tsx' ? 'is-copied' : ''}`}
+        onClick={copyTsx}
+        title="Copy paste-ready TSX component"
+      >
+        {copied === 'tsx' ? 'Copied' : 'Copy TSX'}
+      </button>
+      <button
+        type="button"
+        className={`components-builder-chip components-builder-chip--copy ${copied === 'css' ? 'is-copied' : ''}`}
+        onClick={copyCss}
+        title="Copy paste-ready CSS rules"
+      >
+        {copied === 'css' ? 'Copied' : 'Copy CSS'}
+      </button>
+    </div>
+  );
+}
+
+function LoginShowcaseCard({ def }: { def: LoginComponentDef }) {
+  const variants = def.variants ?? [];
+  const hasVariants = variants.length > 1;
+  const [variant, setVariant] = useState('Classic');
+  const [num, setNum] = useState('01');
+  const activeVariant = hasVariants ? variant : 'Classic';
+  const isSticker = def.type === 'sticker';
+
+  const body = def.ShowcaseBody ? (
+    def.ShowcaseBody({ variant: activeVariant, num })
+  ) : (
+    def.MiniBody({ cfg: MINI_DEFAULTS, patch: () => undefined })
+  );
+
+  return (
+    <ComponentCard
+      key={def.type}
+      id={def.id}
+      name={def.name}
+      tag={def.tag}
+      control={
+        <LoginCardControls
+          def={def}
+          variant={activeVariant}
+          onVariantChange={setVariant}
+          num={num}
+          onNumChange={isSticker ? setNum : undefined}
+          exportOpts={{
+            label: def.type === 'login' ? MINI_DEFAULTS.loginLabel : def.type === 'guest' ? MINI_DEFAULTS.guestLabel : undefined,
+            note: def.type === 'footer' ? MINI_DEFAULTS.footerNote : undefined,
+            link: def.type === 'footer' ? MINI_DEFAULTS.footerLink : undefined,
+            num: isSticker ? num : undefined,
+          }}
+        />
+      }
+    >
+      {body}
+    </ComponentCard>
+  );
+}
+
 function AuthDivider() {
   return (
     <div className="auth__divider" style={{ width: '100%' }}>
@@ -621,7 +790,8 @@ function AuthFormHeader() {
           WELCOME BACK, <span className="components-accent-text">CHAMP</span>
         </h2>
         <p className="auth__form-subtitle">
-          LOG IN NOW TO UPDATE YOUR PREDICTIONS BEFORE <span className="components-accent-text">F1</span> BEGINS
+          LOG IN NOW TO UPDATE YOUR PREDICTIONS BEFORE{' '}
+          <span className="components-accent-text">F1</span> BEGINS
         </p>
       </div>
       <div className="auth__form-slashes" aria-hidden="true">
@@ -629,6 +799,32 @@ function AuthFormHeader() {
         <span className="auth__form-slash" />
         <span className="auth__form-slash" />
       </div>
+    </div>
+  );
+}
+
+function AuthBackImage({ number = '01' }: { number?: string } = {}) {
+  const raw = (number ?? '').replace(/\D/g, '').slice(0, 2);
+  const display = raw ? raw.padStart(2, '0') : '01';
+  return (
+    <div className="components-back-image" style={{ width: '100%' }}>
+      <span className="components-back-image__num" aria-hidden="true">
+        {display}
+      </span>
+      <img
+        className="components-back-image__ornament"
+        src="/imgOrnament24.svg?v=2"
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+      />
+      <img
+        className="components-back-image__photo"
+        src="/imgSticker1.png?v=1"
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+      />
     </div>
   );
 }
@@ -648,33 +844,19 @@ function AuthFooterCallout({
   );
 }
 
-type MiniSectionId =
-  | 'header'
-  | 'error'
-  | 'fields'
-  | 'remember'
-  | 'login'
-  | 'divider'
-  | 'guest'
-  | 'footer';
-
-const MINI_SECTIONS: { id: MiniSectionId; label: string }[] = [
-  { id: 'header', label: 'Header' },
-  { id: 'error', label: 'Error banner' },
-  { id: 'fields', label: 'Fields' },
-  { id: 'remember', label: 'Remember row' },
-  { id: 'login', label: 'Login CTA' },
-  { id: 'divider', label: 'OR divider' },
-  { id: 'guest', label: 'Guest CTA' },
-  { id: 'footer', label: 'Footer' },
-];
+type MiniBlockType = string;
 
 const ACCENT_SWATCHES = ['#ff1801', '#ce1503', '#f59e0b', '#22c55e', '#3b82f6', '#a855f7'];
 
+type MiniBlock = { uid: string; type: MiniBlockType };
+
+let miniBlockSeq = 0;
+const nextMiniUid = () => `mb-${++miniBlockSeq}`;
+
 type MiniBuilderState = {
-  show: Record<MiniSectionId, boolean>;
   loginVariant: LoginBtnVariant;
-  guestVariant: GuestBtnVariant;
+  guestVariant: LoginBtnVariant;
+  bgVariant: AuthBgVariant;
   accent: string;
   passwordVisible: boolean;
   loginLabel: string;
@@ -684,18 +866,9 @@ type MiniBuilderState = {
 };
 
 const MINI_DEFAULTS: MiniBuilderState = {
-  show: {
-    header: true,
-    error: true,
-    fields: true,
-    remember: true,
-    login: true,
-    divider: true,
-    guest: true,
-    footer: true,
-  },
   loginVariant: 'Classic',
   guestVariant: 'Classic',
+  bgVariant: 'Classic',
   accent: '#ff1801',
   passwordVisible: false,
   loginLabel: 'LOGIN',
@@ -703,6 +876,294 @@ const MINI_DEFAULTS: MiniBuilderState = {
   footerNote: "DON'T HAVE AN ACCOUNT?",
   footerLink: 'REGISTER >',
 };
+
+type MiniRenderProps = {
+  cfg: MiniBuilderState;
+  patch: (p: Partial<MiniBuilderState>) => void;
+};
+
+/**
+ * Single source of truth for Login components.
+ * Add a card here → it appears in the fieldset AND as a Mini Login palette option.
+ */
+type LoginComponentDef = {
+  type: string;
+  id: string;
+  name: string;
+  tag: string;
+  paletteLabel: string;
+  defaultInMini?: boolean;
+  hideFromShowcase?: boolean;
+  hideFromPalette?: boolean;
+  variants?: string[];
+  usage?: string;
+  MiniBody: (props: MiniRenderProps) => React.ReactNode;
+  MiniPanel?: (props: MiniRenderProps) => React.ReactNode;
+  ShowcaseBody?: (props: { variant: string; num?: string }) => React.ReactNode;
+};
+
+const LOGIN_COMPONENTS: LoginComponentDef[] = [
+  {
+    type: 'email',
+    id: 'L01 · Input',
+    name: 'Text Input',
+    tag: 'Field',
+    paletteLabel: 'Text input',
+    defaultInMini: true,
+    usage: '<div className="auth__input"><Mail /><input className="auth__input-field" placeholder="EMAIL ADDRESS" /></div>',
+    MiniBody: () => <AuthTextInput />,
+  },
+  {
+    type: 'password',
+    id: 'L02 · Secret',
+    name: 'Password',
+    tag: 'Field',
+    paletteLabel: 'Password',
+    defaultInMini: true,
+    usage: '<AuthPasswordInput />  // eye toggle · type password|text',
+    MiniBody: ({ cfg, patch }) => (
+      <AuthPasswordInput
+        visible={cfg.passwordVisible}
+        onVisibleChange={(v) => patch({ passwordVisible: v })}
+      />
+    ),
+    MiniPanel: ({ cfg, patch }) => (
+      <BuilderSwitch
+        label="Reveal password"
+        on={cfg.passwordVisible}
+        onChange={(v) => patch({ passwordVisible: v })}
+      />
+    ),
+  },
+  {
+    type: 'error',
+    id: 'L03 · Alert',
+    name: 'Error Banner',
+    tag: 'Feedback',
+    paletteLabel: 'Error banner',
+    defaultInMini: true,
+    usage: '<div className="auth-error-banner"><AlertCircle /> Invalid credentials…</div>',
+    MiniBody: () => <AuthErrorBanner />,
+  },
+  {
+    type: 'status',
+    id: 'L04 · Ok',
+    name: 'Status Banner',
+    tag: 'Feedback',
+    paletteLabel: 'Status banner',
+    usage: '<p className="auth-status-banner" role="status">Account created…</p>',
+    MiniBody: () => <AuthStatusBanner />,
+  },
+  {
+    type: 'remember',
+    id: 'L05 · Options',
+    name: 'Remember Row',
+    tag: 'Options',
+    paletteLabel: 'Remember row',
+    defaultInMini: true,
+    usage: '<div className="auth__form-options">REMEMBER ME · FORGOT PASSWORD?</div>',
+    MiniBody: () => <AuthRememberRow />,
+  },
+  {
+    type: 'login',
+    id: 'L06 · Primary',
+    name: 'Login Button',
+    tag: 'Action',
+    paletteLabel: 'Login CTA',
+    defaultInMini: true,
+    variants: ['Classic', 'Variant 2'],
+    usage: '<AuthPrimaryBtn variant="Classic|Variant 2" label="LOGIN" />  // Variant 2 → /public/login-btn.svg',
+    MiniBody: ({ cfg }) => <AuthPrimaryBtn variant={cfg.loginVariant} label={cfg.loginLabel} />,
+    ShowcaseBody: ({ variant }) => <AuthPrimaryBtn variant={variant as LoginBtnVariant} />,
+    MiniPanel: ({ cfg, patch }) => (
+      <>
+        <label className="components-builder-field">
+          <span>Variant</span>
+          <Dropdown
+            label="Variant"
+            items={['Classic', 'Variant 2']}
+            value={cfg.loginVariant}
+            onChange={(v) => patch({ loginVariant: v as LoginBtnVariant })}
+          />
+        </label>
+        <BuilderText
+          label="Label"
+          value={cfg.loginLabel}
+          onChange={(v) => patch({ loginLabel: v })}
+          maxLength={24}
+        />
+      </>
+    ),
+  },
+  {
+    type: 'guest',
+    id: 'L07 · Secondary',
+    name: 'Guest Button',
+    tag: 'Action',
+    paletteLabel: 'Guest CTA',
+    defaultInMini: true,
+    variants: ['Classic', 'Variant 2'],
+    usage: '<AuthSecondaryBtn variant="Classic|Variant 2" label="CONTINUE AS GUEST" />  // Variant 2 → /public/guest-btn.svg',
+    MiniBody: ({ cfg }) => <AuthSecondaryBtn variant={cfg.guestVariant} label={cfg.guestLabel} />,
+    ShowcaseBody: ({ variant }) => <AuthSecondaryBtn variant={variant as GuestBtnVariant} />,
+    MiniPanel: ({ cfg, patch }) => (
+      <>
+        <label className="components-builder-field">
+          <span>Variant</span>
+          <Dropdown
+            label="Variant"
+            items={['Classic', 'Variant 2']}
+            value={cfg.guestVariant}
+            onChange={(v) => patch({ guestVariant: v as GuestBtnVariant })}
+          />
+        </label>
+        <BuilderText
+          label="Label"
+          value={cfg.guestLabel}
+          onChange={(v) => patch({ guestLabel: v })}
+          maxLength={28}
+        />
+      </>
+    ),
+  },
+  {
+    type: 'divider',
+    id: 'L08 · Split',
+    name: 'OR Divider',
+    tag: 'Chrome',
+    paletteLabel: 'OR divider',
+    defaultInMini: true,
+    usage: '<div className="auth__divider"><span>OR</span></div>  // ::before/::after lines',
+    MiniBody: () => <AuthDivider />,
+  },
+  {
+    type: 'tabs',
+    id: 'L09 · Switch',
+    name: 'Platform Tabs',
+    tag: 'Switch',
+    paletteLabel: 'Platform tabs',
+    usage: '<AuthPlatformTabs />  // F1 Website | F1 Store',
+    MiniBody: () => <AuthPlatformTabs />,
+  },
+  {
+    type: 'social',
+    id: 'L10 · OAuth',
+    name: 'Social Auth',
+    tag: 'OAuth',
+    paletteLabel: 'Social auth',
+    usage: '<AuthSocial />  // Google + Apple grid',
+    MiniBody: () => <AuthSocial />,
+  },
+  {
+    type: 'header',
+    id: 'L11 · Header',
+    name: 'Form Header',
+    tag: 'Chrome',
+    paletteLabel: 'Header',
+    defaultInMini: true,
+    usage: '<AuthFormHeader />  // WELCOME BACK + accent slashes',
+    MiniBody: () => <AuthFormHeader />,
+    MiniPanel: ({ cfg, patch }) => (
+      <div className="components-builder-swatches" role="group" aria-label="Accent color">
+        {ACCENT_SWATCHES.map((hex) => (
+          <button
+            key={hex}
+            type="button"
+            className={`components-swatch ${cfg.accent.toLowerCase() === hex ? 'is-active' : ''}`}
+            style={{ background: hex }}
+            aria-label={`Accent ${hex}`}
+            onClick={() => patch({ accent: hex })}
+          />
+        ))}
+        <label className="components-swatch components-swatch--custom" title="Custom accent">
+          <input
+            type="color"
+            value={cfg.accent}
+            onChange={(e) => patch({ accent: e.target.value })}
+            aria-label="Custom accent color"
+          />
+        </label>
+      </div>
+    ),
+  },
+  {
+    type: 'footer',
+    id: 'L12 · CTA',
+    name: 'Footer Callout',
+    tag: 'Link',
+    paletteLabel: 'Footer',
+    defaultInMini: true,
+    usage: '<AuthFooterCallout note="DON’T HAVE AN ACCOUNT?" link="REGISTER >" />',
+    MiniBody: ({ cfg }) => <AuthFooterCallout note={cfg.footerNote} link={cfg.footerLink} />,
+    MiniPanel: ({ cfg, patch }) => (
+      <>
+        <BuilderText
+          label="Note"
+          value={cfg.footerNote}
+          onChange={(v) => patch({ footerNote: v })}
+          maxLength={36}
+        />
+          <BuilderText
+            label="Link"
+            value={cfg.footerLink}
+            onChange={(v) => patch({ footerLink: v })}
+            maxLength={20}
+          />
+        </>
+      ),
+    },
+    {
+      type: 'sticker',
+      id: 'L15 · Backdrop',
+      name: 'Back Image',
+      tag: 'Backdrop',
+      paletteLabel: 'Back image',
+      hideFromPalette: true,
+      usage: '<AuthBackImage />  // photo + Ornament 24 stars + 2-digit watermark',
+      MiniBody: () => <AuthBackImage />,
+      ShowcaseBody: ({ num }) => <AuthBackImage number={num ?? '01'} />,
+    },
+  ];
+
+const MINI_DEFAULT_ORDER: MiniBlockType[] = [
+  'header',
+  'error',
+  'email',
+  'password',
+  'remember',
+  'login',
+  'divider',
+  'guest',
+  'footer',
+];
+
+const findLoginComponent = (type: MiniBlockType) =>
+  LOGIN_COMPONENTS.find((c) => c.type === type);
+
+const miniLabel = (type: MiniBlockType) =>
+  findLoginComponent(type)?.paletteLabel ?? type;
+
+const makeDefaultBlocks = (): MiniBlock[] =>
+  MINI_DEFAULT_ORDER.filter((type) => findLoginComponent(type)?.defaultInMini).map((type) => ({
+    uid: nextMiniUid(),
+    type,
+  }));
+
+type MiniDragPayload =
+  | { kind: 'palette'; type: MiniBlockType }
+  | { kind: 'block'; uid: string };
+
+const MINI_DND_MIME = 'application/x-mini-builder';
+
+function readMiniDrag(e: React.DragEvent): MiniDragPayload | null {
+  try {
+    const raw = e.dataTransfer.getData(MINI_DND_MIME);
+    if (!raw) return null;
+    return JSON.parse(raw) as MiniDragPayload;
+  } catch {
+    return null;
+  }
+}
 
 function BuilderSwitch({
   label,
@@ -755,59 +1216,99 @@ function BuilderText({
   );
 }
 
+function MiniDropZone({
+  index,
+  onDropAt,
+  onOver,
+  active,
+}: {
+  index: number;
+  onDropAt: (index: number, payload: MiniDragPayload) => void;
+  onOver: (index: number | null) => void;
+  active: boolean;
+}) {
+  return (
+    <div
+      className={`components-mini-drop ${active ? 'is-over' : ''}`}
+      onDragOver={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.dataTransfer.dropEffect = 'move';
+        onOver(index);
+      }}
+      onDragEnter={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onOver(index);
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const payload = readMiniDrag(e);
+        onOver(null);
+        if (payload) onDropAt(index, payload);
+      }}
+      aria-hidden
+    />
+  );
+}
+
 function Hotspot({
-  id,
-  label,
-  activeId,
-  setActiveId,
-  visible,
-  onShow,
+  uid,
+  type,
+  activeUid,
+  setActiveUid,
   children,
   panel,
+  onDragStartBlock,
+  onDragEndBlock,
+  isDragging,
 }: {
-  id: MiniSectionId;
-  label: string;
-  activeId: MiniSectionId | null;
-  setActiveId: (id: MiniSectionId | null) => void;
-  visible: boolean;
-  onShow: (v: boolean) => void;
+  uid: string;
+  type: MiniBlockType;
+  activeUid: string | null;
+  setActiveUid: (id: string | null) => void;
   children: React.ReactNode;
   panel: React.ReactNode;
+  onDragStartBlock: (uid: string) => void;
+  onDragEndBlock: () => void;
+  isDragging: boolean;
 }) {
-  const active = activeId === id;
-
-  if (!visible) {
-    return (
-      <button
-        type="button"
-        className={`components-hotspot-ghost ${active ? 'is-active' : ''}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          onShow(true);
-          setActiveId(id);
-        }}
-      >
-        + {label}
-      </button>
-    );
-  }
+  const active = activeUid === uid;
+  const label = miniLabel(type);
 
   return (
     <div
-      className={`components-hotspot ${active ? 'is-active' : ''}`}
-      onClick={() => setActiveId(active ? null : id)}
+      className={`components-hotspot ${active ? 'is-active' : ''} ${isDragging ? 'is-dragging' : ''}`}
+      onClick={() => setActiveUid(active ? null : uid)}
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.setData(MINI_DND_MIME, JSON.stringify({ kind: 'block', uid } satisfies MiniDragPayload));
+        e.dataTransfer.effectAllowed = 'move';
+        onDragStartBlock(uid);
+      }}
+      onDragEnd={() => onDragEndBlock()}
     >
-      <span className="components-hotspot-chip">{label}</span>
+      <span className="components-hotspot-chip">
+        <span className="components-hotspot-grip" aria-hidden>
+          ⠿
+        </span>
+        {label}
+      </span>
       <div className="components-hotspot-body">{children}</div>
       {active ? (
         <div className="components-hotspot-panel" onClick={(e) => e.stopPropagation()}>
           <div className="components-hotspot-panel-head">
             <span>{label}</span>
-            <button type="button" className="components-hotspot-close" onClick={() => setActiveId(null)} aria-label="Close editor">
+            <button
+              type="button"
+              className="components-hotspot-close"
+              onClick={() => setActiveUid(null)}
+              aria-label="Close editor"
+            >
               ×
             </button>
           </div>
-          <BuilderSwitch label="Visible" on onChange={onShow} />
           {panel}
         </div>
       ) : null}
@@ -815,18 +1316,130 @@ function Hotspot({
   );
 }
 
-function MiniLoginCard() {
-  const [activeId, setActiveId] = useState<MiniSectionId | null>(null);
+function MiniBlockBody({
+  type,
+  cfg,
+  patch,
+}: {
+  type: MiniBlockType;
+  cfg: MiniBuilderState;
+  patch: (p: Partial<MiniBuilderState>) => void;
+}) {
+  const def = findLoginComponent(type);
+  if (!def) return null;
+  return <>{def.MiniBody({ cfg, patch })}</>;
+}
+
+function MiniBlockPanel({
+  type,
+  cfg,
+  patch,
+  onRemove,
+}: {
+  type: MiniBlockType;
+  cfg: MiniBuilderState;
+  patch: (p: Partial<MiniBuilderState>) => void;
+  onRemove: () => void;
+}) {
+  const def = findLoginComponent(type);
+  return (
+    <>
+      {def?.MiniPanel ? def.MiniPanel({ cfg, patch }) : null}
+      <button type="button" className="components-builder-remove" onClick={onRemove}>
+        Remove section
+      </button>
+    </>
+  );
+}
+
+function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant }) {
+  const [activeUid, setActiveUid] = useState<string | null>(null);
+  const [blocks, setBlocks] = useState<MiniBlock[]>(() => makeDefaultBlocks());
   const [cfg, setCfg] = useState<MiniBuilderState>(MINI_DEFAULTS);
   const [width, setWidth] = useState(352);
+  const [draggingUid, setDraggingUid] = useState<string | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [overIndex, setOverIndex] = useState<number | null>(null);
+  const [copied, setCopied] = useState<'tsx' | 'css' | null>(null);
+  const [glow, setGlow] = useState(false);
   const dragRef = React.useRef<{ startX: number; startW: number } | null>(null);
+  const copyTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const formRef = React.useRef<HTMLDivElement | null>(null);
 
   const MIN_W = 240;
   const MAX_W = 520;
 
   const patch = (partial: Partial<MiniBuilderState>) => setCfg((c) => ({ ...c, ...partial }));
-  const setShow = (id: MiniSectionId, v: boolean) =>
-    setCfg((c) => ({ ...c, show: { ...c.show, [id]: v } }));
+
+  const insertAt = (index: number, type: MiniBlockType) => {
+    const block: MiniBlock = { uid: nextMiniUid(), type };
+    setBlocks((prev) => {
+      const next = [...prev];
+      const clamped = Math.max(0, Math.min(index, next.length));
+      next.splice(clamped, 0, block);
+      return next;
+    });
+    setActiveUid(block.uid);
+  };
+
+  const moveUid = (uid: string, index: number) => {
+    setBlocks((prev) => {
+      const from = prev.findIndex((b) => b.uid === uid);
+      if (from < 0) return prev;
+      const next = [...prev];
+      const [item] = next.splice(from, 1);
+      const to = Math.max(0, Math.min(index > from ? index - 1 : index, next.length));
+      next.splice(to, 0, item);
+      return next;
+    });
+  };
+
+  const removeUid = (uid: string) => {
+    setBlocks((prev) => prev.filter((b) => b.uid !== uid));
+    setActiveUid((cur) => (cur === uid ? null : cur));
+  };
+
+  const handleDropAt = (index: number, payload: MiniDragPayload) => {
+    setOverIndex(null);
+    if (payload.kind === 'palette') {
+      insertAt(index, payload.type);
+    } else {
+      moveUid(payload.uid, index);
+    }
+  };
+
+  const buildMiniLoginSnapshot = () => {
+    const order = blocks.map((b) => b.type);
+    return { order, width, cfg };
+  };
+
+  const flashCopied = (kind: 'tsx' | 'css') => {
+    setCopied(kind);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopied(null), 1600);
+  };
+
+  const copyTsx = async () => {
+    await copyTextToClipboard(buildMiniLoginTsx(buildMiniLoginSnapshot()));
+    flashCopied('tsx');
+  };
+
+  const copyCss = async () => {
+    await copyTextToClipboard(buildMiniLoginCss(buildMiniLoginSnapshot()));
+    flashCopied('css');
+  };
+
+  React.useEffect(() => () => {
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+  }, []);
+
+  const updateGlow = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = formRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty('--glow-x', `${e.clientX - rect.left}px`);
+    el.style.setProperty('--glow-y', `${e.clientY - rect.top}px`);
+  };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -868,253 +1481,229 @@ function MiniLoginCard() {
     }
   };
 
-  const shared = {
-    activeId,
-    setActiveId,
-  };
-
   return (
-    <div className="components-mini-login-frame">
-      <div
-        className="components-mini-login"
-        style={{ width: `${width}px`, ['--auth-accent' as string]: cfg.accent } as React.CSSProperties}
-      >
-        <Hotspot
-          id="header"
-          label="Header"
-          visible={cfg.show.header}
-          onShow={(v) => setShow('header', v)}
-          {...shared}
-          panel={
-            <>
-              <div className="components-builder-swatches" role="group" aria-label="Accent color">
-                {ACCENT_SWATCHES.map((hex) => (
-                  <button
-                    key={hex}
-                    type="button"
-                    className={`components-swatch ${cfg.accent.toLowerCase() === hex ? 'is-active' : ''}`}
-                    style={{ background: hex }}
-                    aria-label={`Accent ${hex}`}
-                    onClick={() => patch({ accent: hex })}
-                  />
-                ))}
-                <label className="components-swatch components-swatch--custom" title="Custom accent">
-                  <input
-                    type="color"
-                    value={cfg.accent}
-                    onChange={(e) => patch({ accent: e.target.value })}
-                    aria-label="Custom accent color"
-                  />
-                </label>
-              </div>
-            </>
-          }
-        >
-          <AuthFormHeader />
-        </Hotspot>
-
-        <Hotspot
-          id="error"
-          label="Error banner"
-          visible={cfg.show.error}
-          onShow={(v) => setShow('error', v)}
-          {...shared}
-          panel={null}
-        >
-          <AuthErrorBanner />
-        </Hotspot>
-
-        <Hotspot
-          id="fields"
-          label="Fields"
-          visible={cfg.show.fields}
-          onShow={(v) => setShow('fields', v)}
-          {...shared}
-          panel={
-            <BuilderSwitch
-              label="Reveal password"
-              on={cfg.passwordVisible}
-              onChange={(v) => patch({ passwordVisible: v })}
-            />
-          }
-        >
-          <div className="auth__form-inputs">
-            <AuthTextInput />
-            <AuthPasswordInput
-              visible={cfg.passwordVisible}
-              onVisibleChange={(v) => patch({ passwordVisible: v })}
-            />
-          </div>
-        </Hotspot>
-
-        <Hotspot
-          id="remember"
-          label="Remember row"
-          visible={cfg.show.remember}
-          onShow={(v) => setShow('remember', v)}
-          {...shared}
-          panel={null}
-        >
-          <AuthRememberRow />
-        </Hotspot>
-
-        <Hotspot
-          id="login"
-          label="Login CTA"
-          visible={cfg.show.login}
-          onShow={(v) => setShow('login', v)}
-          {...shared}
-          panel={
-            <>
-              <label className="components-builder-field">
-                <span>Variant</span>
-                <Dropdown
-                  label="Variant"
-                  items={['Classic', 'Variant 2']}
-                  value={cfg.loginVariant}
-                  onChange={(v) => patch({ loginVariant: v as LoginBtnVariant })}
-                />
-              </label>
-              <BuilderText
-                label="Label"
-                value={cfg.loginLabel}
-                onChange={(v) => patch({ loginLabel: v })}
-                maxLength={24}
-              />
-            </>
-          }
-        >
-          <AuthPrimaryBtn variant={cfg.loginVariant} label={cfg.loginLabel} />
-        </Hotspot>
-
-        <Hotspot
-          id="divider"
-          label="OR divider"
-          visible={cfg.show.divider}
-          onShow={(v) => setShow('divider', v)}
-          {...shared}
-          panel={null}
-        >
-          <AuthDivider />
-        </Hotspot>
-
-        <Hotspot
-          id="guest"
-          label="Guest CTA"
-          visible={cfg.show.guest}
-          onShow={(v) => setShow('guest', v)}
-          {...shared}
-          panel={
-            <>
-              <label className="components-builder-field">
-                <span>Variant</span>
-                <Dropdown
-                  label="Variant"
-                  items={['Classic', 'Variant 2']}
-                  value={cfg.guestVariant}
-                  onChange={(v) => patch({ guestVariant: v as GuestBtnVariant })}
-                />
-              </label>
-              <BuilderText
-                label="Label"
-                value={cfg.guestLabel}
-                onChange={(v) => patch({ guestLabel: v })}
-                maxLength={28}
-              />
-            </>
-          }
-        >
-          <AuthSecondaryBtn variant={cfg.guestVariant} label={cfg.guestLabel} />
-        </Hotspot>
-
-        <Hotspot
-          id="footer"
-          label="Footer"
-          visible={cfg.show.footer}
-          onShow={(v) => setShow('footer', v)}
-          {...shared}
-          panel={
-            <>
-              <BuilderText
-                label="Note"
-                value={cfg.footerNote}
-                onChange={(v) => patch({ footerNote: v })}
-                maxLength={36}
-              />
-              <BuilderText
-                label="Link"
-                value={cfg.footerLink}
-                onChange={(v) => patch({ footerLink: v })}
-                maxLength={20}
-              />
-            </>
-          }
-        >
-          <AuthFooterCallout note={cfg.footerNote} link={cfg.footerLink} />
-        </Hotspot>
-      </div>
-
-      <div
-        className="components-resize-bar"
-        role="slider"
-        tabIndex={0}
-        aria-label="Resize login form width"
-        aria-valuemin={MIN_W}
-        aria-valuemax={MAX_W}
-        aria-valuenow={width}
-        aria-valuetext={`${width} pixels`}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-        onKeyDown={onKeyDown}
-      >
-        <span className="components-resize-grip" aria-hidden>
-          <span />
-          <span />
-          <span />
-        </span>
-        <span className="components-resize-label">{width}px</span>
-      </div>
-
-      <div className="components-builder-bar">
-        <span className="components-builder-bar-label">
-          {activeId ? `Editing · ${MINI_SECTIONS.find((s) => s.id === activeId)?.label}` : 'Click a section to edit'}
-        </span>
-        <div className="components-builder-bar-actions">
-          {MINI_SECTIONS.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              className={`components-builder-chip ${!cfg.show[s.id] ? 'is-off' : ''} ${activeId === s.id ? 'is-active' : ''}`}
-              onClick={() => {
-                setActiveId(s.id);
-                if (!cfg.show[s.id]) setShow(s.id, true);
+    <div className="components-mini-builder">
+      <div className="components-mini-builder-main">
+        <div className="components-mini-builder-canvas">
+          <div className="components-mini-scene">
+            <div className="components-mini-login__back" aria-hidden="true">
+              <AuthBackImage />
+            </div>
+            <div
+              ref={formRef}
+              className={`components-mini-login components-mini-login--bg-${
+                bgVariant === 'Variant 3' ? 'v3' : bgVariant === 'Variant 2' ? 'v2' : 'classic'
+              } ${dragActive ? 'is-drag-active' : ''} ${glow ? 'is-glow' : ''}`}
+              style={
+                {
+                  width: `${width}px`,
+                  ['--auth-accent' as string]: cfg.accent,
+                  ['--glow-x' as string]: '50%',
+                  ['--glow-y' as string]: '50%',
+                } as React.CSSProperties
+              }
+              onMouseEnter={(e) => {
+                setGlow(true);
+                updateGlow(e);
+              }}
+              onMouseLeave={() => {
+                setGlow(false);
+              }}
+              onMouseMove={updateGlow}
+              onDragLeave={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setOverIndex(null);
+                }
+              }}
+              onDrop={() => {
+                setOverIndex(null);
+                setDragActive(false);
               }}
             >
-              {s.label}
-            </button>
-          ))}
-          <button
-            type="button"
-            className="components-builder-chip components-builder-chip--reset"
-            onClick={() => {
-              setCfg(MINI_DEFAULTS);
-              setActiveId(null);
-            }}
+              {bgVariant === 'Variant 3' ? (
+                <img
+                  className="components-mini-login__bg-svg"
+                  src="/mini-login-bg.svg?v=5"
+                  alt=""
+                  aria-hidden="true"
+                  draggable={false}
+                />
+              ) : null}
+              {bgVariant === 'Variant 3' ? (
+                <div className="components-mini-login__glow" aria-hidden="true" />
+              ) : null}
+
+              <MiniDropZone
+                index={0}
+                onDropAt={handleDropAt}
+                onOver={setOverIndex}
+                active={overIndex === 0}
+              />
+
+              {blocks.length === 0 ? (
+                <div className="components-mini-empty">Drop components from the palette</div>
+              ) : null}
+
+              {blocks.map((block, i) => (
+                <React.Fragment key={block.uid}>
+                  <Hotspot
+                    uid={block.uid}
+                    type={block.type}
+                    activeUid={activeUid}
+                    setActiveUid={setActiveUid}
+                    isDragging={draggingUid === block.uid}
+                    onDragStartBlock={(uid) => {
+                      setDraggingUid(uid);
+                      setDragActive(true);
+                    }}
+                    onDragEndBlock={() => {
+                      setDraggingUid(null);
+                      setDragActive(false);
+                      setOverIndex(null);
+                    }}
+                    panel={
+                      <MiniBlockPanel
+                        type={block.type}
+                        cfg={cfg}
+                        patch={patch}
+                        onRemove={() => removeUid(block.uid)}
+                      />
+                    }
+                  >
+                    <MiniBlockBody type={block.type} cfg={cfg} patch={patch} />
+                  </Hotspot>
+                  <MiniDropZone
+                    index={i + 1}
+                    onDropAt={handleDropAt}
+                    onOver={setOverIndex}
+                    active={overIndex === i + 1}
+                  />
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
+          <div
+            className="components-resize-bar"
+            role="slider"
+            tabIndex={0}
+            aria-label="Resize login form width"
+            aria-valuemin={MIN_W}
+            aria-valuemax={MAX_W}
+            aria-valuenow={width}
+            aria-valuetext={`${width} pixels`}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            onKeyDown={onKeyDown}
           >
-            Reset
-          </button>
+            <span className="components-resize-grip" aria-hidden>
+              <span />
+              <span />
+              <span />
+            </span>
+            <span className="components-resize-label">{width}px</span>
+          </div>
         </div>
+
+        <aside
+          className="components-mini-palette"
+          onDragOver={(e) => {
+            e.preventDefault();
+          }}
+          onDrop={() => setOverIndex(null)}
+        >
+          <div className="components-mini-palette-head">
+            <span>Components</span>
+            <span className="components-mini-palette-hint">Drag onto form</span>
+          </div>
+          <div className="components-mini-palette-list">
+            {LOGIN_COMPONENTS.filter((item) => !item.hideFromPalette).map((item) => (
+              <button
+                key={item.type}
+                type="button"
+                className="components-mini-palette-item"
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData(
+                    MINI_DND_MIME,
+                    JSON.stringify({ kind: 'palette', type: item.type } satisfies MiniDragPayload),
+                  );
+                  e.dataTransfer.effectAllowed = 'copy';
+                  setDragActive(true);
+                }}
+                onDragEnd={() => {
+                  setDragActive(false);
+                  setOverIndex(null);
+                }}
+                onClick={() => insertAt(blocks.length, item.type)}
+                title={`Add ${item.paletteLabel}`}
+              >
+                <span className="components-mini-palette-grip" aria-hidden>
+                  ⠿
+                </span>
+                {item.paletteLabel}
+                <span className="components-mini-palette-add" aria-hidden>
+                  +
+                </span>
+              </button>
+            ))}
+          </div>
+          <div className="components-mini-palette-actions">
+            <button
+              type="button"
+              className={`components-builder-chip components-builder-chip--copy ${copied === 'tsx' ? 'is-copied' : ''}`}
+              onClick={copyTsx}
+              title="Copy Mini Login as paste-ready TSX"
+            >
+              {copied === 'tsx' ? 'Copied' : 'Copy TSX'}
+            </button>
+            <button
+              type="button"
+              className={`components-builder-chip components-builder-chip--copy ${copied === 'css' ? 'is-copied' : ''}`}
+              onClick={copyCss}
+              title="Copy Mini Login as paste-ready CSS"
+            >
+              {copied === 'css' ? 'Copied' : 'Copy CSS'}
+            </button>
+            <button
+              type="button"
+              className="components-builder-chip components-builder-chip--reset"
+              onClick={() => {
+                setBlocks(makeDefaultBlocks());
+                setCfg(MINI_DEFAULTS);
+                setActiveUid(null);
+                setWidth(352);
+              }}
+            >
+              Reset layout
+            </button>
+          </div>
+        </aside>
       </div>
     </div>
   );
 }
 
 function MiniLoginSpecimen() {
+  const [bgVariant, setBgVariant] = useState<AuthBgVariant>('Classic');
+
   return (
-    <ComponentCard id="L13 · Card" name="Mini Login" tag="Builder">
-      <MiniLoginCard />
+    <ComponentCard
+      id="L13 · Card"
+      name="Mini Login"
+      tag="Builder"
+      control={
+        <Dropdown
+          label="Background"
+          items={['Classic', 'Variant 2', 'Variant 3']}
+          value={bgVariant}
+          onChange={(v) => setBgVariant(v as AuthBgVariant)}
+        />
+      }
+    >
+      <MiniLoginCard bgVariant={bgVariant} />
     </ComponentCard>
   );
 }
@@ -1171,7 +1760,7 @@ function ComponentsShowcase() {
         </div>
         <div className="components-meta">
           <span className="components-meta-dot" aria-hidden />
-          <span>Basic 07+03 · Auth 12+02</span>
+          <span>Basic 07+03 · Auth 13+02</span>
         </div>
       </header>
 
@@ -1256,7 +1845,7 @@ function ComponentsShowcase() {
       </fieldset>
 
       <fieldset className="components-fieldset" style={{ marginTop: '2.5rem' }}>
-        <legend className="components-legend">Auth interaction</legend>
+        <legend className="components-legend">Login components</legend>
 
         <div className="components-section components-section--nested">
           <div className="components-section-head">
@@ -1265,38 +1854,20 @@ function ComponentsShowcase() {
           </div>
 
           <div className="components-grid">
-            <ComponentCard id="L01 · Input" name="Text Input" tag="Field">
-              <AuthTextInput />
-            </ComponentCard>
-            <ComponentCard id="L02 · Secret" name="Password" tag="Field">
-              <AuthPasswordInput />
-            </ComponentCard>
-            <ComponentCard id="L03 · Alert" name="Error Banner" tag="Feedback">
-              <AuthErrorBanner />
-            </ComponentCard>
-            <ComponentCard id="L04 · Ok" name="Status Banner" tag="Feedback">
-              <AuthStatusBanner />
-            </ComponentCard>
-            <ComponentCard id="L05 · Options" name="Remember Row" tag="Options">
-              <AuthRememberRow />
-            </ComponentCard>
-            <LoginButtonSpecimen />
-            <GuestButtonSpecimen />
-            <ComponentCard id="L08 · Split" name="OR Divider" tag="Chrome">
-              <AuthDivider />
-            </ComponentCard>
-            <ComponentCard id="L09 · Switch" name="Platform Tabs" tag="Switch">
-              <AuthPlatformTabs />
-            </ComponentCard>
-            <ComponentCard id="L10 · OAuth" name="Social Auth" tag="OAuth">
-              <AuthSocial />
-            </ComponentCard>
-            <ComponentCard id="L11 · Header" name="Form Header" tag="Chrome">
-              <AuthFormHeader />
-            </ComponentCard>
-            <ComponentCard id="L12 · CTA" name="Footer Callout" tag="Link">
-              <AuthFooterCallout />
-            </ComponentCard>
+            {LOGIN_COMPONENTS.filter((c) => !c.hideFromShowcase).map((c) => (
+              <LoginShowcaseCard key={c.type} def={c} />
+            ))}
+          </div>
+        </div>
+
+        <div className="components-section components-section--nested components-section--mini-login">
+          <div className="components-section-head">
+            <span className="components-section-label">Composite builder</span>
+            <span className="components-section-rule" aria-hidden />
+          </div>
+
+          <div className="components-mini-login-row">
+            <MiniLoginSpecimen />
           </div>
         </div>
 
@@ -1307,13 +1878,53 @@ function ComponentsShowcase() {
           </div>
 
           <div className="components-grid components-grid--wide">
-            <MiniLoginSpecimen />
-            <ComponentCard id="L14 · Brand" name="Auth Header" tag="Composite">
+            <ComponentCard
+              id="L14 · Brand"
+              name="Auth Header"
+              tag="Composite"
+              control={
+                <LoginCardControls
+                  def={{
+                    type: 'auth-header',
+                    id: 'L14 · Brand',
+                    name: 'Auth Header',
+                    tag: 'Composite',
+                    paletteLabel: 'Auth header',
+                    usage: '<AuthHeaderBlock />  // badge + title + platform tabs',
+                  }}
+                  variant="Classic"
+                />
+              }
+            >
               <AuthHeaderBlock />
             </ComponentCard>
           </div>
         </div>
       </fieldset>
+
+      <details className="components-fieldset components-fieldset--disclosure">
+        <summary className="components-legend components-legend--summary">
+          <span className="components-legend-chevron" aria-hidden>
+            <ChevronDown size={16} />
+          </span>
+          Copy export test
+        </summary>
+
+        <div className="components-section components-section--nested">
+          <div className="components-section-head">
+            <span className="components-section-label">Mini Login — pasted Copy TSX + Copy CSS</span>
+            <span className="components-section-rule" aria-hidden />
+          </div>
+
+          <div className="components-mini-login-row">
+            <div className="components-card">
+              <div className="components-card-preview">
+                <MiniLogin />
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
     </main>
   );
 }
