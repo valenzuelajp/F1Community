@@ -522,15 +522,15 @@ const STICKER_CSS = `@import url('https://fonts.googleapis.com/css2?family=Karan
 
 .auth-back-image__num {
   position: absolute;
-  right: 2%;
-  top: 4%;
+  right: 50%;
+  top: -12%;
   z-index: 0;
-  font-family: 'Karantina', sans-serif;
-  font-size: min(700px, 42cqw);
+  font-family: 'Karantina', 'Arial Narrow', sans-serif;
+  font-size: min(700px, 60cqw);
   line-height: 1;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.01em;
   color: transparent;
-  -webkit-text-stroke: 1.5px #ffffff;
+  -webkit-text-stroke: 2px #ffffff;
   user-select: none;
   pointer-events: none;
 }
@@ -550,7 +550,7 @@ const STICKER_CSS = `@import url('https://fonts.googleapis.com/css2?family=Karan
 
 .auth-back-image__photo {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   width: 135%;
   height: 135%;
@@ -1244,7 +1244,11 @@ function joinCss(blocks: string[]): string {
     .join('\n\n');
 }
 
-function collectMiniComponents(order: string[], cfg: MiniExportConfig): string {
+function collectMiniComponents(
+  order: string[],
+  cfg: MiniExportConfig,
+  backNum?: string,
+): string {
   const types = uniqueTypes(order);
   const parts: string[] = [];
   for (const type of types) {
@@ -1252,8 +1256,12 @@ function collectMiniComponents(order: string[], cfg: MiniExportConfig): string {
     if (!entry) continue;
     parts.push(stripStandaloneDirectives(entry(exportCtx(type, cfg)).tsx));
   }
-  if (!types.includes('sticker')) {
-    parts.push(stripStandaloneDirectives(TYPE_TO_EXPORT['sticker'](exportCtx('sticker', cfg)).tsx));
+  if (backNum && !types.includes('sticker')) {
+    parts.push(
+      stripStandaloneDirectives(
+        TYPE_TO_EXPORT['sticker']({ variant: 'Classic', num: backNum }).tsx,
+      ),
+    );
   }
   return parts.join('\n\n');
 }
@@ -1313,8 +1321,13 @@ export function buildMiniLoginTsx(input: {
   order: string[];
   width: number;
   cfg: MiniExportConfig;
+  back?: { on: boolean; variant: string; num: string };
 }): string {
-  const { order, width, cfg } = input;
+  const { order, width, cfg, back } = input;
+  const backOn = back?.on ?? true;
+  const backVariant = back?.variant ?? 'Classic';
+  const backRaw = (back?.num ?? '').replace(/\D/g, '').slice(0, 2);
+  const backNum = backRaw ? backRaw.padStart(2, '0') : '01';
   const glow = needsGlow(order, cfg);
   const bgClass =
     cfg.bgVariant === 'Variant 3'
@@ -1358,13 +1371,21 @@ export function buildMiniLoginTsx(input: {
 `
       : '';
 
-  const backImg = `      <div className="mini-login__back" aria-hidden="true">
+  const backImg = backOn
+    ? `      <div
+        className="mini-login__back"
+        aria-hidden="true"
+        data-back-variant="${backVariant.toLowerCase()}"
+      >
         <AuthBackImage />
       </div>
-`;
+`
+    : null;
 
   const stateLines = [
-    needsPasswordState(order) ? '  const [passwordVisible, setPasswordVisible] = useState(false);' : null,
+    needsPasswordState(order)
+      ? `  const [passwordVisible, setPasswordVisible] = useState(${cfg.passwordVisible});`
+      : null,
     needsRememberState(order) ? '  // RememberRow manages its own checkbox state' : null,
     glow ? '  const [glow, setGlow] = useState(false);' : null,
     glow ? '  const formRef = useRef<HTMLDivElement | null>(null);' : null,
@@ -1388,7 +1409,7 @@ export function buildMiniLoginTsx(input: {
   const header = [
     '// L13 Mini Login — paste-ready form (matches current builder order/config)',
     `// order: ${order.map((t) => t).join(' → ') || '(empty)'}`,
-    `// width: ${width}px · bg: ${cfg.bgVariant} · accent: ${cfg.accent}`,
+    `// width: ${width}px · bg: ${cfg.bgVariant} · accent: ${cfg.accent} · back: ${backOn ? `${backVariant} №${backNum}` : 'off'}`,
     '// Pair with the Mini Login "Copy CSS" output as mini-login.css',
     '// Assets: /public/login-btn.svg · /public/guest-btn.svg · /public/mini-login-bg.svg · /public/imgSticker1.png · /public/imgOrnament24.svg',
     '',
@@ -1423,13 +1444,13 @@ export function buildMiniLoginTsx(input: {
     .join('\n');
 
   const component = [
-    collectMiniComponents(order, cfg),
+    collectMiniComponents(order, cfg, backOn ? backNum : undefined),
     '',
     `export function MiniLogin() {`,
     stateLines ? stateLines + '\n' : '',
     `  return (`,
     `    <div className="mini-login-scene">`,
-    backImg.replace(/\n$/, ''),
+    backImg ? backImg.replace(/\n$/, '') : null,
     formJsx,
     `    </div>`,
     `  );`,
@@ -1497,10 +1518,13 @@ export function buildMiniLoginCss(input: {
 
 .mini-login__back {
   position: absolute;
-  top: 50%;
-  left: -40%;
+  top: 0;
+  bottom: 0;
+  left: -60%;
   width: 100%;
-  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   z-index: 0;
   pointer-events: none;
   user-select: none;

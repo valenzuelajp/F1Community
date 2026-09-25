@@ -175,7 +175,7 @@
 }
 
 .components-mini-login-row .components-mini-builder-main {
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -318,10 +318,8 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.375rem;
   overflow: hidden;
-  opacity: 0;
-  transform: translateY(18px);
-  animation: components-card-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  animation: components-card-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: border-color 0.2s ease, box-shadow 0.25s ease;
 }
 
 .components-card:nth-child(1) { animation-delay: 0.05s; }
@@ -332,15 +330,14 @@
 .components-card:nth-child(6) { animation-delay: 0.40s; }
 
 @keyframes components-card-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  from {
+    opacity: 0;
+    transform: translateY(18px);
   }
 }
 
 .components-card:hover {
   border-color: rgba(255, 24, 1, 0.35);
-  transform: translateY(-2px);
 }
 
 .components-card::before {
@@ -458,15 +455,15 @@
 
 .components-back-image__num {
   position: absolute;
-  right: 2%;
-  top: 4%;
+  right: 50%;
+  top: -12%;
   z-index: 0;
   font-family: 'Karantina', 'Arial Narrow', sans-serif;
-  font-size: min(700px, 42cqw);
+  font-size: min(700px, 60cqw);
   line-height: 1;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.01em;
   color: transparent;
-  -webkit-text-stroke: 1.5px #ffffff;
+  -webkit-text-stroke: 2px #ffffff;
   user-select: none;
   pointer-events: none;
 }
@@ -486,7 +483,7 @@
 
 .components-back-image__photo {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   width: 135%;
   height: 135%;
@@ -537,7 +534,8 @@
 .components-mini-builder-main {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: stretch;
+  justify-content: space-between;
   gap: 1rem;
   width: 100%;
 }
@@ -601,6 +599,48 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.components-mini-settings {
+  flex: 1 1 12rem;
+  min-width: 10.5rem;
+  max-width: 14rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.35rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.components-mini-settings-form {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.components-mini-settings-form + .components-mini-settings-form {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.6rem;
+}
+
+.components-mini-settings .components-dropdown,
+.components-mini-settings .components-dropdown > .components-btn {
+  width: 100%;
+}
+
+.components-mini-settings .components-dropdown > .components-btn {
+  justify-content: space-between;
+}
+
+.components-mini-settings .components-card-num {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .components-mini-palette-head {
@@ -1665,10 +1705,13 @@
 
 .components-mini-login__back {
   position: absolute;
-  top: 50%;
-  left: -40%;
+  top: 0;
+  bottom: 0;
+  left: -60%;
   width: 100%;
-  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   z-index: 0;
   pointer-events: none;
   user-select: none;
@@ -1810,8 +1853,8 @@
 .components-mini-login-row .components-mini-builder,
 .components-mini-login-row .components-mini-builder-main {
   width: 100%;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: space-between;
 }
 
 .components-grid--wide .components-card {

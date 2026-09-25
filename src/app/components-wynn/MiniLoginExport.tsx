@@ -1,6 +1,6 @@
 // L13 Mini Login — paste-ready form (matches current builder order/config)
 // order: header → error → email → password → remember → login → divider → guest → footer
-// width: 520px · bg: Classic · accent: #ff1801
+// width: 520px · bg: Classic · accent: #ff1801 · back: Classic №01
 // Pair with the Mini Login "Copy CSS" output as mini-login.css
 // Assets: /public/login-btn.svg · /public/guest-btn.svg · /public/mini-login-bg.svg · /public/imgSticker1.png · /public/imgOrnament24.svg
 
@@ -210,7 +210,11 @@ export function MiniLogin() {
 
   return (
     <div className="mini-login-scene">
-      <div className="mini-login__back" aria-hidden="true">
+      <div
+        className="mini-login__back"
+        aria-hidden="true"
+        data-back-variant="classic"
+      >
         <AuthBackImage />
       </div>
       <div

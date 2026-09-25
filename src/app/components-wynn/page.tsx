@@ -107,7 +107,7 @@ function Dropdown({
 
   return (
     <div className={`components-dropdown components-dropdown--${align} ${open ? 'is-open' : ''}`}>
-      <button className="components-btn components-btn--secondary" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+      <button type="button" className="components-btn components-btn--secondary" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
         {trigger}
         <ChevronDown className="ml-1 inline h-3 w-3" />
       </button>
@@ -115,6 +115,7 @@ function Dropdown({
         {items.map((item) => (
           <button
             key={item}
+            type="button"
             className={`components-dropdown-item ${value === item ? 'is-active' : ''}`}
             role="menuitem"
             onClick={() => {
@@ -1352,7 +1353,7 @@ function MiniBlockPanel({
   );
 }
 
-function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant }) {
+function MiniLoginCard() {
   const [activeUid, setActiveUid] = useState<string | null>(null);
   const [blocks, setBlocks] = useState<MiniBlock[]>(() => makeDefaultBlocks());
   const [cfg, setCfg] = useState<MiniBuilderState>(MINI_DEFAULTS);
@@ -1362,6 +1363,9 @@ function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant })
   const [overIndex, setOverIndex] = useState<number | null>(null);
   const [copied, setCopied] = useState<'tsx' | 'css' | null>(null);
   const [glow, setGlow] = useState(false);
+  const [backOn, setBackOn] = useState(true);
+  const [backVariant, setBackVariant] = useState('Classic');
+  const [backNum, setBackNum] = useState('01');
   const dragRef = React.useRef<{ startX: number; startW: number } | null>(null);
   const copyTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const formRef = React.useRef<HTMLDivElement | null>(null);
@@ -1410,7 +1414,12 @@ function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant })
 
   const buildMiniLoginSnapshot = () => {
     const order = blocks.map((b) => b.type);
-    return { order, width, cfg };
+    return {
+      order,
+      width,
+      cfg,
+      back: { on: backOn, variant: backVariant, num: backNum },
+    };
   };
 
   const flashCopied = (kind: 'tsx' | 'css') => {
@@ -1484,15 +1493,94 @@ function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant })
   return (
     <div className="components-mini-builder">
       <div className="components-mini-builder-main">
-        <div className="components-mini-builder-canvas">
-          <div className="components-mini-scene">
-            <div className="components-mini-login__back" aria-hidden="true">
-              <AuthBackImage />
+        <aside className="components-mini-settings">
+          <form
+            className="components-mini-settings-form"
+            aria-label="Back image settings"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <div className="components-mini-palette-head">
+              <span>Back Image</span>
+              <span className="components-mini-palette-hint">{backVariant}</span>
             </div>
+            <button
+              type="button"
+              className={`components-toggle ${backOn ? 'is-on' : ''}`}
+              role="switch"
+              aria-checked={backOn}
+              aria-label="Back image"
+              onClick={() => setBackOn((v) => !v)}
+            >
+              <span className="components-toggle-track">
+                <span className="components-toggle-thumb" />
+              </span>
+              <span className="components-toggle-label">{backOn ? 'On' : 'Off'}</span>
+            </button>
+            <Dropdown
+              label="Variant"
+              items={['Classic']}
+              value={backVariant}
+              onChange={setBackVariant}
+              align="down"
+            />
+            <label
+              className="components-builder-field components-card-num"
+              title="Back image number — accepts 2 digits (00–99)"
+            >
+              <span className="components-card-num__label" aria-hidden="true">
+                №
+              </span>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={backNum}
+                maxLength={2}
+                placeholder="01"
+                aria-label="Back image number, 00 to 99"
+                onChange={(e) => setBackNum(e.target.value.replace(/\D/g, '').slice(0, 2))}
+              />
+            </label>
+          </form>
+          <form
+            className="components-mini-settings-form"
+            aria-label="Background settings"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <div className="components-mini-palette-head">
+              <span>Background</span>
+              <span className="components-mini-palette-hint">{cfg.bgVariant}</span>
+            </div>
+            <Dropdown
+              label="Variant"
+              items={['Classic', 'Variant 2', 'Variant 3']}
+              value={cfg.bgVariant}
+              onChange={(v) => patch({ bgVariant: v as AuthBgVariant })}
+              align="down"
+            />
+          </form>
+        </aside>
+        <div
+          className="components-mini-builder-canvas"
+          style={
+            backOn
+              ? { marginLeft: `${Math.ceil(width * 0.6) + 16}px` }
+              : undefined
+          }
+        >
+          <div className="components-mini-scene">
+            {backOn ? (
+              <div
+                className="components-mini-login__back"
+                aria-hidden="true"
+                data-back-variant={backVariant.toLowerCase()}
+              >
+                <AuthBackImage number={backNum} />
+              </div>
+            ) : null}
             <div
               ref={formRef}
               className={`components-mini-login components-mini-login--bg-${
-                bgVariant === 'Variant 3' ? 'v3' : bgVariant === 'Variant 2' ? 'v2' : 'classic'
+                cfg.bgVariant === 'Variant 3' ? 'v3' : cfg.bgVariant === 'Variant 2' ? 'v2' : 'classic'
               } ${dragActive ? 'is-drag-active' : ''} ${glow ? 'is-glow' : ''}`}
               style={
                 {
@@ -1520,7 +1608,7 @@ function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant })
                 setDragActive(false);
               }}
             >
-              {bgVariant === 'Variant 3' ? (
+              {cfg.bgVariant === 'Variant 3' ? (
                 <img
                   className="components-mini-login__bg-svg"
                   src="/mini-login-bg.svg?v=5"
@@ -1529,7 +1617,7 @@ function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant })
                   draggable={false}
                 />
               ) : null}
-              {bgVariant === 'Variant 3' ? (
+              {cfg.bgVariant === 'Variant 3' ? (
                 <div className="components-mini-login__glow" aria-hidden="true" />
               ) : null}
 
@@ -1675,6 +1763,9 @@ function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant })
                 setCfg(MINI_DEFAULTS);
                 setActiveUid(null);
                 setWidth(352);
+                setBackOn(true);
+                setBackVariant('Classic');
+                setBackNum('01');
               }}
             >
               Reset layout
@@ -1687,23 +1778,13 @@ function MiniLoginCard({ bgVariant = 'Classic' }: { bgVariant?: AuthBgVariant })
 }
 
 function MiniLoginSpecimen() {
-  const [bgVariant, setBgVariant] = useState<AuthBgVariant>('Classic');
-
   return (
     <ComponentCard
       id="L13 · Card"
       name="Mini Login"
       tag="Builder"
-      control={
-        <Dropdown
-          label="Background"
-          items={['Classic', 'Variant 2', 'Variant 3']}
-          value={bgVariant}
-          onChange={(v) => setBgVariant(v as AuthBgVariant)}
-        />
-      }
     >
-      <MiniLoginCard bgVariant={bgVariant} />
+      <MiniLoginCard />
     </ComponentCard>
   );
 }
