@@ -40,6 +40,7 @@ status: active
 - [ ] **Dead anchors in nav** — `#schedules`, `#news`, `#store`, `#sale` (nav has no sections to jump to yet)
 - [ ] **Newsletter form** — `action="#newsletter"` is a No-Op; no submit handler, no backend
 - [ ] **Forgot-password link** — `#forgot` dead; needs real reset flow (see [[SECURITY|Security]] P1)
+- [x] **Register page JSX malformed (P0)** — rebuilt 2026-09-24 as a 1:1 mirror of the login shell (same header/hero/card/telemetry/podium/teams/tires/footer; card renders `RegisterForm`; header pill → /login); `npm run typecheck` passes
 
 ## B. Login page — non-functional UI (P1)
 
@@ -74,9 +75,9 @@ status: active
 
 > Full checklist in [[SECURITY|Security Plan]].
 
-- [ ] **Remove demo-credentials leak** on login page (exposes `customer123`)
-- [ ] Rate limit auth endpoints (`/api/auth/callback/credentials`, `/register`)
-- [ ] Production `NEXTAUTH_SECRET` policy (dev fallback is hardcoded in `src/lib/auth.ts`)
+- [x] **Remove demo-credentials leak** on login page (done 2026-09-24: demo button + its CSS deleted from `LoginForm`; verified zero references remain)
+- [x] Rate limit auth endpoints (done 2026-09-24: `src/lib/rate-limit.ts` in-memory throttle — 10 logins/15min, 5 registers/hour per email — wired into `authorize` + `registerUser`)
+- [x] Production `NEXTAUTH_SECRET` policy (done 2026-09-24: `auth.ts` throws when unset in real prod runtime; dev fallback + `next build` exemption kept — no `.env*` files exist locally, only `.env.example`)
 - [ ] CSP + security headers via `next.config.js` `headers()`
 - [ ] `NEXTAUTH_URL` per environment (currently localhost in `.env.local`)
 - [ ] Cookie hardening (`secure` in prod) + `sameSite`

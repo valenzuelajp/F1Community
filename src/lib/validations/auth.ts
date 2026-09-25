@@ -8,13 +8,14 @@ import { z } from 'zod';
 export const loginSchema = z.object({
   email: z
     .string()
+    .trim()
     .min(1, { message: 'Email address is required' })
-    .email({ message: 'Please enter a valid email address (e.g. user@f1.com)' }),
+    .email({ message: 'Please enter a valid email address (e.g. user@f1.com)' })
+    .toLowerCase(),
   password: z
     .string()
     .min(1, { message: 'Password is required' })
-    .min(6, { message: 'Password must be at least 6 characters long' }),
-  rememberMe: z.boolean().default(false).optional(),
+    .min(8, { message: 'Password must be at least 8 characters long' }),
 });
 
 /**
@@ -34,7 +35,12 @@ export const registerSchema = z.object({
     .min(3, { message: 'Username must be at least 3 characters' })
     .max(30, { message: 'Username must be at most 30 characters' })
     .regex(/^[a-zA-Z0-9_]+$/, { message: 'Letters, numbers and underscores only' }),
-  email: z.string().min(1).email({ message: 'Please enter a valid email address' }),
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: 'Email address is required' })
+    .email({ message: 'Please enter a valid email address' })
+    .toLowerCase(),
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long' })
