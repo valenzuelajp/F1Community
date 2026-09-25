@@ -68,7 +68,7 @@ status: active
 - [x] **Security plan + database guide documented**: `SECURITY.md`, `DATABASE.md`
 - [x] Figma design exports added (`assets/figma/...` - login, store, account, schedules/standings, admin screens)
 - [ ] API contract defined (OpenAPI)
-- [x] Component library chosen/created — interaction primitives + `/components-wynn` showcase (2026-09-24; see Components Showcase below)
+- [x] Component library chosen/created — interaction primitives + `/components-wynn` showcase (2026-09-24; includes **Wynn** login/auth set; see report below)
 - [ ] Design system tokens defined
 - [ ] F1 API clients created (Jolpica, Live, News) - **NO CODE YET**
 - [ ] Route groups created ((f1), (shop))
@@ -170,16 +170,17 @@ A task is **Done** when:
 
 ## Components Showcase Report — `components` branch (2026-09-24)
 
-**Route:** `/components-wynn` (`src/app/components-wynn/page.tsx` + `components.css`)  
+**Wynn** · Route: `/components-wynn` (`src/app/components-wynn/page.tsx` + `components.css`)  
 **Aesthetic:** Pit Wall Telemetry (full-width, racing-grid bg, Anton display type, F1 red accents, staggered card entrance).
 
-### Layout
+### Layout — **Wynn**
 - Removed centered max-width layout; full-width page.
-- **3-column specimen grid** for short-form components; each card labeled with ID, name, and category tag (no card description/footer).
+- **3-column specimen grid** for short-form components (responsive: **1-col &lt;640px · 2-col 640–1023px · 3-col ≥1024px**); each card labeled with ID, name, and category tag (no card description/footer).
 - Split sections with legends: **Short-form content** vs **Long-form content**.
 - Card hover glow (`box-shadow`) removed; border highlight + lift only.
+- Grouped existing specimens under a **Basic interaction** `fieldset`/`legend` with indented contents.
 
-### Short-form specimens (P01–P07)
+### Short-form specimens (P01–P07) — **Wynn**
 | ID | Component | Interaction |
 |----|-----------|-------------|
 | P01 | Modal | Open/close overlay dialog |
@@ -190,17 +191,44 @@ A task is **Done** when:
 | P06 | Loading | Async button (idle → loading → done + toast) |
 | P07 | Segmented | Q1/Q2/Q3 group select |
 
-### Long-form specimens (P08–P10)
+### Long-form specimens (P08–P10) — **Wynn**
 | ID | Component | Interaction |
 |----|-----------|-------------|
 | P08 | Accordion | Vertical disclosure, long body copy |
 | P09 | Tabs | Race/Quali/Setup panels with long text |
 | P10 | Horizontal | Horizontal accordion — collapsed strips expand side-by-side |
 
-### Related
+### Related — **Wynn**
+- Horizontal accordion: full-width fill, content-height sizing, slower expand + label fade on trigger.
 - Global interaction styles live in `src/app/globals.css` (modal, tooltip, toast, accordion).
 - Typecheck: only pre-existing Prisma `username` errors (unrelated).
 
+### Login / auth set on `/components-wynn` — **Wynn** (2026-09-24)
+- Added as a second fieldset **Login components** on the same page (no separate route).
+- Short-form **L01–L12** (responsive grid): Text Input, Password, Error Banner, Status Banner, Remember Row, Login Button, Guest Button, OR Divider, Platform Tabs, Social Auth, Form Header, Footer Callout.
+- Long-form **L13–L14** (1-col): Mini Login composite, Auth Header + platform tabs.
+- Previews reuse `src/components/auth/auth-forms.css` (imported only in `components-wynn`).
+- **Wynn:** Mini Login **composes the same field-control components** as L01–L12 (shared React components) — edits to those components update both the cards and Mini Login.
+- **Wynn:** Mini Login has a **drag resize bar** under the form (pointer drag + arrow keys) to change form width (240–520px).
+- **Wynn:** Primary LOGIN button uses **`/public/login-btn.svg?v=2`** (`preserveAspectRatio="none"`, `#ce1503`, evenodd tip cut) via `.components-login-svg-btn` — stretched to **38px** to match Classic.
+- **Wynn:** L06 card has a **Variant** dropdown **below the specimen** (inside the card, not in the header) switching **Classic** (gradient) vs **Variant 2** (user SVG) designs.
+- **Wynn:** L07 Guest Button has the same **Variant** dropdown **below the specimen** — **Classic** (outline) vs **Variant 2** (`/public/guest-btn.svg`, `preserveAspectRatio="none"`, `#ff1801`).
+- **Wynn:** OR Divider (L08) shows **`[line] OR [line]`** via `.auth__divider::before/::after` (also applies to real login form).
+- **Wynn:** Mini Login (L13) is a **drag-and-drop builder**: right **Components palette** (drag or click to add), **drop zones** between blocks for insert/reorder, grip on section chips, **Remove section** in the hotspot panel. Still supports click-to-edit (variants, labels, accent, password reveal) + **Reset layout** + resize bar. (Hint/chip bar under the form removed.)
+- **Wynn:** L13 Mini Login palette footer has **Copy TSX** + **Copy CSS** (full form in current builder order/config) + Reset layout (snapshot comment dump removed).
+- **Wynn:** **`LOGIN_COMPONENTS` registry** drives both the **Login components** fieldset cards and the **Mini Login palette** — add an entry once and it shows up as a palette option (optional `defaultInMini`, `MiniBody`, `MiniPanel`, `Specimen`).
+- **Wynn:** **L13 Mini Login** has a **Background** Variant dropdown (**Classic | Variant 2 | Variant 3**) under the specimen — applies `components-mini-login--bg-classic|v2|v3` to the form container (not a separate card). Variant 3 uses **`/public/mini-login-bg.svg?v=1`** (`preserveAspectRatio="none"`, `background-size: 100% 100%`) so it stretches with the responsive form width (no fixed size). Variant 2 remains a CSS placeholder.
+- **Wynn:** Every login card except Mini Login has **Variant** (dropdown if multi-variant, disabled **Classic** otherwise) + **Copy TSX** + **Copy CSS** (paste-ready component + rules for the active variant; builders live in `src/app/components-wynn/export-code.ts`).
+- **Wynn:** **Copy TSX / Copy CSS export rule:** bake copy-time decisions (variant, labels, accent, bg, order) into the output as final `className` / CSS — do **not** emit runtime branches the recipient does not need (e.g. no `const isSvg = true` + ternary when the variant is already fixed). Live showcase components may keep runtime props; exports should not. Copy CSS only includes rules that apply to the selected variant.
+- **Wynn:** **Copy TSX / Copy CSS seamlessness pass:** every Copy TSX goes through `finalizeTsx()` (single `'use client'`, one top import block, no mid-file imports). Mini Login imports are conditional (glow → `useRef`/`MouseEvent`; blocks → only needed lucide icons). Mini Login Copy CSS bakes the builder **width** (matches TSX inline style), emits accent overrides only for present blocks, and dedupes shared rules (`.auth__input` for email+password; btn label/arrow + `.components-auth-arrow` for login+guest). `buildLoginTsx` uses the same single-module normalizer.
+- **Wynn:** **L15 · Backdrop — Back Image** added to Login components (`type: 'sticker'`, named **Back Image** — not "Background Image"): frame/border removed; specimen is the transparent cutout `/public/imgSticker1.png` (3000×1988) with `/public/imgOrnament24.svg?v=2` star grid at the bottom and an editable **2-digit watermark number**. Hidden from the Mini Login palette (`hideFromPalette`) since it is a backdrop layer, not a droppable form block. Copy TSX/CSS via `stickerTsX()` / `STICKER_CSS` in `export-code.ts`. Meta count **Auth 13+02** now matches 13 field-control cards + 2 composites.
+- **Wynn:** **L15 watermark number field:** card control has a **Number (2 digits)** text input (digits only, `maxLength 2`, placeholder `01`, prompt "accepts 2 digits (00–99)") under the Variant chip — the value renders as the preview overlay and is **baked at copy time** into Copy TSX (literal text) via `exportOpts.num`; empty/non-digit input falls back to `01` and single digits zero-pad (`7 → 07`). Control UI redesigned as a compact single-row pill (`№` glyph label + 3ch monospace tabular centered input) matching the Variant chip height — fixes the old stacked field's misalignment and the COPY CSS row wrap; hover/focus get accent border + glow, `№` turns accent on focus. Overlay style per reference screenshot: **Karantina** (Google Fonts `@import` at top of `components.css` + in `STICKER_CSS`), `font-size: min(700px, 60cqw)` (export uses same container query), `letter-spacing: -0.01em`, `color: transparent` fill, `-webkit-text-stroke: 2px #ffffff` (1.5px looked broken/rasterized at small sizes, bumped to 2px). Layer order: **watermark number behind the driver cutout (`z-index: 0`) at top-center, overhanging the frame** (`right: 50%; top: -12%`), photo above it (`z-index: 1`), stars `z-index: 0` bottom-center.
+- **Wynn:** **L15 composition matched to reference screenshot:** portrait frame `aspect-ratio: 7 / 8`, **no background of its own** (transparent — the card's theme shows through; the blue `#0e1326` fill and duplicate stripes were removed on request); photo sized `width: 135%; height: 135%` positioned `left: 50%` + `translateX(-50%)` with **`top: 60%`** (lowered on request: "put the driver lower") and `object-fit: contain` and **`max-width: none`** (Tailwind preflight's `img { max-width: 100% }` was silently clamping every enlargement — this was the bug behind the driver not growing; 165% was then rejected as "too stretched for the container", so 135% makes the full cutout fit with margins on all sides); Ornament 24 kept at its **original size and full grid** (SVG restored to `viewBox 0 0 511 379`, `?v=2`) — sized per the user's DevTools-tuned values: `width: 50%` (natural height), `bottom: calc(1% + 50px)`, `transform: translateX(-40%)`, **behind the driver cutout** (`z-index: 0` vs photo `z-index: 1`) — the larger driver covers it except at silhouette gaps. All rules mirrored in export `STICKER_CSS` (incl. `container-type: inline-size` so the export's `cqw` units resolve). Verified via Playwright (msedge) screenshots against the user's reference; typecheck clean (5 pre-existing Prisma `username` errors only).
+- **Wynn:** **Back Image behind the Mini Login container** (user: "how the back image is formed, is how it should be put behind the container of the mini login, with the back image being more to the left so that it may pop out more"): the form is wrapped in `.components-mini-scene` (`position: relative; width: fit-content`) holding two children in tree order — `.components-mini-login__back` (absolute, **flex-centered vertically** — `top: 0; bottom: 0; justify-content: center`, no fractional-pixel `translateY(-50%)` that blurred the raster, `left: -60%`, `width: 100%`, `z-index: 0`, `pointer-events: none`) and the form itself (relative, `z-index: auto`) — so the back image keeps its **exact L15 formation** (`.components-back-image` `aspect-ratio: 7/8`, photo 135% at `top: 60%`, `01`, stars) and paints **behind the form's opaque background where they overlap, popping out to the left** (60% of frame width protrudes = 312px at 520w; verified by pixel probes: overlap samples = form bg `06080D`, protrusion = driver). Ancestors already have `overflow: visible` (`.components-mini-login-row` chain), so the pop-out isn't clipped. Export parity: Copy TSX wraps `mini-login-scene` → `mini-login__back` → `mini-login` (backImg div before the form; glow handler indent fixed); Copy CSS emits `.mini-login-scene`/`.mini-login__back` + `BACK_IMAGE_CSS` (=`STICKER_CSS` minus its `@import`, which is line 1 of the output) and the `> *:not()` chrome rule for **all** variants. Pasted Copy-export test (`MiniLoginExport.tsx` + `mini-login.css`, width 520) regenerated from live clipboard; typecheck clean (5 pre-existing only).
+- **Wynn:** **Mini Login settings panel + rasterization/layout pass:** new left **`.components-mini-settings`** column beside the canvas holds two stacked `<form>` blocks — **Back Image** (On/Off toggle, Variant dropdown, № pill input) and, below a divider, a separate **Background** form (Classic | Variant 2 | Variant 3). The Background selector **moved out of the card-header control** and is bound to `cfg.bgVariant`, so the **Copy TSX/CSS snapshot now follows the selector** (it previously always exported `bg: Classic`). Settings + palette use `flex: 1 1 …` with `max-width: 14rem`, equal stretch heights, `justify-content: space-between` edge pinning, and the canvas gets `marginLeft: ceil(width*0.6)+16px` while the back layer is on (keeps the 312px pop-out clear of the settings column — measured 33px min clearance). Rasterization fixes (slider drags rendered blurry): back layer re-centered with **flex layout instead of `translateY(-50%)`** (fractional px → GPU blur), and `.components-card` entrance animation switched to `backwards` fill (base has no `opacity:0`/`transform`, hover lift removed) so no permanent composited layer is left over. `Dropdown` trigger/item buttons got `type="button"` (safe inside the settings forms). Reset layout restores back + width + blocks + `cfg`.
+- **Wynn:** **Copy TSX / Copy CSS full-feature review (49/49):** a Playwright harness exercised every builder knob end-to-end and asserted both outputs — width (240/520 baked in TSX inline style + CSS `.mini-login`), palette adds (status/tabs/social), DnD reorder to front, section remove, **all MiniPanels** (login/guest Variant 2 + custom labels, footer note/link, accent swatch `#3b82f6`, password reveal), Background v2/v3 (class, glow handlers, bg svg, CSS rule presence/absence), Back off/on with №78 baking, empty builder (`{/* empty builder */}` + `/* No blocks in builder */`), and Reset layout. Each TSX copy is structurally validated: exactly one `'use client'`, no imports after the body, every JSX tag defined or imported, every hook/type imported, no `<null />`/`undefined`, and a `ts.transpileModule` syntax check. **One bug found and fixed:** the password reveal toggle wasn't baked — export now emits `useState(${cfg.passwordVisible})` instead of always `false`.
+- **Wynn:** Meta count: **Auth 13+02** (L01–L14; Mini Login is L13).
+
 ---
 
-*Last updated: 2026-09-24 | Next review: 2026-09-25*
+*Last updated: 2026-09-25 (Wynn) | Next review: 2026-09-26*
