@@ -11,6 +11,28 @@
   width: 100%;
 }
 
+/* Visually hidden labels keep screen-reader names without changing visuals. */
+.auth__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard focus must stay visible on auth controls. */
+.auth__password-toggle:focus-visible,
+.auth__btn--primary:focus-visible,
+.auth__btn--secondary:focus-visible,
+.auth__footer-link:focus-visible {
+  outline: 2px solid #ff1801;
+  outline-offset: 2px;
+}
+
 /* Header & Racing Slashes */
 .auth__form-header {
   display: flex;
@@ -157,43 +179,6 @@
   color: #ffffff;
 }
 
-/* Options: Remember me & Forgot password */
-.auth__form-options {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 8px;
-  letter-spacing: 0.06em;
-  padding: 0.15rem 0;
-}
-
-.auth__remember {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: rgba(255, 255, 255, 0.75);
-  cursor: pointer;
-}
-
-.auth__checkbox {
-  height: 0.75rem;
-  width: 0.75rem;
-  border-radius: 2px;
-  background-color: #1a2332;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  accent-color: #ff1801;
-}
-
-.auth__forgot {
-  color: #ff1801;
-  font-weight: 700;
-  transition: color 0.15s ease;
-}
-
-.auth__forgot:hover {
-  color: #ff4d3d;
-}
-
 /* Buttons */
 .auth__btn--primary {
   position: relative;
@@ -274,7 +259,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.08em;
   padding-top: 0.4rem;
@@ -465,22 +450,4 @@
 
 .auth-actions-stack {
   padding-top: 0.5rem;
-}
-
-.auth__demo-wrap {
-  padding-top: 0.25rem;
-  text-align: center;
-}
-
-.auth__demo-btn {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #6b7280;
-  transition: color 0.15s ease;
-  cursor: pointer;
-}
-
-.auth__demo-btn:hover {
-  color: #d1d5db;
 }

@@ -4,12 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Countdown } from "@/components/f1/Countdown";
-import {
-  fallbackF1Event,
-  getNextF1Event,
-  getTopDrivers,
-} from "@/lib/f1/jolpica";
-import type { F1StandingDriver } from "@/lib/f1/jolpica";
+import { fallbackF1Event, getNextF1Event } from "@/lib/f1/jolpica";
 import "./login.css";
 
 export const metadata: Metadata = {
@@ -43,15 +38,6 @@ export default async function LoginPage() {
     // keep fallback
   }
 
-  // Championship top 3 by points (same Jolpica client, same ISR caching).
-  // Empty array on failure → the leaderboard section hides itself.
-  let topDrivers: F1StandingDriver[] = [];
-  try {
-    topDrivers = await getTopDrivers(3);
-  } catch {
-    // keep empty
-  }
-
   const roundLabel = `ROUND ${String(event.round).padStart(2, "0")}`;
   const seasonLabel = `${event.season} SEASON`;
   const hookLabel = event.isLive
@@ -66,12 +52,12 @@ export default async function LoginPage() {
       <header className="login-header">
         <div className="login-header-inner">
           {/* F1 Official Logo */}
-          <Link href="/home" className="login-logo" aria-label="Formula 1 Home">
+          <Link href="/login" className="login-logo" aria-label="Formula 1 Login">
             <Image
               src="/imgLogoContainer.png"
               alt="Formula 1 Logo"
               fill
-              sizes="(max-width: 640px) 130px, 155px"
+              sizes="(max-width: 640px) 164px, (max-width: 1024px) 172px, 188px"
               className="object-contain object-left"
               priority
             />
@@ -274,54 +260,6 @@ export default async function LoginPage() {
           )}
         </div>
       </section>
-
-      {/* =====================================================================
-          3b. CHAMPIONSHIP LEADERBOARD (TOP 3 BY POINTS)
-          Live driver standings from the Jolpica schedule API (ISR hourly).
-          Hidden entirely when the API is unavailable.
-          ===================================================================== */}
-      {topDrivers.length > 0 && (
-        <section
-          aria-label="Top 3 championship drivers"
-          className="login-podium"
-        >
-          <h2 className="login-podium-title">
-            TOP 3 — {event.season} CHAMPIONSHIP
-          </h2>
-          <div className="login-podium-row">
-            {topDrivers.map((driver) => (
-              <div
-                key={driver.code}
-                className={`login-podium-cell login-podium-cell--${driver.position}`}
-              >
-                <span className="login-podium-info">
-                  <span className="login-podium-name">
-                    {driver.name.toUpperCase()}
-                  </span>
-                  <span className="login-podium-team">
-                    {driver.team.toUpperCase()}
-                  </span>
-                  <span className="login-podium-points">
-                    {driver.points}{" "}
-                    <span className="login-podium-pts">PTS</span>
-                  </span>
-                </span>
-                {driver.photo && (
-                  <span className="login-podium-photo">
-                    <Image
-                      src={driver.photo}
-                      alt={`${driver.name} portrait`}
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 1024px) 112px, (min-width: 640px) 96px, 72px"
-                    />
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* =====================================================================
           4. TRUSTED TEAMS SPONSORS STRIP

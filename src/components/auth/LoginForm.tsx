@@ -36,7 +36,6 @@ export function LoginForm() {
     defaultValues: {
       email: "",
       password: "",
-      rememberMe: false,
     },
   });
 
@@ -46,7 +45,7 @@ export function LoginForm() {
 
     try {
       const result = await signIn("credentials", {
-        email: data.email,
+        email: data.email.trim().toLowerCase(),
         password: data.password,
         redirect: false,
       });
@@ -56,9 +55,19 @@ export function LoginForm() {
           "Invalid credentials. Please check your email and password.",
         );
       } else {
-        const callbackUrl =
+        // Same-origin guard: never follow a callbackUrl off this site.
+        const raw =
           new URLSearchParams(window.location.search).get("callbackUrl") ||
           "/home";
+        let callbackUrl = "/home";
+        try {
+          const target = new URL(raw, window.location.origin);
+          if (target.origin === window.location.origin) {
+            callbackUrl = `${target.pathname}${target.search}${target.hash}`;
+          }
+        } catch {
+          callbackUrl = "/home";
+        }
         window.location.assign(callbackUrl);
       }
     } catch {
@@ -98,7 +107,7 @@ export function LoginForm() {
 
       {/* Error alert */}
       {authError && (
-        <div className="auth-error-banner">
+        <div className="auth-error-banner" role="alert">
           <AlertCircle className="auth-error-icon" />
           <span>{authError}</span>
         </div>
@@ -107,37 +116,50 @@ export function LoginForm() {
       {/* Inputs Stack */}
       <div className="auth__form-inputs">
         {/* Email */}
+        <label className="auth__sr-only" htmlFor="login-email">
+          Email address
+        </label>
         <div className="auth__input">
           <div className="auth__input-icon">
             <Mail className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
+            id="login-email"
             {...register("email")}
             type="email"
+            autoComplete="email"
             placeholder="EMAIL ADDRESS"
+            aria-invalid={errors.email ? true : undefined}
+            aria-describedby={errors.email ? "login-email-error" : undefined}
             className={`auth__input-field ${errors.email ? 'has-error' : ''}`}
           />
         </div>
         {errors.email && (
-          <p className="auth-error-text">{errors.email.message}</p>
+          <p id="login-email-error" className="auth-error-text">{errors.email.message}</p>
         )}
 
         {/* Password */}
+        <label className="auth__sr-only" htmlFor="login-password">
+          Password
+        </label>
         <div className="auth__input">
           <div className="auth__input-icon">
             <Lock className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
+            id="login-password"
             {...register("password")}
             type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
             placeholder="PASSWORD"
+            aria-invalid={errors.password ? true : undefined}
+            aria-describedby={errors.password ? "login-password-error" : undefined}
             className={`auth__input-field ${errors.password ? 'has-error' : ''}`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="auth__password-toggle"
-            tabIndex={-1}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? (
@@ -148,24 +170,8 @@ export function LoginForm() {
           </button>
         </div>
         {errors.password && (
-          <p className="auth-error-text">{errors.password.message}</p>
+          <p id="login-password-error" className="auth-error-text">{errors.password.message}</p>
         )}
-      </div>
-
-      {/* Options Row */}
-      <div className="auth__form-options">
-        <label className="auth__remember">
-          <input
-            {...register("rememberMe")}
-            type="checkbox"
-            className="auth__checkbox"
-          />
-          <span>REMEMBER ME</span>
-        </label>
-
-        <Link href="/register" className="auth__forgot">
-          FORGOT PASSWORD?
-        </Link>
       </div>
 
       {/* Primary Red Login Button with Arrow */}
@@ -210,19 +216,6 @@ export function LoginForm() {
         </Link>
       </div>
 
-      {/* Demo Credentials quick button (helpful for testing) */}
-      <div className="auth__demo-wrap">
-        <button
-          type="button"
-          onClick={() => {
-            setValue('email', 'customer@f1store.com');
-            setValue('password', 'customer123');
-          }}
-          className="auth__demo-btn"
-        >
-          Click to load demo credentials
-        </button>
-      </div>
     </form>
   );
 }

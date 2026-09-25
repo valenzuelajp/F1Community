@@ -23,7 +23,7 @@ import "./auth-forms.css";
 /**
  * Register Form Component — login-card visual language.
  *
- * Mirrors LoginForm structure with `login-*` classes so it sits
+ * Mirrors LoginForm structure with the shared `auth__*` classes so it sits
  * 1:1 inside the login shell: header + slashes, stacked inputs,
  * red primary button with arrow, footer switcher.
  */
@@ -63,101 +63,128 @@ export function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="auth" noValidate>
       {/* Top Header & Racing Slashes */}
-      <div className="login-form-header">
+      <div className="auth__form-header">
         <div>
-          <h2 className="login-form-title">
+          <h2 className="auth__form-title">
             JOIN THE <span className="text-[#ff1801]">GRID</span>
           </h2>
-          <p className="login-form-subtitle">
+          <p className="auth__form-subtitle">
             CREATE YOUR ACCOUNT FOR PREDICTIONS,{" "}
             <span className="text-[#ff1801]">LIVE</span> STANDINGS &amp; TEAM
             GEAR
           </p>
         </div>
 
-        <div className="login-form-slashes" aria-hidden="true">
-          <span className="login-form-slash" />
-          <span className="login-form-slash" />
-          <span className="login-form-slash" />
+        <div className="auth__form-slashes" aria-hidden="true">
+          <span className="auth__form-slash" />
+          <span className="auth__form-slash" />
+          <span className="auth__form-slash" />
         </div>
       </div>
 
       {/* Error alert */}
       {authError && (
-        <div className="auth-error-banner">
+        <div className="auth-error-banner" role="alert">
           <AlertCircle className="auth-error-icon" />
           <span>{authError}</span>
         </div>
       )}
 
       {/* Inputs Stack */}
-      <div className="login-form-inputs">
+      <div className="auth__form-inputs">
         {/* Display name */}
-        <div className="login-input">
-          <div className="login-input-icon">
+        <label className="auth__sr-only" htmlFor="register-name">
+          Display name
+        </label>
+        <div className="auth__input">
+          <div className="auth__input-icon">
             <User className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
+            id="register-name"
             {...register("name")}
             type="text"
+            autoComplete="name"
             placeholder="DISPLAY NAME"
-            className={`login-input-field ${errors.name ? "has-error" : ""}`}
+            aria-invalid={errors.name ? true : undefined}
+            aria-describedby={errors.name ? "register-name-error" : undefined}
+            className={`auth__input-field ${errors.name ? "has-error" : ""}`}
           />
         </div>
         {errors.name && (
-          <p className="auth-error-text">{errors.name.message}</p>
+          <p id="register-name-error" className="auth-error-text">{errors.name.message}</p>
         )}
 
         {/* Username */}
-        <div className="login-input">
-          <div className="login-input-icon">
+        <label className="auth__sr-only" htmlFor="register-username">
+          Username
+        </label>
+        <div className="auth__input">
+          <div className="auth__input-icon">
             <AtSign className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
+            id="register-username"
             {...register("username")}
             type="text"
+            autoComplete="username"
             placeholder="USERNAME"
-            className={`login-input-field ${errors.username ? "has-error" : ""}`}
+            aria-invalid={errors.username ? true : undefined}
+            aria-describedby={errors.username ? "register-username-error" : undefined}
+            className={`auth__input-field ${errors.username ? "has-error" : ""}`}
           />
         </div>
         {errors.username && (
-          <p className="auth-error-text">{errors.username.message}</p>
+          <p id="register-username-error" className="auth-error-text">{errors.username.message}</p>
         )}
 
         {/* Email */}
-        <div className="login-input">
-          <div className="login-input-icon">
+        <label className="auth__sr-only" htmlFor="register-email">
+          Email address
+        </label>
+        <div className="auth__input">
+          <div className="auth__input-icon">
             <Mail className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
+            id="register-email"
             {...register("email")}
             type="email"
+            autoComplete="email"
             placeholder="EMAIL ADDRESS"
-            className={`login-input-field ${errors.email ? "has-error" : ""}`}
+            aria-invalid={errors.email ? true : undefined}
+            aria-describedby={errors.email ? "register-email-error" : undefined}
+            className={`auth__input-field ${errors.email ? "has-error" : ""}`}
           />
         </div>
         {errors.email && (
-          <p className="auth-error-text">{errors.email.message}</p>
+          <p id="register-email-error" className="auth-error-text">{errors.email.message}</p>
         )}
 
         {/* Password */}
-        <div className="login-input">
-          <div className="login-input-icon">
+        <label className="auth__sr-only" htmlFor="register-password">
+          Password
+        </label>
+        <div className="auth__input">
+          <div className="auth__input-icon">
             <Lock className="h-3.5 w-3.5 text-gray-400" />
           </div>
           <input
+            id="register-password"
             {...register("password")}
             type={showPassword ? "text" : "password"}
+            autoComplete="new-password"
             placeholder="PASSWORD"
-            className={`login-input-field ${errors.password ? "has-error" : ""}`}
+            aria-invalid={errors.password ? true : undefined}
+            aria-describedby={errors.password ? "register-password-error" : undefined}
+            className={`auth__input-field ${errors.password ? "has-error" : ""}`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="login-password-toggle"
-            tabIndex={-1}
+            className="auth__password-toggle"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? (
@@ -168,7 +195,7 @@ export function RegisterForm() {
           </button>
         </div>
         {errors.password && (
-          <p className="auth-error-text">{errors.password.message}</p>
+          <p id="register-password-error" className="auth-error-text">{errors.password.message}</p>
         )}
       </div>
 
@@ -176,7 +203,7 @@ export function RegisterForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="login-btn-primary group"
+        className="auth__btn--primary group"
       >
         {isLoading ? (
           <>
@@ -185,8 +212,8 @@ export function RegisterForm() {
           </>
         ) : (
           <>
-            <span className="login-btn-label">CREATE ACCOUNT</span>
-            <span className="login-btn-arrow">
+            <span className="auth__btn-label">CREATE ACCOUNT</span>
+            <span className="auth__btn-arrow">
               <Image
                 src="/imgRectangle427.png"
                 alt="arrow"
@@ -199,9 +226,9 @@ export function RegisterForm() {
       </button>
 
       {/* Bottom Switcher */}
-      <div className="login-form-footer">
-        <span className="login-form-footer-note">ALREADY HAVE AN ACCOUNT?</span>
-        <Link href="/login" className="login-form-footer-link">
+      <div className="auth__form-footer">
+        <span className="auth__footer-note">ALREADY HAVE AN ACCOUNT?</span>
+        <Link href="/login" className="auth__footer-link">
           LOG IN &gt;
         </Link>
       </div>
