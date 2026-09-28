@@ -13,6 +13,31 @@
 
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcryptjs';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+// Minimal `.env.local` loader. Plain `tsx` does not load env files on its
+// own (only `next` commands do), so without this the script crashes with
+// "Environment variable not found: DATABASE_URL" even when `.env.local`
+// exists. No new dependencies: KEY=VALUE lines only, skips blanks and `#`
+// comments, strips wrapping quotes, never overrides real env values.
+function loadLocalEnv(): void {
+  const file = join(process.cwd(), '.env.local');
+  if (!existsSync(file)) return;
+  for (const line of readFileSync(file, 'utf8').split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || !trimmed.includes('=')) continue;
+    const key = trimmed.slice(0, trimmed.indexOf('=')).trim();
+    if (!key || process.env[key] !== undefined) continue;
+    const value = trimmed
+      .slice(trimmed.indexOf('=') + 1)
+      .trim()
+      .replace(/^["']|["']$/g, '');
+    process.env[key] = value;
+  }
+}
+
+loadLocalEnv();
 
 const prisma = new PrismaClient();
 

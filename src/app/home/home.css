@@ -1,63 +1,32 @@
 /* ==========================================================================
-   Home Page Styles
-   Cleanly separated for simple reading, editing, and teammate onboarding.
+   Home content sections (+ newsroom) - shared stylesheet.
+   Imported by /home, /news, /schedule, and /standings pages.
+   Page shell (.page/.page__glow) lives in ../globals.css;
+   the navbar lives in the SiteNavbar component + site-navbar.css.
+   (Hero + home-navbar styles were removed: dead after the news-first
+   redesign. bg-racing-grid stays in globals.css in case pages reuse it.)
    ========================================================================== */
 
-.page {
+/* ==========================================================================
+   Home content sections
+   (shared page sections for home/news/schedule/standings)
+   Mobile-first; same dark tokens as the hero above.
+   ========================================================================== */
+
+.home-section {
   position: relative;
-  flex: 1 1 0%;
-  overflow: hidden;
-  background-color: #090b10;
-  color: #e5e7eb;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.page__glow {
-  pointer-events: none;
-  position: absolute;
-  left: 25%;
-  top: 0;
-  height: 24rem;
-  width: 24rem;
-  border-radius: 9999px;
-  background-color: rgba(220, 38, 38, 0.1);
-  filter: blur(48px);
-}
-
-.hero {
-  position: relative;
-}
-
-.hero__inner {
-  position: relative;
+.home-section__inner {
   margin: 0 auto;
   width: 100%;
   max-width: 64rem;
-  padding: 5rem 1.5rem;
+  padding: 3rem 1.5rem;
   text-align: center;
 }
 
-@media (min-width: 640px) {
-  .hero__inner {
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero__inner {
-    padding: 7rem 4rem;
-  }
-}
-
-.hero__badge {
-  margin-bottom: 1.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  background-color: rgba(69, 10, 10, 0.8);
-  padding: 0.5rem 1rem;
+.home-section__eyebrow {
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -65,78 +34,359 @@
   color: #f87171;
 }
 
-.hero__headline {
-  font-size: 2.25rem;
+.home-section__title {
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  line-height: 1;
   letter-spacing: -0.025em;
+  color: #ffffff;
 }
 
-@media (min-width: 640px) {
-  .hero__headline {
-    font-size: 3.75rem;
-  }
-}
-
-.hero__subtext {
-  margin: 1.5rem auto 0;
+.home-section__subtext {
+  margin: 0.75rem auto 0;
   max-width: 42rem;
   font-size: 0.875rem;
   line-height: 1.625;
   color: #9ca3af;
 }
 
-@media (min-width: 640px) {
-  .hero__subtext {
-    font-size: 1rem;
-  }
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding-top: 2rem;
-}
-
-.hero__btn--primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 0.5rem;
-  background: linear-gradient(to right, #ff1801, #e01500);
-  padding: 0.875rem 1.75rem;
+.home-live-pill {
+  display: inline-block;
+  margin-top: 1.25rem;
+  border-radius: 9999px;
+  background-color: #ff1801;
+  padding: 0.5rem 1.25rem;
   font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #ffffff;
-  box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3);
-  transition: opacity 0.15s ease, filter 0.15s ease;
 }
 
-.hero__btn--primary:hover {
-  filter: brightness(1.1);
+.home-countdown {
+  display: block;
+  margin-top: 1.25rem;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #ffffff;
 }
 
-.hero__btn--secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 0.875rem 1.75rem;
+.home-muted {
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.home-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.home-card {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+}
+
+.home-card__icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: #f87171;
+}
+
+.home-card__title {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.home-card__text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: #9ca3af;
+}
+
+.home-table {
+  list-style: none;
+  margin: 2rem auto 0;
+  max-width: 42rem;
+  padding: 0;
+}
+
+.home-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0.25rem;
+  font-size: 0.875rem;
+}
+
+.home-row__position {
+  width: 1.5rem;
+  font-weight: 800;
+  color: #f87171;
+}
+
+.home-row__code {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.home-row__name {
+  flex: 1 1 auto;
+  text-align: left;
+  color: #e5e7eb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-row__team {
+  display: none;
+  color: #9ca3af;
+}
+
+.home-row__points {
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .home-section__inner {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .home-section__title {
+    font-size: 1.875rem;
+  }
+
+  .home-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .home-row__team {
+    display: inline;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-section__inner {
+    padding: 4rem;
+  }
+}
+
+
+/* ==========================================================================
+   Newsroom (live RSS headlines)
+   Hero + sidebar on desktop, stacked on mobile. Same dark tokens.
+   ========================================================================== */
+
+.home-section__inner--wide {
+  max-width: 72rem;
+}
+
+.news-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.news-hero__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.news-hero__title {
+  margin-top: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.news-card__meta {
+  margin-top: 1rem;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #ffffff;
-  transition: background-color 0.15s ease;
+  letter-spacing: 0.1em;
+  color: #f87171;
 }
 
-.hero__btn--secondary:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+.news-card__summary {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: #9ca3af;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.news-card__cta {
+  display: inline-block;
+  margin-top: 1rem;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #ff1801, #e01500);
+  padding: 0.5rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  transition: filter 0.15s ease;
+}
+
+.news-card__cta:hover {
+  filter: brightness(1.1);
+}
+
+.news-side {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 1.25rem;
+  align-self: start;
+}
+
+.news-side__heading {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.news-side__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.news-side__row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0;
+}
+
+.news-side__row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.news-side__row a {
+  display: block;
+  transition: opacity 0.15s ease;
+}
+
+.news-side__row a:hover .news-side__title {
+  color: #f87171;
+}
+
+.news-side__title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #e5e7eb;
+}
+
+.news-side__meta {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.news-card {
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.news-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.news-card__noimg {
+  display: flex;
+  aspect-ratio: 16 / 10;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 24, 1, 0.15), rgba(255, 255, 255, 0.03));
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f87171;
+}
+
+.news-card__body {
+  padding: 1.25rem;
+}
+
+.news-card__body .news-card__meta {
+  margin-top: 0;
+}
+
+.news-card__title {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #ffffff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .news-hero__title {
+    font-size: 1.875rem;
+  }
+
+  .news-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .news-top {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .news-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

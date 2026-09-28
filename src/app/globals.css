@@ -40,6 +40,27 @@ body {
   background-size: 32px 32px;
 }
 
+/* Shared page shell (home/news/schedule/standings) with ambient glow. */
+.page {
+  position: relative;
+  flex: 1 1 0%;
+  overflow: hidden;
+  background-color: #090b10;
+  color: #e5e7eb;
+}
+
+.page__glow {
+  pointer-events: none;
+  position: absolute;
+  left: 25%;
+  top: 0;
+  height: 24rem;
+  width: 24rem;
+  border-radius: 9999px;
+  background-color: rgba(220, 38, 38, 0.1);
+  filter: blur(48px);
+}
+
 .f1-outline-title {
   color: transparent;
   -webkit-text-stroke: 2px rgba(255, 255, 255, 0.9);
