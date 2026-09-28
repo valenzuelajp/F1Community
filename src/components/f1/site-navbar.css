@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Shared site navbar (sticky) — imported by the SiteNavbar component,
+   used on home/news/schedule/standings.
+   Logo runs a little bigger than the login/register header tiers.
+   ========================================================================== */
+
+.site-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: rgba(9, 11, 16, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.site-navbar__inner {
+  margin: 0 auto;
+  display: flex;
+  max-width: 64rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.site-navbar__logo {
+  position: relative;
+  height: 50px;
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.site-navbar__links {
+  display: none;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.site-navbar__link {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
+}
+
+.site-navbar__link:hover {
+  color: #ffffff;
+}
+
+/* Disabled nav pill for routes that do not exist yet (Store/Sale). */
+.site-navbar__soon {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #4b5563;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  cursor: default;
+  white-space: nowrap;
+}
+
+/* Always visible (sits outside the collapsing links row). */
+.site-navbar__logout {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, #ff1801, #e01500);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.site-navbar__logout:hover {
+  filter: brightness(1.1);
+}
+
+.site-navbar__logout:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+@media (min-width: 640px) {
+  .site-navbar__inner {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .site-navbar__logo {
+    height: 54px;
+    width: 196px;
+  }
+
+  .site-navbar__links {
+    display: flex;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-navbar__inner {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+
+  .site-navbar__logo {
+    height: 58px;
+    width: 208px;
+  }
+}

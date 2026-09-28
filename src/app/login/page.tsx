@@ -54,7 +54,7 @@ export default async function LoginPage() {
           {/* F1 Official Logo */}
           <Link href="/login" className="login-logo" aria-label="Formula 1 Login">
             <Image
-              src="/imgLogoContainer.png"
+              src="/imgLogoF1.png"
               alt="Formula 1 Logo"
               fill
               sizes="(max-width: 640px) 164px, (max-width: 1024px) 172px, 188px"
@@ -471,7 +471,7 @@ export default async function LoginPage() {
           <div className="login-footer-brand">
             <div className="login-footer-logo">
               <Image
-                src="/imgLogoContainer.png"
+                src="/imgLogoF1.png"
                 alt="Formula 1 Logo"
                 fill
                 className="object-contain object-left"

@@ -74,10 +74,11 @@ flowchart LR
 ## New-colleague onboarding (clone → login in 4 commands)
 
 No accounts, no installs, no shared secrets. The dev database is a local
-SQLite file the tooling creates for you:
+SQLite file that ships **inside the clone** (`prisma/dev.db`, with a starter
+admin row) — no sync step needed for a fresh checkout:
 
 1. `cp .env.example .env.local` (already points at `file:./dev.db`) + set a real `NEXTAUTH_SECRET`.
-2. `npm run db:push` — creates `prisma/dev.db` and syncs the schema.
+2. `npm run db:push` — only needed after a schema change; otherwise skip (the file is already there).
 3. `npm run db:admin` — upserts `admin@f1store.com` / `admin123` as `ADMIN`
    without wiping anything (override with `ADMIN_EMAIL` / `ADMIN_USERNAME` /
    `ADMIN_PASSWORD`). A `SELECT 1` runs first, so success = DB reachable.
@@ -89,6 +90,11 @@ the owner shares privately)? Point `.env.local` at that URL **and** regenerate
 the client for it: `npm run db:generate:prod`. Switch back with
 `npm run db:generate`. Connection strings are passwords: local `.env.local`
 only (gitignored), **never in a commit, chat log, or wiki page**.
+
+> Convention: `dev.db` is a committed starter file, but day-to-day data edits
+> stay local-only — SQLite is binary, so two devs committing different rows
+> = merge conflict. Ship schema via `db:push`/migrations, ship seed data via
+> `db:admin`, never by committing a dirty `dev.db`.
 
 ## The `users` Table (auth-critical)
 
