@@ -202,6 +202,7 @@ src/
 - **README**: Per package/folder if non-obvious
 - **ADR**: For architectural decisions (see ARCHITECTURE.md)
 - **Wiki**: Keep PROJECT_OVERVIEW, PROGRESS, ROADMAP, TASKS current
+- **Wynn marker**: When Wynn completes progress, record what changed in the wiki and prefix/tag those notes with **`Wynn`** so other devs can see which interactions/changes came from Wynn (see `rules.md` → Progress → Wiki)
 
 ---
 
