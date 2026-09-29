@@ -195,6 +195,38 @@
   max-width: 72rem;
 }
 
+/* ==========================================================================
+   Maximalist split: race intel left, newsroom right (wide screens only).
+   Below 1280px the columns stack in document order (hero, then news).
+   ========================================================================== */
+
+@media (min-width: 1280px) {
+  .pit-split {
+    display: grid;
+    grid-template-columns: 7fr 6fr;
+    align-items: start;
+  }
+
+  .pit-split__race .race-hero__inner,
+  .pit-split__news .home-section__inner {
+    max-width: none;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .pit-split__news {
+    border-left: 1px solid var(--pit-line);
+  }
+
+  .pit-split__news .news-top {
+    grid-template-columns: 1fr;
+  }
+
+  .pit-split__news .news-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .news-top {
   display: grid;
   grid-template-columns: 1fr;
@@ -239,24 +271,6 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.news-card__cta {
-  display: inline-block;
-  margin-top: 1rem;
-  border-radius: 9999px;
-  background: linear-gradient(to right, #ff1801, #e01500);
-  padding: 0.5rem 1.25rem;
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #ffffff;
-  transition: filter 0.15s ease;
-}
-
-.news-card__cta:hover {
-  filter: brightness(1.1);
 }
 
 .news-side {
@@ -335,7 +349,10 @@
 .news-card__media {
   position: relative;
   aspect-ratio: 16 / 10;
-  background-color: rgba(255, 255, 255, 0.03);
+  /* Skeleton slot: visible while the remote photo loads, no layout shift. */
+  background:
+    linear-gradient(135deg, rgba(255, 24, 1, 0.12), rgba(255, 255, 255, 0.02) 60%),
+    rgba(255, 255, 255, 0.03);
 }
 
 .news-card__noimg {
@@ -366,7 +383,7 @@
   line-height: 1.4;
   color: #ffffff;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -389,4 +406,1105 @@
   .news-grid {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+/* ==========================================================================
+   Newcomer welcome, topic filter chips, season pulse
+   ========================================================================== */
+
+.welcome-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.topic-chip {
+  display: inline-block;
+  margin-right: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--pit-red);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #ffffff;
+  transform: skewX(var(--pit-skew));
+  transform: skewX(var(--pit-skew));
+}
+
+.news-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.news-filter__btn {
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: transparent;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.news-filter__btn--active {
+  background-color: #ff1801;
+  border-color: #ff1801;
+  color: #ffffff;
+}
+
+.news-filter__btn:focus-visible {
+  outline: 2px solid #f87171;
+  outline-offset: 2px;
+}
+
+.season-progress {
+  height: 0.375rem;
+  max-width: 28rem;
+  margin: 1.25rem auto 0;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.season-progress__bar {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #ff1801, #e01500);
+}
+
+@media (min-width: 640px) {
+  .welcome-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .welcome-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Responsive robustness + motion
+   One-line flex-truncation fix, entrance motion, hover lifts, live pulse.
+   All motion switches off under prefers-reduced-motion.
+   ========================================================================== */
+
+/* Flex children refuse to shrink past content without this — without it,
+   long driver names push the standings row wider than small phones. */
+.home-row__name {
+  min-width: 0;
+}
+
+.home-row__team {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.news-hero,
+.news-card,
+.home-card,
+.home-row {
+  animation: rise-in 0.5s ease both;
+}
+
+/* Gentle stagger so grids read top-to-bottom on load. */
+.news-card:nth-child(2),
+.home-card:nth-child(2),
+.home-row:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.news-card:nth-child(3),
+.home-card:nth-child(3),
+.home-row:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.news-card:nth-child(n + 4),
+.home-card:nth-child(n + 4),
+.home-row:nth-child(n + 4) {
+  animation-delay: 0.18s;
+}
+
+.news-card,
+.home-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.news-card:hover,
+.home-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 24, 1, 0.4);
+  box-shadow: 0 12px 24px -12px rgba(255, 24, 1, 0.35);
+}
+
+.home-live-pill {
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 24, 1, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 24, 1, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-hero,
+  .news-card,
+  .home-card,
+  .home-row,
+  .home-live-pill,
+  .ticker__track,
+  .mobile-menu__overlay {
+    animation: none;
+  }
+
+  .news-card,
+  .home-card {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Timing ticker (homepage tape under the navbar)
+   Seamless CSS loop: two identical groups, -50% shift. Pauses on hover,
+   static under prefers-reduced-motion (see block above).
+   ========================================================================== */
+
+.ticker {
+  overflow: hidden;
+  border-top: 1px solid var(--pit-line);
+  border-bottom: 1px solid var(--pit-line);
+  background-color: var(--pit-surface);
+}
+
+.ticker__track {
+  display: inline-flex;
+  animation: ticker-scroll 45s linear infinite;
+}
+
+.ticker:hover .ticker__track {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker__group {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.ticker__item {
+  padding: 0.5rem 0.25rem;
+  font-size: 13px;
+  color: var(--pit-muted);
+}
+
+.ticker__item::after {
+  content: '//';
+  margin: 0 1rem;
+  color: var(--pit-red);
+}
+
+.ticker__item--next {
+  color: var(--pit-text);
+  font-weight: 700;
+}
+
+.ticker__live {
+  margin-left: 1rem;
+  border-radius: 0.25rem;
+  background-color: var(--pit-red);
+  padding: 0.125rem 0.5rem;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+}
+
+/* ==========================================================================
+   Weekend session timeline (schedule page)
+   ========================================================================== */
+
+.timeline {
+  list-style: none;
+  margin: 2rem auto 0;
+  max-width: 42rem;
+  padding: 0;
+  text-align: left;
+}
+
+.timeline__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0.25rem;
+  font-size: 0.875rem;
+}
+
+.timeline__dot {
+  flex: none;
+  height: 0.625rem;
+  width: 0.625rem;
+  border-radius: 9999px;
+  background-color: #4b5563;
+}
+
+.timeline__row--live .timeline__dot {
+  background-color: #ff1801;
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+
+.timeline__row--next .timeline__dot {
+  background-color: transparent;
+  border: 2px solid #f87171;
+}
+
+.timeline__label {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.timeline__time {
+  margin-left: auto;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.timeline__state {
+  flex: none;
+  width: 5.5rem;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+}
+
+.timeline__row--live .timeline__state {
+  color: #ff1801;
+}
+
+.timeline__row--done .timeline__label {
+  color: #9ca3af;
+}
+
+/* ==========================================================================
+   Season calendar (full-year list on /schedule)
+   ========================================================================== */
+
+.calendar {
+  list-style: none;
+  margin: 2rem auto 0;
+  max-width: 42rem;
+  padding: 0;
+  text-align: left;
+}
+
+.calendar__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0.25rem;
+  font-size: 0.875rem;
+}
+
+.calendar__round {
+  flex: none;
+  width: 1.75rem;
+  font-weight: 800;
+  color: #f87171;
+}
+
+.calendar__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.calendar__name {
+  font-weight: 700;
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar__circuit {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar__date {
+  flex: none;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.calendar__status {
+  flex: none;
+  width: 5.5rem;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+}
+
+.calendar__row--completed .calendar__name {
+  color: #9ca3af;
+}
+
+/* ==========================================================================
+   Race-week hero (mockup: eyebrow, giant title, countdown boxes,
+   circuit outline, session schedule). Mobile-first, tokens from :root.
+   ========================================================================== */
+
+.race-hero {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+
+.race-hero__inner {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 64rem;
+  padding: 3rem 1.5rem 2.5rem;
+}
+
+.race-hero__eyebrow {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.race-hero__title {
+  margin-top: 0.5rem;
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  transform: skewX(-4deg);
+  transform-origin: left center;
+}
+
+.race-hero__circuit {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.race-hero__countdown {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.75rem;
+}
+
+.countdown-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.countdown-box__value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-box__label {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.race-hero__track {
+  display: block;
+  width: 100%;
+  max-width: 28rem;
+  height: auto;
+  margin-top: 2rem;
+}
+
+.race-hero__sessions {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.race-hero__session {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.875rem;
+}
+
+.race-hero__session-name {
+  color: var(--text);
+}
+
+.race-hero__session-name--live {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.race-hero__session-time {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Driver portraits on the /drivers table. */
+.driver-row__photo {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  background-color: var(--surface);
+}
+
+.driver-row__photo--fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+@media (min-width: 640px) {
+  .race-hero__inner {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .race-hero__title {
+    font-size: 4rem;
+  }
+
+  .countdown-box__value {
+    font-size: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .race-hero__inner {
+    padding: 4rem;
+  }
+
+  .race-hero__title {
+    font-size: 4.5rem;
+  }
+}
+
+/* ==========================================================================
+   Pit-wall pass · Step 3 — split hero + standings tower
+   Left: title, giant countdown, session rows. Right: top-5 tower.
+   One skew angle everywhere (--pit-skew).
+   ========================================================================== */
+
+.race-hero__inner--split {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  overflow: hidden;
+}
+
+.race-hero__roundbg {
+  pointer-events: none;
+  user-select: none;
+  position: absolute;
+  top: -1.5rem;
+  left: -0.5rem;
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(8rem, 28vw, 16rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.08);
+  z-index: 0;
+}
+
+.race-hero__main {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.race-hero__inner--split .race-hero__title {
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  transform: skewX(var(--pit-skew));
+}
+
+/* Countdown digits run larger than the title — tabular numerals only. */
+.race-hero__inner--split .countdown-box__value {
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-variant-numeric: tabular-nums;
+}
+
+.race-hero__session-local {
+  font-variant-numeric: tabular-nums;
+  color: var(--pit-text);
+  white-space: nowrap;
+}
+
+.race-hero__session-utc {
+  font-size: 0.75rem;
+  color: var(--pit-muted);
+  white-space: nowrap;
+}
+
+.race-hero__tower {
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--pit-line);
+  border-radius: 0.75rem;
+  background-color: var(--pit-surface);
+  padding: 1.25rem 1.25rem 1rem;
+  min-width: 0;
+}
+
+.race-hero__tower-heading {
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--pit-ink);
+  margin: 0 0 0.75rem;
+}
+
+.race-hero__tower-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.race-hero__tower-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-radius: 0.375rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.race-hero__tower-pos {
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 1.125rem;
+  width: 1.5rem;
+  color: var(--pit-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.race-hero__tower-code {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--pit-ink);
+}
+
+.race-hero__tower-gap {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--pit-muted);
+  white-space: nowrap;
+}
+
+.race-hero__tower-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pit-red);
+}
+
+.race-hero__tower-link:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 1024px) {
+  .race-hero__inner--split {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+/* ==========================================================================
+   Step 4 (pit-wall): whole-card links, lead overlay, 3-line headlines
+   ========================================================================== */
+
+a.news-card,
+a.news-hero {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+a.news-card:hover .news-card__title,
+a.news-hero:hover .news-hero__title {
+  text-decoration: underline;
+  text-decoration-color: var(--pit-red);
+  text-underline-offset: 0.25rem;
+}
+
+.news-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(255, 24, 1, 0.28), transparent 55%);
+  pointer-events: none;
+}
+
+.news-hero__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ */
+/* Step 5: championship towers (drivers + constructors mini-tower)     */
+/* ------------------------------------------------------------------ */
+
+.tower-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.tower__heading {
+  font-family: var(--font-pit-display), sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--pit-text);
+}
+
+.tower__list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.tower__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid var(--pit-line);
+}
+
+.tower__pos {
+  flex: 0 0 auto;
+  width: 3rem;
+  font-family: var(--font-pit-display), sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--pit-text);
+}
+
+.tower__who {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.tower__code {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--pit-ink);
+}
+
+.tower__name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  color: var(--pit-muted);
+}
+
+.tower__meta {
+  flex: 0 0 auto;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tower__points {
+  display: block;
+  font-weight: 700;
+  color: var(--pit-ink);
+}
+
+.tower__gap {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--pit-muted);
+}
+
+.tower__link {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--pit-red);
+  text-decoration: none;
+}
+
+.tower__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+@media (min-width: 1024px) {
+  .tower-grid {
+    grid-template-columns: 7fr 5fr;
+    align-items: start;
+  }
+}
+
+/* ==========================================================================
+   Pit-wall mockup pass: container, titles, badge, ticker, hero, team
+   bars, news overlay, towers, footer. Appended as an override layer —
+   earlier shared blocks above stay valid for the other content pages.
+   ========================================================================== */
+
+/* One container: 1240px max, content left-aligned. */
+.pit-container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1240px;
+  padding: 3rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .pit-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+/* Left-aligned section title with a skewed red marker. */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-family: var(--font-pit-display), 'Arial Narrow', sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: 0.01em;
+  color: var(--pit-ink);
+  text-align: left;
+}
+
+.section-title::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 2rem;
+  background-color: var(--pit-red);
+  transform: skewX(var(--pit-skew));
+}
+
+/* Yellow round badge in the hero. */
+.round-badge {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.375rem 1rem;
+  background-color: var(--pit-yellow);
+  color: #07080b;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transform: skewX(var(--pit-skew));
+}
+
+/* Alternate-section band. */
+.home-section--band {
+  background-color: rgba(255, 255, 255, 0.015);
+}
+
+/* ---- Ticker: red LATEST tag, red-to-yellow underline ---- */
+.ticker {
+  display: flex;
+  align-items: stretch;
+  border-top: 1px solid var(--pit-line);
+  border-bottom: 1px solid var(--pit-line);
+  background-color: var(--pit-surface);
+  position: relative;
+}
+
+.ticker::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--pit-red), var(--pit-yellow));
+}
+
+.ticker__tag {
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: var(--pit-red);
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.ticker__viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: pit-ticker 45s linear infinite;
+}
+
+.ticker:hover .ticker__track {
+  animation-play-state: paused;
+}
+
+@keyframes pit-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker__item {
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track {
+    animation: none;
+    width: auto;
+  }
+
+  .ticker__viewport {
+    overflow-x: auto;
+  }
+}
+
+/* ---- Hero: two columns at 960px, hairline grid, red session row ---- */
+.race-hero {
+  position: relative;
+}
+
+.race-hero::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: linear-gradient(180deg, black 0, transparent 14rem);
+  mask-image: linear-gradient(180deg, black 0, transparent 14rem);
+}
+
+.race-hero__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 960px) {
+  .race-hero__inner {
+    grid-template-columns: 7fr 5fr;
+    align-items: start;
+  }
+}
+
+.race-hero__title {
+  font-size: clamp(2.25rem, 6vw, 4rem);
+}
+
+.race-hero__session--race .race-hero__session-name,
+.race-hero__session--race .race-hero__session-local {
+  color: var(--pit-red);
+  font-weight: 800;
+}
+
+.race-hero__session-local,
+.race-hero__session-utc {
+  font-size: 0.8125rem;
+}
+
+/* Constructor bar chart inside the hero tower card. */
+.team-bars {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--pit-line);
+  padding-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.team-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.team-bar__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--pit-ink);
+}
+
+.team-bar__track {
+  height: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.team-bar__fill {
+  display: block;
+  height: 100%;
+  transform: skewX(var(--pit-skew-bars));
+  transform-origin: left center;
+}
+
+.team-bar__points {
+  font-variant-numeric: tabular-nums;
+  color: var(--pit-muted);
+}
+
+/* ---- News: lead overlay, credit, 13px floors ---- */
+.news-hero__media {
+  position: relative;
+}
+
+.news-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 55%;
+  background: linear-gradient(180deg, transparent, rgba(7, 8, 11, 0.85));
+}
+
+.news-credit {
+  margin-top: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--pit-muted);
+  text-align: left;
+}
+
+.news-side__meta,
+.countdown-box__label {
+  font-size: 0.8125rem;
+}
+
+/* ---- Towers: gap column hides under 560px ---- */
+@media (max-width: 559px) {
+  .tower__gap,
+  .race-hero__tower-gap {
+    display: none;
+  }
+}
+
+/* ---- Footer: checker divider, store note ---- */
+.pit-footer {
+  border-top: 1px solid var(--pit-line);
+}
+
+.pit-footer .pit-container {
+  padding-top: 2rem;
+  padding-bottom: 2.5rem;
+}
+
+.checker {
+  height: 10px;
+  background: repeating-conic-gradient(
+    rgba(242, 243, 245, 0.5) 0% 25%,
+    transparent 0% 50%
+  );
+  background-size: 20px 20px;
+}
+
+.pit-footer__note {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--pit-muted);
+  text-align: left;
 }

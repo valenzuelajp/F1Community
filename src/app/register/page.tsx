@@ -131,11 +131,17 @@ export default async function RegisterPage() {
                   )}
                 </span>
                 {!event.isLive && !event.seasonOver && (
-                  <Countdown
-                    target={event.nextSessionStart!}
-                    className="login-countdown"
-                    showStartTime
-                  />
+                  event.nextSessionStart ? (
+                    <Countdown
+                      target={event.nextSessionStart}
+                      className="login-countdown"
+                      showStartTime
+                    />
+                  ) : (
+                    <span className="login-countdown">
+                      Schedule unavailable right now.
+                    </span>
+                  )
                 )}
               </div>
 

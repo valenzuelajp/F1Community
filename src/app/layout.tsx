@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Anton } from 'next/font/google';
+import { Inter, Anton, Barlow_Condensed, Barlow } from 'next/font/google';
 import { AppShell } from '@/components/layout/AppShell';
 import './globals.css';
 
@@ -13,6 +13,22 @@ const anton = Anton({
   subsets: ['latin'],
   weight: '400',
   variable: '--font-display',
+  display: 'swap',
+});
+
+/* Pit-wall theme faces (home + content pages; auth pages keep Inter). */
+const pitDisplay = Barlow_Condensed({
+  subsets: ['latin'],
+  weight: ['600', '700', '800', '900'],
+  style: 'italic',
+  variable: '--font-pit-display',
+  display: 'swap',
+});
+
+const pitBody = Barlow({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-pit-body',
   display: 'swap',
 });
 
@@ -75,7 +91,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${anton.variable} antialiased`}>
+    <html lang="en" className={`${inter.variable} ${anton.variable} ${pitDisplay.variable} ${pitBody.variable} antialiased`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
