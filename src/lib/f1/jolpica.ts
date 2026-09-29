@@ -14,6 +14,9 @@ export const JOLPICA_BASE_URL =
 /** Caching strategy from the wiki: refetch at most once per hour. */
 const REVALIDATE_SECONDS = 3600;
 
+/** Approximate session length, used to detect "live now" and weekend bounds. */
+const SESSION_WINDOW_MS = 3 * 60 * 60 * 1000;
+
 /* -------------------------------------------------------------------------- */
 /*  API response types (subset of Jolpica/Ergast)                             */
 /* -------------------------------------------------------------------------- */
@@ -146,6 +149,19 @@ export interface F1Event {
   racesRemaining: number;
   /** Season is over (last race finished). */
   seasonOver: boolean;
+  /** Every session of this race weekend (FP1 → Race), oldest first. */
+  sessions: F1SessionEntry[];
+}
+
+/** One session in a race weekend, with its live state at fetch time. */
+export interface F1SessionEntry {
+  type: SessionType;
+  /** Short label, e.g. "FP1" / "Qualifying" / "Race". */
+  label: string;
+  /** Session start (ISO). */
+  start: string;
+  /** Where this session sits relative to now. */
+  state: "done" | "live" | "next";
 }
 
 interface SessionSlot {
@@ -194,6 +210,112 @@ export async function getTopDrivers(limit = 3): Promise<F1StandingDriver[]> {
     wins: Number(s.wins),
     photo: DRIVER_PHOTO_BY_CODE[s.Driver.code] ?? null,
   }));
+}
+
+/** One row in the constructors' championship. */
+export interface F1StandingConstructor {
+  position: number;
+  name: string;
+  nationality: string;
+  points: number;
+  wins: number;
+}
+
+/**
+ * Returns the championship constructors ranked by points (default: top 10).
+ * Same ISR caching as the driver standings. Throws when unreachable —
+ * callers should render without the teams section.
+ */
+export async function getConstructorStandings(
+  limit = 10,
+): Promise<F1StandingConstructor[]> {
+  const res = await fetch(
+    `${JOLPICA_BASE_URL}/current/constructorstandings/`,
+    {
+      headers: { Accept: "application/json" },
+      next: { revalidate: REVALIDATE_SECONDS },
+    },
+  );
+
+  if (!res.ok) throw new Error(`Jolpica standings error: ${res.status}`);
+
+  const data = (await res.json()) as {
+    MRData: {
+      StandingsTable: {
+        StandingsLists: [
+          {
+            ConstructorStandings: {
+              position: string;
+              points: string;
+              wins: string;
+              Constructor: { name: string; nationality: string };
+            }[],
+          },
+        ];
+      };
+    };
+  };
+  const standings =
+    data.MRData.StandingsTable.StandingsLists[0]?.ConstructorStandings ?? [];
+
+  return standings.slice(0, limit).map((s) => ({
+    position: Number(s.position),
+    name: s.Constructor.name,
+    nationality: s.Constructor.nationality,
+    points: Number(s.points),
+    wins: Number(s.wins),
+  }));
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Season calendar (full year, round order)                                  */
+/* -------------------------------------------------------------------------- */
+
+/** One round on the season calendar. */
+export interface F1CalendarRace {
+  round: number;
+  raceName: string;
+  circuitName: string;
+  locality: string;
+  country: string;
+  /** Race start (ISO). Null when the API omits date/time. */
+  start: string | null;
+  status: "completed" | "upcoming";
+}
+
+/**
+ * Full season calendar in round order, with per-race done/upcoming state.
+ * Same hourly ISR as the other Jolpica fetches. Throws when the API is
+ * unreachable — callers should render without the calendar section.
+ */
+export async function getSeasonCalendar(): Promise<{
+  season: number;
+  totalRounds: number;
+  races: F1CalendarRace[];
+}> {
+  const races = await fetchCurrentRaces();
+  if (races.length === 0) throw new Error("Jolpica returned no races");
+
+  const now = Date.now();
+  const RACE_MS = 2 * 60 * 60 * 1000; // a Grand Prix lasts ~2h
+
+  return {
+    season: Number(races[0].season),
+    totalRounds: races.length,
+    races: races.map((race) => {
+      const start = toDate({ date: race.date, time: race.time } as JSession);
+      return {
+        round: Number(race.round),
+        raceName: race.raceName,
+        circuitName: race.Circuit.circuitName,
+        locality: race.Circuit.Location.locality,
+        country: race.Circuit.Location.country,
+        start: start ? start.toISOString() : null,
+        status:
+          start && start.getTime() + RACE_MS < now ? "completed" : "upcoming",
+      } satisfies F1CalendarRace;
+    }),
+  };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -264,8 +386,6 @@ export async function getNextF1Event(): Promise<F1Event> {
   if (races.length === 0) throw new Error("Jolpica returned no races");
 
   const now = Date.now();
-  // Approximate session length, used to detect "live now" and weekend bounds.
-  const SESSION_WINDOW_MS = 3 * 60 * 60 * 1000;
   const totalRounds = races.length;
   const racesCompleted = races.filter(
     (r) => new Date(`${r.date}T23:59:59Z`).getTime() < now,
@@ -287,7 +407,7 @@ export async function getNextF1Event(): Promise<F1Event> {
     );
 
     if (live) {
-      event = buildEvent(race, live, now, totalRounds, racesCompleted, true);
+      event = buildEvent(race, live, slots, now, totalRounds, racesCompleted, true);
       break;
     }
 
@@ -301,6 +421,7 @@ export async function getNextF1Event(): Promise<F1Event> {
       event = buildEvent(
         race,
         upcoming,
+        slots,
         now,
         totalRounds,
         racesCompleted,
@@ -328,6 +449,7 @@ export async function getNextF1Event(): Promise<F1Event> {
       racesCompleted,
       racesRemaining: 0,
       seasonOver: true,
+      sessions: [],
     };
   }
 
@@ -338,12 +460,37 @@ export async function getNextF1Event(): Promise<F1Event> {
 function buildEvent(
   race: JRace,
   slot: SessionSlot,
+  slots: SessionSlot[],
   now: number,
   totalRounds: number,
   racesCompleted: number,
   isLive: boolean,
 ): F1Event {
-  void now;
+  let practiceCount = 0;
+  const sessions: F1SessionEntry[] = slots.map((s) => {
+    let label: string;
+    if (s.type === "practice") {
+      practiceCount += 1;
+      label = `FP${practiceCount}`;
+    } else if (s.type === "sprint-qualifying") {
+      label = "Sprint Shootout";
+    } else {
+      label = s.type[0].toUpperCase() + s.type.slice(1);
+    }
+    const startMs = s.start.getTime();
+    const state =
+      now >= startMs && now < startMs + SESSION_WINDOW_MS
+        ? "live"
+        : startMs + SESSION_WINDOW_MS <= now
+          ? "done"
+          : "next";
+    return {
+      type: s.type,
+      label,
+      start: s.start.toISOString(),
+      state,
+    };
+  });
   return {
     headline: HEADLINES[slot.type],
     title: TITLES[slot.type],
@@ -359,6 +506,7 @@ function buildEvent(
     racesCompleted,
     racesRemaining: totalRounds - racesCompleted,
     seasonOver: false,
+    sessions,
   };
 }
 
@@ -379,5 +527,6 @@ export function fallbackF1Event(): F1Event {
     racesCompleted: 0,
     racesRemaining: 23,
     seasonOver: false,
+    sessions: [],
   };
 }

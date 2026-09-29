@@ -1,20 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LogoutButton } from "@/components/auth/LogoutButton";
+import { MobileMenu } from "./MobileMenu";
 import "./site-navbar.css";
 
-/** Real routes in the navbar. Store/Sale stay "soon" pills (no pages yet). */
-const NAV_LINKS = [
+/** Real routes in the navbar (mockup order). */
+export const NAV_LINKS = [
   { href: "/home", label: "Home" },
-  { href: "/news", label: "News" },
   { href: "/schedule", label: "Schedule" },
   { href: "/standings", label: "Standings" },
+  { href: "/news", label: "News" },
+  { href: "/teams", label: "Teams" },
+  { href: "/drivers", label: "Drivers" },
+  { href: "/new-to-f1", label: "New to F1?" },
 ];
 
 /**
- * Shared sticky navbar (home/news/schedule/standings).
- * Logo is always visible; section links collapse below 640px;
- * the Log out button stays visible on every screen size.
+ * Shared sticky navbar (home/schedule/standings/news/teams/drivers/new-to-f1).
+ * Logo is always visible; on phones the links live behind the
+ * hamburger menu, on larger screens they render inline.
+ * The Log out button stays visible on every screen size.
  */
 export function SiteNavbar() {
   return (
@@ -25,7 +30,7 @@ export function SiteNavbar() {
             src="/imgLogoF1.png"
             alt="Formula 1 Logo"
             fill
-            sizes="(max-width: 640px) 180px, (max-width: 1024px) 196px, 208px"
+            sizes="(max-width: 640px) 116px, (max-width: 1024px) 130px, 145px"
             className="object-contain object-left"
             priority
           />
@@ -36,10 +41,11 @@ export function SiteNavbar() {
               {link.label}
             </Link>
           ))}
-          <span className="site-navbar__soon" title="Coming soon">Store</span>
-          <span className="site-navbar__soon" title="Coming soon">Sale</span>
         </nav>
-        <LogoutButton />
+        <div className="site-navbar__actions">
+          <LogoutButton />
+          <MobileMenu />
+        </div>
       </div>
     </header>
   );

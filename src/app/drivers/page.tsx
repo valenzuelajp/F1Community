@@ -1,27 +1,23 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { SiteNavbar } from "@/components/f1/SiteNavbar";
 import { getTopDrivers } from "@/lib/f1/jolpica";
 import { constructorColor } from "@/lib/f1/teams";
 import "../home/home.css";
 
 export const metadata: Metadata = {
-  title: "F1 Standings – Formula 1 Merchandise",
-  description: "The live Formula 1 drivers' championship table.",
-  openGraph: {
-    title: "F1 Standings – Formula 1 Merchandise",
-    description: "The live Formula 1 drivers' championship table.",
-    url: "https://f1store.com/standings",
-  },
-  alternates: {
-    canonical: "https://f1store.com/standings",
-  },
+  title: "Drivers – F1 Store",
+  description: "The current Formula 1 drivers' championship standings.",
+  alternates: { canonical: "https://f1store.com/drivers" },
 };
 
 /**
- * Standings page — the full drivers' championship table.
+ * Drivers page — the full drivers' championship table.
+ * Live data from the F1 API; constructor-color edge per row.
+ * Shares `./home.css` (`home-table` rows + `driver-*` extras).
  */
-export default async function StandingsPage() {
-  const topDrivers = await getTopDrivers(20);
+export default async function DriversPage() {
+  const drivers = await getTopDrivers(20);
 
   return (
     <main className="page font-sans selection:bg-[#ff1801] selection:text-white">
@@ -30,20 +26,35 @@ export default async function StandingsPage() {
       <section className="home-section">
         <div className="home-section__inner">
           <p className="home-section__eyebrow">Drivers&apos; championship</p>
-          <h1 className="home-section__title">Standings</h1>
-          {topDrivers.length > 0 ? (
+          <h2 className="home-section__title">Meet the grid</h2>
+          {drivers.length > 0 ? (
             <ol className="home-table">
-              {topDrivers.map((driver) => (
+              {drivers.map((driver) => (
                 <li
                   key={driver.code}
                   className="home-row"
                   style={{ boxShadow: `inset 3px 0 0 ${constructorColor(driver.team)}` }}
                 >
                   <span className="home-row__position">{driver.position}</span>
+                  {driver.photo ? (
+                    <Image
+                      src={driver.photo}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className="driver-row__photo"
+                    />
+                  ) : (
+                    <span className="driver-row__photo driver-row__photo--fallback">
+                      {driver.code}
+                    </span>
+                  )}
                   <span className="home-row__code">{driver.code}</span>
                   <span className="home-row__name">{driver.name}</span>
                   <span className="home-row__team">{driver.team}</span>
-                  <span className="home-row__points">{driver.points} pts</span>
+                  <span className="home-row__points">
+                    {driver.points} pts · {driver.wins} wins
+                  </span>
                 </li>
               ))}
             </ol>

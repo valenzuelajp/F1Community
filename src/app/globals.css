@@ -14,6 +14,25 @@
   --tire-hard: #ffffff;
   --tire-intermediate: #43b02a;
   --tire-wet: #0067ad;
+  /* Page tokens: one vocabulary for canvas, surfaces, lines, and text. */
+  --canvas: #07080b;
+  --surface: #10131a;
+  --line: #1f242e;
+  --text: #f2f3f5;
+  --muted: #a6adbb;
+  --accent: #ff1801;
+  /* Pit-wall broadcast tokens (step 1): single theme, one skew, live colors. */
+  --pit-carbon: #07080b;
+  --pit-band: #0b0d12;
+  --pit-surface: #10131a;
+  --pit-red: #ff1801;
+  --pit-yellow: #ffd12e;
+  --pit-green: #3ddc84;
+  --pit-ink: #f2f3f5;
+  --pit-muted: #a6adbb;
+  --pit-line: #1f242e;
+  --pit-skew: -8deg;
+  --pit-skew-bars: -14deg;
 }
 
 html {
@@ -40,25 +59,49 @@ body {
   background-size: 32px 32px;
 }
 
-/* Shared page shell (home/news/schedule/standings) with ambient glow. */
+/* Shared page shell (home/news/schedule/standings): base gradient plus
+   carbon weave. Body text always sits on plain surfaces, never on pattern. */
 .page {
   position: relative;
   flex: 1 1 0%;
   overflow: hidden;
-  background-color: #090b10;
+  background-color: #07080b;
+  background-image:
+    linear-gradient(180deg, #0b0d12 0%, #07080b 34rem),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.018) 0 2px,
+      transparent 2px 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.28) 0 2px,
+      transparent 2px 4px
+    );
   color: #e5e7eb;
 }
 
+/* Hero-only red glow, top-left. The div sits at the top of the page. */
 .page__glow {
   pointer-events: none;
   position: absolute;
-  left: 25%;
-  top: 0;
-  height: 24rem;
-  width: 24rem;
+  left: -12rem;
+  top: -12rem;
+  height: 36rem;
+  width: 36rem;
   border-radius: 9999px;
-  background-color: rgba(220, 38, 38, 0.1);
-  filter: blur(48px);
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 24, 1, 0.16),
+    transparent
+  );
+}
+
+/* Visible keyboard focus everywhere on the pit-wall pages. */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--pit-red);
+  outline-offset: 2px;
 }
 
 .f1-outline-title {
