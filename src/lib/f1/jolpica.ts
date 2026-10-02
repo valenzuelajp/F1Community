@@ -143,6 +143,8 @@ export interface F1Event {
   locality: string;
   country: string;
   round: number;
+  /** Display badge for rounds known to have moved venues (null otherwise). */
+  relocatedLabel: string | null;
   season: number;
   totalRounds: number;
   racesCompleted: number;
@@ -449,11 +451,41 @@ export async function getNextF1Event(): Promise<F1Event> {
       racesCompleted,
       racesRemaining: 0,
       seasonOver: true,
+      relocatedLabel: null,
       sessions: [],
     };
   }
 
   return event;
+}
+
+/** Rounds known to have moved venues, keyed `season-round`. The 2026 Bahrain
+ *  GP relocated to Sepang (official title: "Formula 1 Gulf Air Bahrain Grand
+ *  Prix in Malaysia"). This drives a display badge only — never a data fix. */
+const RELOCATED_ROUNDS: Record<string, string> = {
+  "2026-16": "Relocated",
+};
+
+export interface RaceDisplay {
+  /** Grand Prix title, e.g. "Bahrain Grand Prix". */
+  title: string;
+  /** "Circuit, Locality, Country" from the same object. */
+  venue: string;
+  /** Relocation badge, or null for normal rounds. */
+  relocatedLabel: string | null;
+}
+
+/**
+ * Title + venue projected from ONE race object (same-object guarantee), plus
+ * a relocation badge for known moved rounds. Pure — safe to unit test.
+ */
+export function describeRace(race: JRace): RaceDisplay {
+  const key = `${race.season}-${race.round}`;
+  return {
+    title: race.raceName,
+    venue: `${race.Circuit.circuitName}, ${race.Circuit.Location.locality}, ${race.Circuit.Location.country}`,
+    relocatedLabel: RELOCATED_ROUNDS[key] ?? null,
+  };
 }
 
 /** Build a normalized event from a race + the next/live session slot. */
@@ -500,6 +532,7 @@ function buildEvent(
     circuitName: race.Circuit.circuitName,
     locality: race.Circuit.Location.locality,
     country: race.Circuit.Location.country,
+    relocatedLabel: describeRace(race).relocatedLabel,
     round: Number(race.round),
     season: Number(race.season),
     totalRounds,
@@ -527,6 +560,7 @@ export function fallbackF1Event(): F1Event {
     racesCompleted: 0,
     racesRemaining: 23,
     seasonOver: false,
+    relocatedLabel: null,
     sessions: [],
   };
 }

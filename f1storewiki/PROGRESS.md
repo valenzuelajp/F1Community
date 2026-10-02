@@ -23,16 +23,18 @@ status: active
 
 | Phase                             | Status                           | Completion | Target Date |
 | --------------------------------- | -------------------------------- | ---------- | ----------- |
-| **Phase 0: Foundation**           | 🟡 In Progress                   | 40%        | 2026-09-25  |
-| Phase 1a: F1 Schedule & Standings | ⏳ Not Started                   | 0%         | 2026-10-16  |
-| Phase 1b: F1 News & Live          | ⏳ Not Started                   | 0%         | 2026-11-06  |
+| **Phase 0: Foundation**           | 🟢 Near Done                    | 90%        | 2026-09-25  |
+| Phase 1a: F1 Schedule & Standings | 🟡 In Progress (major pages live; profiles + race detail open) | 80% | 2026-10-16  |
+| Phase 1b: F1 News & Live          | 🟡 In Progress (RSS + news pages live; timing hub parked) | 70% | 2026-11-06  |
 | Phase 2a: Store Core Catalog      | ⏳ Not Started                   | 0%         | 2026-12-04  |
 | Phase 2b: Cart & Checkout         | ⏳ Not Started                   | 0%         | 2027-01-01  |
-| Phase 3: User Accounts            | 🟡 In Progress (early auth only) | 10%        | 2027-01-29  |
+| Phase 3: User Accounts            | 🟡 In Progress (hardened credentials auth) | 60% | 2027-01-29  |
 | Phase 4: Admin Dashboard          | ⏳ Not Started                   | 0%         | 2027-02-26  |
 | Phase 5: Polish & Launch          | ⏳ Not Started                   | 0%         | 2027-03-26  |
 
-> Phase 3 pulled forward: a working (demo) credentials login + F1 Philippines auth UI were built ahead of the store catalog.
+> Phase 3 pulled forward: credentials login + F1 Philippines auth UI were built ahead of the store catalog, then hardened 2026-09-24 (rate limits, secret policy, email normalization, callback guard, demo-credentials button removed).
+
+> 2026-10-02 all-8 site pass: pit-wall `/home` (tokens, ticker, hero+towers, news states, store teaser, a11y) + live `/news` `/schedule` `/standings` `/drivers` `/teams` `/new-to-f1` + navbar/logout/hamburger + login token unify + dead `AuthHeader` removed. Typecheck/tests/lint/build green.
 
 ## Phase 0: Foundation - Detailed Progress
 
@@ -60,7 +62,7 @@ status: active
 - [x] **Registration**: `/register` page + server action (`src/app/actions/auth.ts`) — creates bcrypt-hashed users, duplicate email/username handled
 - [x] **Seed typecheck drift fixed**: `username` added to `User` in `schema.prisma` (matches live Neon table) and supplied in `seed.ts`
 - [x] **Migrations folder created**: `prisma/migrations/20260915024910_community_init` baseline matches live schema; `migrate status` = up to date
-- [x] **Auth UI**: F1-branded login page (`/login`), LoginForm (demo quick-fill now seeded `customer@f1store.com`), RegisterForm, SocialAuth, AuthHeader
+- [x] **Auth UI**: F1-branded login page (`/login`), LoginForm, RegisterForm, SocialAuth (stubs), AuthHeader — demo quick-fill button **removed** 2026-09-24
 - [x] **Login visual pass**: angular black login tile, elevated two-column composition, and `imgSticker1.png` driver artwork beside the form
 - [x] **Login landing page delivered**: `/` redirects to `/login`; the F1 race-week login experience is full-width on desktop with hero, ticker, and partner bar. Successful login defaults to `/home` (2026-09-20; see `LOGIN_LANDING_PAGE.md`)
 - [x] **Login page made dynamic (Jolpica)**: hero badge, race info, per-second countdown, season stats, and auto-adjusting title now come from the real F1 schedule via `src/lib/f1/jolpica.ts` + `src/components/f1/Countdown.tsx`; login CSS variables/classes renamed to match their content (2026-09-22; see `LOGIN_DYNAMIC_F1_CONTENT.md`)
@@ -70,14 +72,14 @@ status: active
 - [ ] API contract defined (OpenAPI)
 - [x] Component library chosen/created — interaction primitives + `/components-wynn` showcase (2026-09-24; includes **Wynn** login/auth set; see report below)
 - [ ] Design system tokens defined
-- [ ] F1 API clients created (Jolpica, Live, News) - **NO CODE YET**
+- [x] F1 API clients created (Jolpica schedule/standings/calendar/timeline + Sky/BBC news RSS — `src/lib/f1/`)
 - [ ] Route groups created ((f1), (shop))
 
 ### Development Environment
 
-- [ ] Local dev server verified (_login + register verified end-to-end 2026-09-18_)
+- [x] Local dev server verified (_login + register verified end-to-end 2026-09-18; re-proven 2026-09-28 against SQLite_)
 - [x] Database migrations folder created (`prisma/migrations` + baseline `community_init` — CI `db:migrate deploy` can now run)
-- [ ] Lint green at repo level (**blocked**: `eslint-config-next@16` vs `eslint@8`/Next 14 mismatch — see TASKS.md)
+- [x] Lint green at repo level (**resolved 2026-09-25**: repo pins `eslint-config-next@14.2.35` + `eslint@8.57.1`; `npm run lint` clean — old `@16` claims were stale)
 - [ ] Storybook configured
 - [ ] Testing framework exercised (Vitest + Playwright installed, no tests written yet)
 - [ ] Error tracking (Sentry)
@@ -92,7 +94,7 @@ status: active
 - [x] **DB-backed `authorize()`** — Prisma user lookup + `bcrypt.compare` (seeded creds login verified live)
 - [x] `src/app/api/auth/[...nextauth]/route.ts`
 - [x] `src/app/login/page.tsx` - F1 Philippines layout with top navigation, driver sticker, and angular login tile
-- [x] `src/components/auth/LoginForm.tsx` (validated form, show/hide password, demo quick-fill → seeded user)
+- [x] `src/components/auth/LoginForm.tsx` (validated form, show/hide password; demo quick-fill removed 2026-09-24)
 - [x] **`/register` page + `RegisterForm` + registration server action** (bcrypt + unique username/email, `src/app/actions/auth.ts`)
 - [x] `src/components/auth/SocialAuth.tsx` (Google/Apple stubs)
 - [x] `src/components/auth/AuthHeader.tsx` (F1/Store platform switcher)
@@ -103,10 +105,10 @@ status: active
 
 ### Unfinished / Open
 
-- [ ] Social buttons still `alert()` stubs; "Forgot password" link is `#forgot`; store nav links (new-arrivals, teams, drivers, accessories, sale) have no pages.
+- [ ] Social buttons still `alert()` stubs; "Forgot password" row removed with the dead options block 2026-09-24; Store/Sale nav pills removed 2026-09-28 (real shop = future project, see `futureplans.md`).
 - [ ] NextAuth version mismatch: package.json = **v4**, GUIDE.md aligns with **v4** after doc pass.
-- [ ] **Lint infra broken** (pre-existing): `eslint-config-next@16.3.4` requires eslint 9/flat config; repo pins `eslint@8` + Next 14.2. `pnpm lint` fails before app code. Fix: pin `eslint-config-next@^14` or move to eslint 9. `pnpm typecheck` passes.
-- [ ] Auth hardening (rate limiting, CSP, cookie flags, email verification) tracked in `SECURITY.md`.
+- [x] **Lint infra fixed** (was broken pre-existing): repo pins `eslint-config-next@14.2.35` + `eslint@8.57.1`; `npm run lint` clean since 2026-09-25.
+- [x] Auth hardening landed 2026-09-24 (rate limiting via `src/lib/rate-limit.ts`, prod `NEXTAUTH_SECRET` enforcement, email normalization, callback guard) — remaining staged items (CSP, cookie flags, OAuth, reset flow) in `SECURITY.md`.
 
 ## Milestone Tracker
 
@@ -118,9 +120,9 @@ status: active
 | DB-backed login (authorize → Prisma + bcrypt) | 2026-09-15 | 2026-09-18                                                             | ✅ Done        |
 | Migrations folder (CI `db:migrate deploy`)    | 2026-09-05 | 2026-09-18                                                             | ✅ Done        |
 | Dev environment ready                         | 2026-09-05 | —                                                                      | 🟡 In Progress |
-| F1 APIs integrated (Jolpica, Live, News)      | 2026-09-15 | —                                                                      | ⏳ Pending     |
+| F1 APIs integrated (Jolpica, Live, News)      | 2026-09-15 | 2026-09-28 (schedule/standings/news live) | ✅ Done |
 | First deploy (staging)                        | 2026-09-20 | —                                                                      | ⏳ Pending     |
-| F1 Website MVP (Schedule + News)              | 2026-11-06 | —                                                                      | ⏳ Pending     |
+| F1 Website MVP (Schedule + News)              | 2026-11-06 | 2026-09-28 (`/schedule`, `/news`, `/standings` live) | ✅ Done |
 | Store MVP (Catalog + Checkout)                | 2027-01-01 | —                                                                      | ⏳ Pending     |
 | Full Platform feature complete                | 2027-02-26 | —                                                                      | ⏳ Pending     |
 | Production launch                             | 2027-03-26 | —                                                                      | ⏳ Pending     |
@@ -134,7 +136,7 @@ status: active
 - [x] Build `/register` page + registration server action with bcrypt + DB (`src/app/actions/auth.ts`)
 - [x] Make `authorize()` query Prisma for the user (seeded creds verified live: `customer@f1store.com` / `customer123`)
 - [x] Verify `pnpm db:generate`, `pnpm typecheck`, `migrate status` — all green
-- [ ] `pnpm lint` — **blocked by pre-existing eslint-config-next@16 / eslint@8 mismatch** (see above)
+- [x] `npm run lint` — **resolved 2026-09-25** (repo pins `eslint-config-next@14.2.35` + `eslint@8.57.1`)
 - [ ] Merge pending `Assets` branch (team/driver images)
 - [ ] Add security hardening items (rate limit, CSP, cookie flags) per `SECURITY.md`
 
@@ -142,7 +144,7 @@ status: active
 
 - ~~`prisma/seed.ts` typecheck drift~~ → **resolved**
 - ~~`prisma/migrations` missing~~ → **resolved**
-- **`pnpm lint` fails pre-existing**: `eslint-config-next@16.3.4` (flat-config/eslint 9) vs installed `eslint@8.57.1` + Next 14.2.35. Need dep pin fix in a dedicated PR.
+- ~~`npm run lint` fails pre-existing~~ → **resolved 2026-09-25** (`eslint-config-next@14.2.35` + `eslint@8.57.1`, lint clean)
 
 ## Velocity & Metrics
 
@@ -231,4 +233,4 @@ A task is **Done** when:
 
 ---
 
-*Last updated: 2026-09-25 (Wynn) | Next review: 2026-09-26*
+*Last updated: 2026-10-02 (wiki-sync: phases/percentages reconciled with live tree) | Next review: 2026-10-09*
