@@ -13,7 +13,7 @@ status: active
 
 # Current Repository File Tree
 
-> Snapshot of the F1Community repository as of 2026-09-16.
+> Snapshot of the F1Community repository as of 2026-10-02.
 >
 > Generated and machine-local directories are intentionally omitted: `node_modules/`, `.next/`, `dist/`, `build/`, `coverage/`, `.git/`, and local environment files.
 
@@ -28,6 +28,7 @@ F1Community/
 ├── package.json
 ├── postcss.config.js
 ├── README.md
+├── RUN.md (local run guide: install → env → db:admin → dev)
 ├── tailwind.config.js
 ├── tsconfig.json
 │
@@ -125,17 +126,27 @@ F1Community/
 │
 ├── f1storewiki/
 │   ├── ARCHITECTURE.md
+│   ├── COMMUNITY_HUB.md (session notes log)
+│   ├── DATABASE.md (dual-schema guide + onboarding)
 │   ├── DEVELOPMENT.md
 │   ├── F1_API_REFERENCE.md
 │   ├── FIGMA_MCP_SETUP.md
 │   ├── FILE_TREE.md
+│   ├── futureplans.md (parked: AI stakes, real store)
+│   ├── GAPS.md (living audit)
 │   ├── GUIDE.md
+│   ├── LOGIN_DYNAMIC_F1_CONTENT.md
+│   ├── LOGIN_LANDING_PAGE.md
 │   ├── PLAN.md
 │   ├── PROGRESS.md
 │   ├── PROJECT_OVERVIEW.md
-│   ├── README.md
+│   ├── README.md (wiki index)
 │   ├── ROADMAP.md
+│   ├── SECURITY.md
+│   ├── SEO.md
+│   ├── SESSION_MEMORY.md
 │   ├── TASKS.md
+│   ├── WELCOME.md
 │   └── DrawingBoardWiki/
 │       ├── Home.md
 │       ├── Phase-1-Setup.md
@@ -145,7 +156,11 @@ F1Community/
 │       └── Phase-5-State.md
 │
 ├── prisma/
-│   ├── schema.prisma
+│   ├── create-admin.ts (`npm run db:admin` — non-destructive admin upsert)
+│   ├── dev.db (committed starter data; day-to-day edits stay local-only)
+│   ├── migrations/
+│   ├── schema.postgresql.prisma (production)
+│   ├── schema.prisma (SQLite dev)
 │   └── seed.ts
 │
 ├── public/
@@ -170,7 +185,7 @@ F1Community/
 │   ├── imgImage8.png
 │   ├── imgInstagram.svg
 │   ├── imgLogin.png
-│   ├── imgLogoContainer.png
+│   ├── imgLogoF1.png (trimmed mark; imgLogoContainer.png deleted 2026-09-28)
 │   ├── imgRectangle427.png
 │   ├── imgSticker1.png
 │   ├── imgTopLogoGroup.svg
@@ -182,25 +197,55 @@ F1Community/
 │   └── imgYoutube.svg
 │
 └── src/
+    ├── middleware.ts (guests pass everywhere; signed-in /login|/register → /home)
     ├── app/
+    │   ├── actions/auth.ts (registerUser server action)
     │   ├── api/auth/[...nextauth]/route.ts
-    │   ├── globals.css
-    │   ├── layout.tsx
-    │   ├── login/page.tsx
-    │   └── page.tsx
+    │   ├── components-wynn/page.tsx
+    │   ├── drivers/page.tsx
+    │   ├── globals.css (carbon weave + pit tokens + motion)
+    │   ├── home/page.tsx (+ home.css — news hub + race hero)
+    │   ├── layout.tsx (Barlow Condensed/Barlow via next/font)
+    │   ├── login/page.tsx (+ login/login.css)
+    │   ├── new-to-f1/page.tsx (beginner guide)
+    │   ├── news/page.tsx (archive)
+    │   ├── page.tsx (redirects / → /home)
+    │   ├── register/page.tsx
+    │   ├── robots.ts
+    │   ├── schedule/page.tsx (timeline + full calendar)
+    │   ├── sitemap.ts
+    │   ├── standings/page.tsx
+    │   └── teams/page.tsx
     ├── components/
     │   ├── auth/
     │   │   ├── AuthHeader.tsx
     │   │   ├── LoginForm.tsx
-    │   │   └── SocialAuth.tsx
+    │   │   ├── LogoutButton.tsx
+    │   │   ├── RegisterForm.tsx
+    │   │   └── SocialAuth.tsx (OAuth stubs)
+    │   ├── f1/
+    │   │   ├── Countdown.tsx
+    │   │   ├── CountdownBoxes.tsx
+    │   │   ├── MobileMenu.tsx (phone overlay)
+    │   │   ├── NewsCard.tsx (+ getNewsTopic tags)
+    │   │   ├── NewsGridFilter.tsx
+    │   │   ├── NewsTicker.tsx
+    │   │   ├── SessionTimes.tsx (local-first times)
+    │   │   └── SiteNavbar.tsx (+ site-navbar.css)
     │   └── layout/
     │       ├── AppShell.tsx
     │       ├── SiteFooter.tsx
     │       └── SiteHeader.tsx
     └── lib/
-        ├── auth.ts
+        ├── auth.ts (prod NEXTAUTH_SECRET enforced)
+        ├── db.ts
+        ├── f1/
+        │   ├── jolpica.ts (schedule, standings, calendar, timeline)
+        │   ├── news.ts (Sky/BBC RSS + static fallback)
+        │   └── teams.ts (constructorColor map)
+        ├── rate-limit.ts (login/register throttle)
         ├── utils.ts
-        └── validations/auth.ts
+        └── validations/auth.ts (+ auth.test.ts, 7 tests)
 ```
 
 ## Current Login Surface
@@ -210,3 +255,9 @@ F1Community/
 - Auth API: `src/app/api/auth/[...nextauth]/route.ts`
 - Auth configuration: `src/lib/auth.ts`
 - Requested login artwork: `assets/Assets/Images/imgSticker1.png`, served by the page as `/imgSticker1.png`
+
+## Current Routes (2026-10-02)
+
+- `/` → `/home` (public news hub: race-week hero, news ticker, live news, top-10 standings towers)
+- `/news` archive · `/schedule` (session timeline + full season calendar) · `/standings` · `/drivers` · `/teams` · `/new-to-f1` beginner guide
+- `/login`, `/register` (auth pages; signed-in users bounce to `/home` via `src/middleware.ts`)

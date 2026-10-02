@@ -9,14 +9,16 @@
    ========================================================= */
 
 :root {
-  /* Main F1 red — badge, LIVE dot, headings, buttons */
-  --brand-red: #ff1801;
+  /* Main F1 red — badge, LIVE dot, headings, buttons.
+     Single source: the pit-wall token in globals.css. */
+  --brand-red: var(--pit-red);
 
   /* Near-black — dark sections (header, ticker, teams, footer) */
   --black: #000000;
 
-  /* Darkest shade — the page background behind everything */
-  --page-background: #030407;
+  /* Darkest shade — the page background behind everything.
+     Unified with the pit-wall carbon token. */
+  --page-background: var(--pit-carbon);
 
   /* Inside color of the login card */
   --card-background: #06080d;
@@ -76,12 +78,22 @@
 
 .login-logo {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
   height: 42px;
   width: 164px;
-  flex-shrink: 0;
   filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5))
     drop-shadow(0 0 12px rgba(225, 24, 1, 0.45));
   transition: filter 0.2s ease;
+}
+
+.login-logo img,
+.login-footer-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .login-logo:hover {
@@ -582,8 +594,11 @@
 
 .login-footer-logo {
   position: relative;
-  height: 38px;
-  width: 135px;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 150px;
+  height: 40px;
 }
 
 .login-footer-details {

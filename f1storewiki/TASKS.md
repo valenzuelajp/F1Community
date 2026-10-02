@@ -60,6 +60,7 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 | Full-width F1 login landing page | 2026-09-20 | `/` now redirects to `/login`; race-week hero, angular auth card, timing ticker, and partner bar use existing local assets. See `LOGIN_LANDING_PAGE.md`.                                                                                     |
 | Preserve post-login navigation   | 2026-09-20 | Default credentials sign-in now goes to `/home`, avoiding the root-to-login redirect loop.                                                                                                                                                   |
 | Dynamic F1 content on login hero | 2026-09-22 | Badge, race info, per-second countdown, season stats, and auto-adjusting title now come from the real schedule via `src/lib/f1/jolpica.ts` + `src/components/f1/Countdown.tsx` (ISR 1h, static fallback). See `LOGIN_DYNAMIC_F1_CONTENT.md`. |
+| Pit-wall homepage + F1 site pages (all-8) | 2026-10-02 | `/home` pit-wall redesign (tokens, ticker, hero+towers, news, store teaser, a11y) + live `/news` `/schedule` `/standings` `/drivers` `/teams` `/new-to-f1` + navbar/logout/hamburger + login token unify + dead `AuthHeader` removed. Typecheck/tests/lint/build green. |
 
 ---
 
@@ -104,18 +105,18 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 
 | Task                                                         | Label      | Estimate | Dependencies                                                               |
 | ------------------------------------------------------------ | ---------- | -------- | -------------------------------------------------------------------------- |
-| Build F1 Homepage (next race countdown, standings, news)     | P0, f1-web | 4h       | Jolpica client, News client                                                |
-| Build Schedule Page (season calendar, filter by year)        | P0, f1-web | 4h       | Jolpica client, ISR                                                        |
+| Build F1 Homepage (next race countdown, standings, news)     | P0, f1-web | 4h       | ✅ 2026-10-02 — `/home` pit-wall hero + towers + news river live |
+| Build Schedule Page (season calendar, filter by year)        | P0, f1-web | 4h       | ✅ 2026-10-02 — `/schedule` calendar + session timeline live  |
 | Build Race Detail Page (circuit, sessions, results, weather) | P0, f1-web | 5h       | Jolpica client, timezone                                                   |
-| Build Standings Page (Driver + Constructor tables)           | P0, f1-web | 4h       | Jolpica client, historical                                                 |
-| Build Team Profile Pages (info, drivers, car, merch link)    | P1, f1-web | 3h       | Team data, Store link                                                      |
-| Build Driver Profile Pages (bio, stats, season, merch link)  | P1, f1-web | 3h       | Driver data, Store link                                                    |
+| Build Standings Page (Driver + Constructor tables)           | P0, f1-web | 4h       | ✅ 2026-10-02 — `/standings` driver + constructor tables live |
+| Build Team Profile Pages (info, drivers, car, merch link)    | P1, f1-web | 3h       | 🟡 2026-10-02 — `/teams` table live; merch links pending (no store) |
+| Build Driver Profile Pages (bio, stats, season, merch link)  | P1, f1-web | 3h       | 🟡 2026-10-02 — `/drivers` top-20 table live; bios pending |
 | Add structured data (Event, SportsEvent JSON-LD)             | P1, f1-web | 2h       | Schedule, Race pages                                                       |
-| Generate sitemap for F1 routes                               | P1, f1-web | 1h       | Next.js sitemap                                                            |
-| Implement team color theming system (CSS variables)          | P1, f1-web | 2h       | Tailwind config                                                            |
+| Generate sitemap for F1 routes                               | P1, f1-web | 1h       | ✅ robots.ts + sitemap.ts live |
+| Implement team color theming system (CSS variables)          | P1, f1-web | 2h       | ✅ 2026-10-02 — `src/lib/f1/teams.ts` constructorColor() + pit tokens |
 | Create countdown timer component (next race)                 | P1, f1-web | 1h       | ✅ `src/components/f1/Countdown.tsx` built + live on `/login` (2026-09-22) |
-| Create session schedule table component                      | P1, f1-web | 2h       | Race detail                                                                |
-| Create responsive standings table component                  | P1, f1-web | 2h       | Standings page                                                             |
+| Create session schedule table component                      | P1, f1-web | 2h       | ✅ 2026-10-02 — session timeline live on `/schedule` |
+| Create responsive standings table component                  | P1, f1-web | 2h       | ✅ 2026-10-02 — tower tables live on `/home` + `/standings` |
 
 ---
 
@@ -123,17 +124,17 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 
 | Task                                                           | Label      | Estimate | Dependencies               |
 | -------------------------------------------------------------- | ---------- | -------- | -------------------------- |
-| RSS parser for Formula1.com, ESPN, BBC, Sky feeds              | P0, f1-web | 3h       | News client                |
+| RSS parser for Formula1.com, ESPN, BBC, Sky feeds              | P0, f1-web | 3h       | ✅ 2026-10-02 — `src/lib/f1/news.ts` Sky primary + BBC fallback (no key) |
 | RapidAPI client for aggregated news (fallback)                 | P1, f1-web | 2h       | RapidAPI key               |
 | NewsArticle Prisma model + cron job (hourly ingestion)         | P0, f1-web | 3h       | Prisma, cron               |
-| Build News Feed Page (aggregated, categories, search)          | P0, f1-web | 4h       | News data, UI              |
+| Build News Feed Page (aggregated, categories, search)          | P0, f1-web | 4h       | ✅ 2026-10-02 — `/news` archive + `/home` newsroom live |
 | Build Article Detail Page (full view, source, related)         | P0, f1-web | 3h       | News data                  |
 | f1-live-api SSE client with React hooks                        | P0, f1-web | 4h       | Live client                |
 | Build Live Timing Page (leaderboard, gaps, sectors, telemetry) | P0, f1-web | 5h       | SSE client, race detection |
 | Build Race Control Messages feed (penalties, flags)            | P1, f1-web | 3h       | Live client                |
 | Build Weather component (track/air temp, humidity, wind)       | P1, f1-web | 2h       | Live client                |
 | Build Team Radio audio player (live sessions)                  | P2, f1-web | 3h       | Live client                |
-| Build Weekend Hub page (schedule + live + news + standings)    | P0, f1-web | 4h       | All F1 data                |
+| Build Weekend Hub page (schedule + live + news + standings)    | P0, f1-web | 4h       | 🟡 2026-10-02 — `/home` covers it; live-timing still parked |
 | Feature flag: live timing only during active sessions          | P1, f1-web | 1h       | Race detection             |
 | SSE connection management (reconnect, cleanup)                 | P1, f1-web | 2h       | Live client                |
 | Rate limiting handling (100 req/min f1-live-api)               | P1, f1-web | 1h       | Live client                |

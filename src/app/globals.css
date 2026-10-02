@@ -24,7 +24,12 @@
   /* Pit-wall broadcast tokens (step 1): single theme, one skew, live colors. */
   --pit-carbon: #07080b;
   --pit-band: #0b0d12;
-  --pit-surface: #10131a;
+  /* Layered carbon scale (background pass): base gradient + surfaces + cards. */
+  --pit-base: #0d1018;
+  --pit-base-to: #121826;
+  --pit-surface: #141925;
+  --pit-card: #1a2030;
+  --pit-border: rgba(255, 255, 255, 0.08);
   --pit-red: #ff1801;
   --pit-yellow: #ffd12e;
   --pit-green: #3ddc84;
@@ -51,7 +56,8 @@ body {
   min-height: 100vh;
 }
 
-/* Custom Racing Grid Background */
+/* Custom Racing Grid Background — shows fully wherever applied.
+   Decorative only (pointer-events come from the parent layers). */
 .bg-racing-grid {
   background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
@@ -60,13 +66,15 @@ body {
 }
 
 /* Shared page shell (home/news/schedule/standings): base gradient plus
-   carbon weave. Body text always sits on plain surfaces, never on pattern. */
+   carbon weave plus a fine film-grain texture (data URI, ~4% opacity).
+   Body text always sits on plain surfaces, never on pattern. */
 .page {
   position: relative;
   flex: 1 1 0%;
   overflow: hidden;
   background-color: #07080b;
   background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
     linear-gradient(180deg, #0b0d12 0%, #07080b 34rem),
     repeating-linear-gradient(
       45deg,

@@ -361,52 +361,8 @@
   transform: scale(1.02);
 }
 
-/* ==========================================================================
-   Auth Header (AuthHeader.tsx)
-   ========================================================================== */
-
-.auth-header-wrap {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.auth-header-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem 0.875rem;
-  border-radius: 9999px;
-  background-color: rgba(69, 10, 10, 0.6);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.auth-header-title {
-  font-size: 1.875rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  color: #ffffff;
-}
-
-@media (min-width: 640px) {
-  .auth-header-title {
-    font-size: 2.25rem;
-  }
-}
-
-.auth-header-subtitle {
-  font-size: 0.875rem;
-  color: #9ca3af;
-  max-width: 24rem;
-  margin: 0 auto;
-}
+/* Auth Header styles removed with dead AuthHeader.tsx (Task 8).
+   The components-wynn demo page keeps its own local copies. */
 
 .auth-tab-switcher {
   display: grid;

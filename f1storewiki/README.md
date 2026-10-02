@@ -47,7 +47,7 @@ tracking progress, plans, decisions, and tasks.
 | [[ARCHITECTURE\|Architecture Decisions (ADR)]] | Technical decisions and rationale (ADR log) |
 | [[DEVELOPMENT\|Development Guidelines]] | Coding standards, workflows, and conventions |
 | [[SECURITY\|🛡️ Security Plan]] | Threat model, implemented auth controls, staged hardening checklist |
-| [[DATABASE\|🗄️ Database Guide]] | How the Neon + Prisma database works and how to control it |
+| [[DATABASE\|🗄️ Database Guide]] | SQLite dev DB (ships in clone) + Neon prod via Prisma dual schema; onboarding + run guide |
 | [[SEO\|🔍 SEO Plan]] | Metadata strategy, robots/sitemap, OG cards, checklist |
 | [[FILE_TREE\|Current File Tree]] | Current repository folders and files |
 | [[F1_API_REFERENCE\|F1 API Reference]] | Formula 1 data sources, endpoints, and integration patterns |
@@ -93,14 +93,11 @@ graph LR
 ## Quick Status
 
 > [!important] Snapshot
-> - **Last Updated**: 2026-09-23
-> - **Current Phase**: Phase 0 - Foundation (~50%)
-> - **Active Sprint**: Auth Completion + Foundation Cleanup
-> - **Latest**: DB-backed login + `/register` live in code; `/login` hero runs live F1
->   schedule data with time-zone-aware countdown; wiki expanded with [[WELCOME|Welcome]],
->   [[SEO|SEO Plan]], and [[GAPS|Gaps Audit]].
-> - **Open (P0)**: rate-limit auth, prod secret policy, demo-credential leak, robots/sitemap,
->   `pnpm lint` config mismatch — all tracked in [[GAPS|Gaps]].
+> - **Last Updated**: 2026-10-02
+> - **Current Phase**: Phase 0 - Foundation (~90%)
+> - **Active Sprint**: F1 website live (schedule/standings/news on real data) + wiki-sync
+> - **Latest**: pit-wall broadcast redesign of `/home` (ticker, race hero, live news, top-10 towers); new `/news` `/schedule` `/standings` `/drivers` `/teams` `/new-to-f1` pages; SQLite clone-and-go dev DB (`db:admin`); auth hardening (rate limits, secret policy, E2E-proven).
+> - **Open (P0)**: CSP/security headers, OAuth providers, password reset, og-image/favicon — tracked in [[GAPS|Gaps]].
 
 ---
 
@@ -127,4 +124,4 @@ After completing any significant work:
 
 ---
 
-*This wiki is maintained alongside the codebase. Keep it current! · Last updated: 2026-09-23*
+*This wiki is maintained alongside the codebase. Keep it current! · Last updated: 2026-10-02*
