@@ -51,14 +51,14 @@ export default async function LoginPage() {
           ===================================================================== */}
       <header className="login-header">
         <div className="login-header-inner">
-          {/* F1 Official Logo */}
+          {/* Original wordmark */}
           <Link href="/login" className="login-logo" aria-label="Formula 1 Login">
             <Image
               src="/imgLogoF1.png"
-              alt="Formula 1 Logo"
-              fill
+              alt="Formula 1"
+              width={164}
+              height={42}
               sizes="(max-width: 640px) 164px, (max-width: 1024px) 172px, 188px"
-              className="object-contain object-left"
               priority
             />
           </Link>
@@ -476,12 +476,7 @@ export default async function LoginPage() {
           {/* Brand Column */}
           <div className="login-footer-brand">
             <div className="login-footer-logo">
-              <Image
-                src="/imgLogoF1.png"
-                alt="Formula 1 Logo"
-                fill
-                className="object-contain object-left"
-              />
+              <Image src="/imgLogoF1.png" alt="Formula 1" width={150} height={40} />
             </div>
             <span className="login-footer-details">[Details]</span>
             <div className="login-footer-socials">

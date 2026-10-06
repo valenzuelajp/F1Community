@@ -1,5 +1,5 @@
-import Image from "next/image";
 import type { F1NewsItem } from "@/lib/f1/news";
+import { NewsImage } from "@/components/f1/NewsImage";
 
 /** "2026-09-28T05:00:00.000Z" -> "28 Sep 2026" (UTC, stable for SSR). */
 export function formatNewsDate(iso: string): string {
@@ -46,22 +46,13 @@ export function NewsCard({ item }: { item: F1NewsItem }) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      {item.image ? (
-        <div className="news-card__media">
-          <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover"
-            loading="lazy"
-          />
-        </div>
-      ) : (
-        <div className="news-card__noimg" aria-hidden="true">
-          <span>{item.source}</span>
-        </div>
-      )}
+      <NewsImage
+        src={item.image}
+        alt={item.title}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        fallbackLabel={item.source}
+        mediaClassName="news-card__media"
+      />
       <div className="news-card__body">
         <p className="news-card__meta">
           <span className="topic-chip">{getNewsTopic(item.title)}</span>

@@ -35,14 +35,14 @@ const pitBody = Barlow({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://f1store.com'),
   title: {
-    default: 'F1Store - Official Formula 1 Merchandise',
-    template: '%s | F1Store',
+    default: 'F1 Store - Official Formula 1 Merchandise',
+    template: '%s | F1 Store',
   },
   description: 'Shop official Formula 1 team and driver merchandise. Authentic F1 apparel, accessories, and collectibles from top constructors.',
   keywords: ['Formula 1', 'F1', 'merchandise', 'racing', 'team merchandise', 'driver merchandise', 'F1 apparel', 'F1 collectibles'],
-  authors: [{ name: 'F1Store' }],
-  creator: 'F1Store',
-  publisher: 'F1Store',
+  authors: [{ name: 'F1 Store' }],
+  creator: 'F1 Store',
+  publisher: 'F1 Store',
   robots: 'index, follow',
   icons: {
     icon: '/icon.png',
@@ -55,21 +55,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://f1store.com',
-    siteName: 'F1Store',
-    title: 'F1Store - Official Formula 1 Merchandise',
+    siteName: 'F1 Store',
+    title: 'F1 Store - Official Formula 1 Merchandise',
     description: 'Shop official Formula 1 team and driver merchandise. Authentic F1 apparel, accessories, and collectibles.',
     images: [
       {
         url: 'https://f1store.com/icon.png',
         width: 800,
         height: 800,
-        alt: 'F1Store - Official Formula 1 Merchandise',
+        alt: 'F1 Store - Official Formula 1 Merchandise',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'F1Store - Official Formula 1 Merchandise',
+    title: 'F1 Store - Official Formula 1 Merchandise',
     description: 'Shop official Formula 1 team and driver merchandise. Authentic F1 apparel, accessories, and collectibles.',
     images: ['https://f1store.com/icon.png'],
   },
@@ -97,14 +97,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className="flex min-h-screen flex-col bg-[#0b0e14]">
+      <body className="flex min-h-screen flex-col bg-pit-carbon">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Organization',
-              name: 'F1Store',
+              name: 'F1 Store',
               url: 'https://f1store.com',
               logo: 'https://f1store.com/icon.png',
               description: 'Official Formula 1 merchandise store. Authentic F1 apparel, accessories, and collectibles.',
@@ -117,7 +117,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
-              name: 'F1Store',
+              name: 'F1 Store',
               url: 'https://f1store.com',
               potentialAction: {
                 '@type': 'SearchAction',

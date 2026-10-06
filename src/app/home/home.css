@@ -195,37 +195,7 @@
   max-width: 72rem;
 }
 
-/* ==========================================================================
-   Maximalist split: race intel left, newsroom right (wide screens only).
-   Below 1280px the columns stack in document order (hero, then news).
-   ========================================================================== */
-
-@media (min-width: 1280px) {
-  .pit-split {
-    display: grid;
-    grid-template-columns: 7fr 6fr;
-    align-items: start;
-  }
-
-  .pit-split__race .race-hero__inner,
-  .pit-split__news .home-section__inner {
-    max-width: none;
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  .pit-split__news {
-    border-left: 1px solid var(--pit-line);
-  }
-
-  .pit-split__news .news-top {
-    grid-template-columns: 1fr;
-  }
-
-  .pit-split__news .news-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/* Wide screens: single column flow (hero, towers, full-width news). */
 
 .news-top {
   display: grid;
@@ -353,19 +323,6 @@
   background:
     linear-gradient(135deg, rgba(255, 24, 1, 0.12), rgba(255, 255, 255, 0.02) 60%),
     rgba(255, 255, 255, 0.03);
-}
-
-.news-card__noimg {
-  display: flex;
-  aspect-ratio: 16 / 10;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgba(255, 24, 1, 0.15), rgba(255, 255, 255, 0.03));
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #f87171;
 }
 
 .news-card__body {
@@ -811,7 +768,7 @@
 .race-hero__inner {
   margin: 0 auto;
   width: 100%;
-  max-width: 64rem;
+  max-width: 1240px;
   padding: 3rem 1.5rem 2.5rem;
 }
 
@@ -1118,111 +1075,7 @@ a.news-hero:hover .news-hero__title {
   overflow: hidden;
 }
 
-/* ------------------------------------------------------------------ */
-/* Step 5: championship towers (drivers + constructors mini-tower)     */
-/* ------------------------------------------------------------------ */
-
-.tower-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
-  margin-top: 2rem;
-  text-align: left;
-}
-
-.tower__heading {
-  font-family: var(--font-pit-display), sans-serif;
-  font-style: italic;
-  font-weight: 800;
-  font-size: 1.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--pit-text);
-}
-
-.tower__list {
-  list-style: none;
-  margin: 1rem 0 0;
-  padding: 0;
-}
-
-.tower__row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0.5rem;
-  border-bottom: 1px solid var(--pit-line);
-}
-
-.tower__pos {
-  flex: 0 0 auto;
-  width: 3rem;
-  font-family: var(--font-pit-display), sans-serif;
-  font-style: italic;
-  font-weight: 900;
-  font-size: 2rem;
-  line-height: 1;
-  color: var(--pit-text);
-}
-
-.tower__who {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.tower__code {
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  color: var(--pit-ink);
-}
-
-.tower__name {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 0.875rem;
-  color: var(--pit-muted);
-}
-
-.tower__meta {
-  flex: 0 0 auto;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.tower__points {
-  display: block;
-  font-weight: 700;
-  color: var(--pit-ink);
-}
-
-.tower__gap {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--pit-muted);
-}
-
-.tower__link {
-  display: inline-block;
-  margin-top: 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--pit-red);
-  text-decoration: none;
-}
-
-.tower__link:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.25rem;
-}
-
-@media (min-width: 1024px) {
-  .tower-grid {
-    grid-template-columns: 7fr 5fr;
-    align-items: start;
-  }
-}
+/* Home standings towers live only in the race hero now — no tower-section CSS. */
 
 /* ==========================================================================
    Pit-wall mockup pass: container, titles, badge, ticker, hero, team
@@ -1286,6 +1139,11 @@ a.news-hero:hover .news-hero__title {
 /* Alternate-section band. */
 .home-section--band {
   background-color: rgba(255, 255, 255, 0.015);
+}
+
+/* Standings towers sit on the surface shade; news sits on the base. */
+.home-section--surface {
+  background-color: var(--pit-surface);
 }
 
 /* ---- Ticker: red LATEST tag, red-to-yellow underline ---- */
@@ -1362,22 +1220,10 @@ a.news-hero:hover .news-hero__title {
   }
 }
 
-/* ---- Hero: two columns at 960px, hairline grid, red session row ---- */
+/* ---- Hero: two columns at 960px, red session row ----
+   (Hero grid comes from .bg-racing-grid on the section — fully shown.) */
 .race-hero {
   position: relative;
-}
-
-.race-hero::before {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  -webkit-mask-image: linear-gradient(180deg, black 0, transparent 14rem);
-  mask-image: linear-gradient(180deg, black 0, transparent 14rem);
 }
 
 .race-hero__inner {
@@ -1386,10 +1232,17 @@ a.news-hero:hover .news-hero__title {
   gap: 2rem;
 }
 
+@media (min-width: 640px) {
+  .race-hero__inner {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
 @media (min-width: 960px) {
   .race-hero__inner {
     grid-template-columns: 7fr 5fr;
-    align-items: start;
+    align-items: stretch;
   }
 }
 
@@ -1434,6 +1287,7 @@ a.news-hero:hover .news-hero__title {
 
 .team-bar__track {
   height: 0.5rem;
+  min-width: 4rem;
   background-color: rgba(255, 255, 255, 0.08);
   overflow: hidden;
 }
@@ -1483,7 +1337,7 @@ a.news-hero:hover .news-hero__title {
   }
 }
 
-/* ---- Footer: checker divider, store note ---- */
+/* ---- Footer: checker divider, store teaser ---- */
 .pit-footer {
   border-top: 1px solid var(--pit-line);
 }
@@ -1502,9 +1356,247 @@ a.news-hero:hover .news-hero__title {
   background-size: 20px 20px;
 }
 
-.pit-footer__note {
-  margin-top: 1rem;
+/* Slimmer reuse of the footer checker as a section divider. */
+.checker--slim {
+  height: 6px;
+  opacity: 0.6;
+}
+
+.pit-footer__title {
+  margin-top: 1.5rem;
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--pit-text);
+}
+
+.pit-footer__sub {
+  margin-top: 0.5rem;
   font-size: 0.875rem;
   color: var(--pit-muted);
-  text-align: left;
+}
+
+.shop-teaser {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.shop-card {
+  display: block;
+  border-radius: 0.5rem;
+  border: 1px solid var(--pit-line);
+  background: var(--pit-surface);
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.shop-card:hover {
+  border-color: var(--pit-red);
+}
+
+.shop-card__eyebrow {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pit-muted);
+}
+
+.shop-card__name {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--pit-text);
+}
+
+@media (min-width: 640px) {
+  .shop-teaser {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .shop-teaser {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Relocation badge inside the hero circuit line (yellow = alert). */
+.race-hero__relocated {
+  color: var(--pit-yellow);
+  font-weight: 800;
+}
+
+/* Image states: red shimmer while a remote photo loads, branded fallback
+   when the URL is missing or the download fails. Never an empty box. */
+.news-media--loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.news-media--loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 24, 1, 0.06) 30%,
+    rgba(255, 24, 1, 0.22) 50%,
+    rgba(255, 24, 1, 0.06) 70%
+  );
+  background-size: 200% 100%;
+  animation: news-media-shimmer 1.6s linear infinite;
+}
+
+@keyframes news-media-shimmer {
+  from {
+    background-position: 180% 0;
+  }
+  to {
+    background-position: -80% 0;
+  }
+}
+
+.news-media--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 24, 1, 0.28), rgba(255, 24, 1, 0.06) 55%, rgba(255, 255, 255, 0.03));
+}
+
+.news-media__fallback-label {
+  position: relative;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f87171;
+}
+
+/* Abstract racing-line brand device (TrackLine component).
+   Decorative layers only: behind content, never intercepting taps. */
+.race-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.race-hero__track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.news-media--fallback {
+  position: relative;
+  overflow: hidden;
+}
+
+.news-fallback__track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-media--loading::before {
+    animation: none;
+  }
+}
+
+/* Item 2: data-driven hero glows. Colors arrive via inline style from live
+   standings; these classes only position the layers behind the content
+   (pointer-events: none, no blur filters). */
+.page__glow--leader {
+  pointer-events: none;
+  position: absolute;
+  left: -12rem;
+  top: -12rem;
+  height: 36rem;
+  width: 36rem;
+  border-radius: 9999px;
+}
+
+.page__glow--red {
+  pointer-events: none;
+  position: absolute;
+  right: -12rem;
+  top: -8rem;
+  height: 30rem;
+  width: 30rem;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 24, 1, 0.1),
+    transparent
+  );
+}
+
+/* Glossary chips: touch-first term explainers. The readout panel flows in
+   normal layout (never absolutely positioned) so it always wraps at 390px. */
+.gloss {
+  margin-top: 1rem;
+}
+
+.gloss-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gloss-term {
+  border: 1px solid var(--pit-line);
+  border-radius: 9999px;
+  background: transparent;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--pit-muted);
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.gloss-term:hover {
+  border-color: var(--pit-red);
+  color: var(--pit-text);
+}
+
+.gloss-term--open {
+  border-color: var(--pit-red);
+  color: #ffffff;
+  background: rgba(255, 24, 1, 0.14);
+}
+
+.gloss-term:focus-visible {
+  outline: 2px solid var(--pit-red);
+  outline-offset: 2px;
+}
+
+.gloss-tip {
+  margin: 0.75rem 0 0;
+  border-left: 3px solid var(--pit-red);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--pit-text);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.gloss-tip__term {
+  color: #ffffff;
 }

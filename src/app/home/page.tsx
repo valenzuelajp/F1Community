@@ -1,12 +1,14 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { CountdownBoxes } from '@/components/f1/CountdownBoxes';
+import { GlossaryTerms } from '@/components/f1/GlossaryTerms';
+import { NewsImage } from '@/components/f1/NewsImage';
 import { SessionTimes } from '@/components/f1/SessionTimes';
 import { SiteNavbar } from '@/components/f1/SiteNavbar';
 import { formatNewsShortDate, getNewsTopic } from '@/components/f1/NewsCard';
 import { NewsGridFilter } from '@/components/f1/NewsGridFilter';
 import { NewsTicker } from '@/components/f1/NewsTicker';
+import { TrackLine } from '@/components/f1/TrackLine';
 import { getConstructorStandings, getNextF1Event, getTopDrivers } from '@/lib/f1/jolpica';
 import { constructorColor } from '@/lib/f1/teams';
 import { getTopNews } from '@/lib/f1/news';
@@ -60,10 +62,30 @@ export default async function MemberHomePage() {
     getConstructorStandings(5).catch(() => []),
   ]);
 
+  function hexToRgba(hex: string, alpha: number): string {
+    const h = hex.replace('#', '');
+    return `rgba(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)}, ${alpha})`;
+  }
+  const leaderColor = constructorColor(topConstructors[0]?.name ?? '');
+
   return (
     <main className="page font-pit-body selection:bg-pit-red selection:text-white">
-      {/* Background radial glow */}
-      <div className="page__glow" />
+      {/* Background glows (Item 2): leader team color top-left + red top-right,
+          computed server-side from live standings. Static red fallback. */}
+      {topConstructors.length > 0 ? (
+        <>
+          <div
+            className="page__glow--leader"
+            aria-hidden="true"
+            style={{
+              background: `radial-gradient(closest-side, ${hexToRgba(leaderColor, 0.12)}, transparent)`,
+            }}
+          />
+          <div className="page__glow--red" aria-hidden="true" />
+        </>
+      ) : (
+        <div className="page__glow" />
+      )}
 
       <SiteNavbar />
 
@@ -77,11 +99,10 @@ export default async function MemberHomePage() {
         isLive={event.isLive}
       />
 
-      {/* Maximalist split: race intel left, newsroom right (stacked below 1280px) */}
-      <div className="pit-split">
-        <div className="pit-split__race">
       {/* Race-week hero: badge + title + countdown, top-5 tower + team bars */}
-      <section className="race-hero">
+      <section className="race-hero bg-racing-grid">
+        {/* Abstract racing line — brand device, not a real circuit. */}
+        <TrackLine className="race-hero__track" />
         <div className="race-hero__inner">
           <span className="race-hero__roundbg" aria-hidden="true">
             {event.round}
@@ -90,6 +111,11 @@ export default async function MemberHomePage() {
             <p className="round-badge">Round {event.round}</p>
             <h1 className="race-hero__title">{event.raceName}</h1>
             <p className="race-hero__circuit">
+              {event.relocatedLabel ? (
+                <span className="race-hero__relocated">
+                  {event.relocatedLabel} ·{" "}
+                </span>
+              ) : null}
               {event.circuitName} · {event.locality}, {event.country}
             </p>
             {event.isLive ? (
@@ -107,6 +133,7 @@ export default async function MemberHomePage() {
             {event.sessions.length > 0 ? (
               <SessionTimes sessions={event.sessions} />
             ) : null}
+            <GlossaryTerms terms={['DRS', 'Qualifying', 'Sprint', 'Pole', 'Gap']} />
           </div>
           {topDrivers.length > 0 ? (
             <aside className="race-hero__tower" aria-label="Top 5 drivers">
@@ -123,7 +150,7 @@ export default async function MemberHomePage() {
                       <span className="race-hero__tower-pos">{driver.position}</span>
                       <span className="race-hero__tower-code">{driver.code}</span>
                       <span className="race-hero__tower-gap">
-                        {gap <= 0 ? '—' : `+${gap}`}
+                        {gap <= 0 ? `${driver.points} pts` : `+${gap} · ${driver.points} pts`}
                       </span>
                     </li>
                   );
@@ -162,10 +189,9 @@ export default async function MemberHomePage() {
           ) : null}
         </div>
       </section>
-        </div>
-        <div className="pit-split__news">
+      <div className="checker checker--slim" aria-hidden="true" />
       {/* Newsroom */}
-      <section id="news" className="home-section home-section--band">
+      <section id="news" className="home-section">
         <div className="pit-container">
           <h2 className="section-title">F1 newsroom</h2>
           {news.length > 0 ? (
@@ -177,17 +203,13 @@ export default async function MemberHomePage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {news[0].image ? (
-                    <div className="news-hero__media">
-                      <Image
-                        src={news[0].image}
-                        alt=""
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 48rem"
-                        className="object-cover"
-                      />
-                    </div>
-                  ) : null}
+                  <NewsImage
+                    src={news[0].image}
+                    alt={news[0].title}
+                    sizes="(max-width: 1024px) 100vw, 48rem"
+                    fallbackLabel={news[0].source}
+                    mediaClassName="news-hero__media"
+                  />
                   <p className="news-card__meta">
                     <span className="topic-chip">{getNewsTopic(news[0].title)}</span>
                     {news[0].source}
@@ -222,83 +244,39 @@ export default async function MemberHomePage() {
           )}
         </div>
       </section>
-        </div>
-      </div>
 
-      {/* Standings Tower */}
-      <section id="drivers" className="home-section">
-        <div className="pit-container">
-          <h2 className="section-title">Standings</h2>
-          <div className="tower-grid">
-            <div className="tower">
-              <h3 className="tower__heading">Drivers</h3>
-              {topDrivers.length > 0 ? (
-                <ol className="tower__list">
-                  {topDrivers.map((driver) => {
-                    const gap = (topDrivers[0]?.points ?? driver.points) - driver.points;
-                    return (
-                      <li
-                        key={driver.code}
-                        className="tower__row"
-                        style={{ boxShadow: `inset 3px 0 0 ${constructorColor(driver.team)}` }}
-                      >
-                        <span className="tower__pos">{driver.position}</span>
-                        <span className="tower__who">
-                          <span className="tower__code">{driver.code}</span>
-                          <span className="tower__name">{driver.name}</span>
-                        </span>
-                        <span className="tower__meta">
-                          <span className="tower__points">{driver.points} pts</span>
-                          <span className="tower__gap">{gap === 0 ? '—' : `-${gap}`}</span>
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ol>
-              ) : (
-                <p className="home-muted">Standings unavailable right now.</p>
-              )}
-              <a className="tower__link" href="/standings">
-                Full standings
-              </a>
-            </div>
-            <div className="tower tower--mini">
-              <h3 className="tower__heading">Constructors</h3>
-              {topConstructors.length > 0 ? (
-                <ol className="tower__list">
-                  {topConstructors.map((team) => {
-                    const gap = (topConstructors[0]?.points ?? team.points) - team.points;
-                    return (
-                      <li
-                        key={team.name}
-                        className="tower__row"
-                        style={{ boxShadow: `inset 3px 0 0 ${constructorColor(team.name)}` }}
-                      >
-                        <span className="tower__pos">{team.position}</span>
-                        <span className="tower__who">
-                          <span className="tower__name">{team.name}</span>
-                        </span>
-                        <span className="tower__meta">
-                          <span className="tower__points">{team.points} pts</span>
-                          <span className="tower__gap">{gap === 0 ? '—' : `-${gap}`}</span>
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ol>
-              ) : (
-                <p className="home-muted">Standings unavailable right now.</p>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
+      {/* Footer: store teaser (real teams/drivers, cross-links, no fake routes) */}
       <footer className="pit-footer">
         <div className="pit-container">
           <div className="checker" aria-hidden="true" />
-          <p className="pit-footer__note">Store coming soon.</p>
+          <h2 className="pit-footer__title">Team shop teaser</h2>
+          <p className="pit-footer__sub">
+            Official kits land here first — meet the front-runners while the shelves stock up.
+          </p>
+          <div className="shop-teaser">
+            {topConstructors.slice(0, 2).map((team) => (
+              <a
+                key={team.name}
+                href="/teams"
+                className="shop-card"
+                style={{ boxShadow: `inset 3px 0 0 0 ${constructorColor(team.name)}` }}
+              >
+                <span className="shop-card__eyebrow">Team kit · coming soon</span>
+                <span className="shop-card__name">{team.name}</span>
+              </a>
+            ))}
+            {topDrivers.slice(0, 2).map((driver) => (
+              <a
+                key={driver.code}
+                href="/drivers"
+                className="shop-card"
+                style={{ boxShadow: `inset 3px 0 0 0 ${constructorColor(driver.team)}` }}
+              >
+                <span className="shop-card__eyebrow">Driver cap · coming soon</span>
+                <span className="shop-card__name">{driver.name}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </footer>
     </main>

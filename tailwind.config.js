@@ -15,7 +15,11 @@ module.exports = {
         pit: {
           carbon: '#07080b',
           band: '#0b0d12',
-          surface: '#10131a',
+          base: '#0d1018',
+          baseTo: '#121826',
+          surface: '#141925',
+          card: '#1a2030',
+          border: 'rgba(255,255,255,.08)',
           red: '#ff1801',
           yellow: '#ffd12e',
           green: '#3ddc84',

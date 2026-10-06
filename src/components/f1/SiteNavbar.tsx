@@ -28,10 +28,10 @@ export function SiteNavbar() {
         <Link href="/home" className="site-navbar__logo" aria-label="F1 Store home">
           <Image
             src="/imgLogoF1.png"
-            alt="Formula 1 Logo"
-            fill
+            alt="F1 Store"
+            width={145}
+            height={40}
             sizes="(max-width: 640px) 116px, (max-width: 1024px) 130px, 145px"
-            className="object-contain object-left"
             priority
           />
         </Link>
