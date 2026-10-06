@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { TrackLine } from "./TrackLine";
 
@@ -26,6 +26,20 @@ export function NewsImage({
   mediaClassName: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Reset per photo; a hung download (no load AND no error) falls back
+  // after 10s so the shimmer can never spin forever.
+  useEffect(() => {
+    setFailed(false);
+    setLoaded(false);
+  }, [src]);
+
+  useEffect(() => {
+    if (!src || loaded || failed) return;
+    const id = setTimeout(() => setFailed(true), 10000);
+    return () => clearTimeout(id);
+  }, [src, loaded, failed]);
 
   if (!src || failed) {
     return (
@@ -45,6 +59,7 @@ export function NewsImage({
         sizes={sizes}
         className="object-cover"
         loading="lazy"
+        onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
       />
     </div>

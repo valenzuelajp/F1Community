@@ -38,6 +38,28 @@
   --pit-line: #1f242e;
   --pit-skew: -8deg;
   --pit-skew-bars: -14deg;
+  /* Maximalist re-skin tokens (new system; pit-* stays for login). */
+  --max-ground: #0d0e13;
+  --max-panel: #171923;
+  --max-line: #2c2f3d;
+  --max-cream: #f5f0e6;
+  --max-muted: #b8b3a7;
+  --max-red: #ff2d1f;
+  --max-yellow: #ffd60a;
+  --max-teal: #19e3c7;
+}
+
+/* Chequer divider strip (22px per spec): repeating squares, no images. */
+.chequer {
+  height: 22px;
+  background: repeating-conic-gradient(var(--max-cream) 0 25%, var(--max-ground) 0 50%);
+  background-size: 22px 22px;
+}
+
+/* Display-only red outline type (large sizes only — unreadable small). */
+.text-outline-red {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--max-red);
 }
 
 html {
@@ -52,7 +74,7 @@ html::-webkit-scrollbar {
 body {
   color: #e5e7eb;
   background-color: #0b0e14;
-  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-max-body), var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
 }
 
@@ -70,6 +92,9 @@ body {
    Body text always sits on plain surfaces, never on pattern. */
 .page {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   flex: 1 1 0%;
   overflow: hidden;
   background-color: #07080b;

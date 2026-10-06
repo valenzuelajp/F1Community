@@ -34,13 +34,22 @@ function stripCdata(value: string): string {
   return value.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").trim();
 }
 
-function decodeEntities(value: string): string {
+/** Decodes HTML entities in RSS titles/descriptions (exported for unit tests). */
+export function decodeEntities(value: string): string {
   return value
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'");
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&[lr]squo;/g, "'")
+    .replace(/&[lr]dquo;/g, '"')
+    .replace(/&[mn]dash;/g, "-")
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex: string) =>
+      String.fromCodePoint(parseInt(hex, 16)),
+    );
 }
 
 function plainText(html: string, maxLen = 160): string {

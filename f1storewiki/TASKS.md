@@ -61,6 +61,7 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 | Preserve post-login navigation   | 2026-09-20 | Default credentials sign-in now goes to `/home`, avoiding the root-to-login redirect loop.                                                                                                                                                   |
 | Dynamic F1 content on login hero | 2026-09-22 | Badge, race info, per-second countdown, season stats, and auto-adjusting title now come from the real schedule via `src/lib/f1/jolpica.ts` + `src/components/f1/Countdown.tsx` (ISR 1h, static fallback). See `LOGIN_DYNAMIC_F1_CONTENT.md`. |
 | Pit-wall homepage + F1 site pages (all-8) | 2026-10-02 | `/home` pit-wall redesign (tokens, ticker, hero+towers, news, store teaser, a11y) + live `/news` `/schedule` `/standings` `/drivers` `/teams` `/new-to-f1` + navbar/logout/hamburger + login token unify + dead `AuthHeader` removed. Typecheck/tests/lint/build green. |
+| Wordmark → logo revert + atmosphere pass | 2026-10-02 | Text wordmark built then reverted per user call: official `imgLogoF1.png` restored at 5 sites, `Wordmark.tsx` + CSS deleted. Background 10/10 (layered carbon, leader-color glow, grid mask→full grid, TrackLine SVG, section rhythm, grain, tooltips, 1240px alignment, contrast pass). Homepage simplified after: strip removed, `#drivers` towers section removed, Top-5 shows points. COMMUNITY_HUB rows 92–95 (92 superseded by revert row). |
 
 ---
 
@@ -105,7 +106,7 @@ This board tracks all actionable work. Tasks flow: **Backlog → Ready → In Pr
 
 | Task                                                         | Label      | Estimate | Dependencies                                                               |
 | ------------------------------------------------------------ | ---------- | -------- | -------------------------------------------------------------------------- |
-| Build F1 Homepage (next race countdown, standings, news)     | P0, f1-web | 4h       | ✅ 2026-10-02 — `/home` pit-wall hero + towers + news river live |
+| Build F1 Homepage (next race countdown, standings, news)     | P0, f1-web | 4h       | ✅ 2026-10-02 — `/home` pit-wall hero + news live (full towers section later removed; hero Top-5 + Full-standings link kept) |
 | Build Schedule Page (season calendar, filter by year)        | P0, f1-web | 4h       | ✅ 2026-10-02 — `/schedule` calendar + session timeline live  |
 | Build Race Detail Page (circuit, sessions, results, weather) | P0, f1-web | 5h       | Jolpica client, timezone                                                   |
 | Build Standings Page (Driver + Constructor tables)           | P0, f1-web | 4h       | ✅ 2026-10-02 — `/standings` driver + constructor tables live |

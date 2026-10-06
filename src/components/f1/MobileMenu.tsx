@@ -6,10 +6,10 @@ import { LogoutButton } from "@/components/auth/LogoutButton";
 import { NAV_LINKS } from "./SiteNavbar";
 
 /**
- * Phones-only hamburger menu (<640px) for the site navbar.
+ * Hamburger menu below 900px for the site navbar.
  * Opens a dropdown panel directly below the bar with the section
  * links and the Log out button.
- * Desktop keeps the inline links row, so this renders nothing there.
+ * 900px and up keep the inline links row, so this renders nothing there.
  *
  * NOTE: the panel is position:absolute (NOT fixed) on purpose — the
  * navbar uses backdrop-filter, which traps fixed descendants inside

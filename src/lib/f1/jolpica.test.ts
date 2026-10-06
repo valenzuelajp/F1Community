@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { describeRace, type JRace } from "./jolpica";
+import {
+  describeRace,
+  shouldShowPodium,
+  type JRace,
+} from "./jolpica";
 
 /** Relocated round fixture: 2026 Bahrain GP at Sepang (round 16). */
 const bahrain2026: JRace = {
@@ -43,5 +47,37 @@ describe("describeRace", () => {
     const display = describeRace(singapore2026);
     expect(display.title).toBe("Singapore Grand Prix");
     expect(display.relocatedLabel).toBeNull();
+  });
+});
+
+describe("shouldShowPodium", () => {
+  const HOUR = 3600000;
+  const DAY = 24 * HOUR;
+  // Sepang lights-out + the 3h live window = moment the podium takes over.
+  const end = Date.parse("2026-10-04T15:00:00Z");
+  const singaporeFp1 = Date.parse("2026-10-09T09:00:00Z");
+
+  it("stays on countdown before the race", () => {
+    expect(shouldShowPodium(end - 2 * DAY, end, singaporeFp1)).toBe(false);
+  });
+
+  it("stays live-owned while the race is running", () => {
+    expect(shouldShowPodium(end - HOUR, end, singaporeFp1)).toBe(false);
+  });
+
+  it("celebrates the podium after the race", () => {
+    expect(shouldShowPodium(end + 2 * DAY, end, singaporeFp1)).toBe(true);
+  });
+
+  it("rolls over to the next round once the window expires", () => {
+    expect(shouldShowPodium(end + 8 * DAY, end, null)).toBe(false);
+  });
+
+  it("rolls over as soon as the next weekend starts", () => {
+    expect(shouldShowPodium(end + 2 * DAY, end, end + DAY)).toBe(false);
+  });
+
+  it("needs no next-weekend info to celebrate inside the window", () => {
+    expect(shouldShowPodium(end + 2 * DAY, end, null)).toBe(true);
   });
 });

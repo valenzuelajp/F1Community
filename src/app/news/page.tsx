@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { SiteNavbar } from "@/components/f1/SiteNavbar";
+import { SiteTicker } from "@/components/f1/SiteTicker";
+import { SiteFooter } from "@/components/f1/SiteFooter";
 import { NewsCard } from "@/components/f1/NewsCard";
 import { getTopNews } from "@/lib/f1/news";
 import "../home/home.css";
@@ -28,6 +30,7 @@ export default async function NewsPage() {
     <main className="page font-sans selection:bg-[#ff1801] selection:text-white">
       <div className="page__glow" />
       <SiteNavbar />
+      <SiteTicker />
       <section className="home-section">
         <div className="home-section__inner home-section__inner--wide">
           <p className="home-section__eyebrow">Archive</p>
@@ -46,6 +49,7 @@ export default async function NewsPage() {
           )}
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }

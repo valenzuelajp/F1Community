@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { SiteNavbar } from "@/components/f1/SiteNavbar";
+import { SiteTicker } from "@/components/f1/SiteTicker";
+import { SiteFooter } from "@/components/f1/SiteFooter";
 import { Countdown } from "@/components/f1/Countdown";
 import { getNextF1Event, getSeasonCalendar } from "@/lib/f1/jolpica";
 import "../home/home.css";
@@ -53,6 +55,7 @@ export default async function SchedulePage() {
     <main className="page font-sans selection:bg-[#ff1801] selection:text-white">
       <div className="page__glow" />
       <SiteNavbar />
+      <SiteTicker />
       <section className="home-section">
         <div className="home-section__inner">
           <p className="home-section__eyebrow">
@@ -130,6 +133,7 @@ export default async function SchedulePage() {
           </div>
         </section>
       )}
+      <SiteFooter />
     </main>
   );
 }

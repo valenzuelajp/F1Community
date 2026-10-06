@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Gauge, Timer, Trophy, Zap } from 'lucide-react';
 import { SiteNavbar } from '@/components/f1/SiteNavbar';
+import { SiteTicker } from '@/components/f1/SiteTicker';
+import { SiteFooter } from '@/components/f1/SiteFooter';
 import '../home/home.css';
 
 export const metadata: Metadata = {
@@ -22,6 +24,7 @@ export default function NewToF1Page() {
       <div className="page__glow" />
 
       <SiteNavbar />
+      <SiteTicker />
 
       <section className="home-section">
         <div className="home-section__inner">
@@ -54,6 +57,7 @@ export default function NewToF1Page() {
           </div>
         </div>
       </section>
+    <SiteFooter />
     </main>
   );
 }
