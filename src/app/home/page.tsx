@@ -5,11 +5,13 @@ import { GlossaryTerms } from '@/components/f1/GlossaryTerms';
 import { NewsImage } from '@/components/f1/NewsImage';
 import { SessionTimes } from '@/components/f1/SessionTimes';
 import { SiteNavbar } from '@/components/f1/SiteNavbar';
+import { SiteFooter } from '@/components/f1/SiteFooter';
 import { formatNewsShortDate, getNewsTopic } from '@/components/f1/NewsCard';
 import { NewsGridFilter } from '@/components/f1/NewsGridFilter';
-import { NewsTicker } from '@/components/f1/NewsTicker';
+import { NextRaceStrip } from '@/components/f1/NextRaceStrip';
+import { SiteTicker } from '@/components/f1/SiteTicker';
 import { TrackLine } from '@/components/f1/TrackLine';
-import { getConstructorStandings, getNextF1Event, getTopDrivers } from '@/lib/f1/jolpica';
+import { getConstructorStandings, getNextF1Event, getPostRaceHero, getTopDrivers } from '@/lib/f1/jolpica';
 import { constructorColor } from '@/lib/f1/teams';
 import { getTopNews } from '@/lib/f1/news';
 import './home.css';
@@ -38,22 +40,6 @@ export const metadata: Metadata = {
  * beginner joining the project.
  */
 
-/** Session start as "Fri 17:30 UTC" — server-safe, no hydration drift. */
-function heroSessionTime(iso: string): string {
-  const date = new Date(iso);
-  const weekday = new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    timeZone: "UTC",
-  }).format(date);
-  const time = new Intl.DateTimeFormat("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: "UTC",
-  }).format(date);
-  return `${weekday} ${time} UTC`;
-}
-
 export default async function MemberHomePage() {
   const [event, topDrivers, news, topConstructors] = await Promise.all([
     getNextF1Event(),
@@ -61,12 +47,20 @@ export default async function MemberHomePage() {
     getTopNews(),
     getConstructorStandings(5).catch(() => []),
   ]);
+  // Post-race branch needs the upcoming weekend's first session: once it has
+  // started, the hero rolls over to the next round instead of celebrating.
+  const postRace = await getPostRaceHero(
+    Date.now(),
+    event.sessions.length > 0 ? new Date(event.sessions[0].start).getTime() : null,
+  ).catch(() => null);
 
   function hexToRgba(hex: string, alpha: number): string {
     const h = hex.replace('#', '');
     return `rgba(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)}, ${alpha})`;
   }
   const leaderColor = constructorColor(topConstructors[0]?.name ?? '');
+  // Post-race hero reuses the same title + venue shape — never mixed rounds.
+  const venue = postRace ?? event;
 
   return (
     <main className="page font-pit-body selection:bg-pit-red selection:text-white">
@@ -89,15 +83,7 @@ export default async function MemberHomePage() {
 
       <SiteNavbar />
 
-      <NewsTicker
-        headlines={news.map((item) => item.title)}
-        nextLabel={
-          event.nextSessionStart
-            ? `Next session · ${event.raceName} · ${heroSessionTime(event.nextSessionStart)}`
-            : `Next race · ${event.raceName}`
-        }
-        isLive={event.isLive}
-      />
+      <SiteTicker />
 
       {/* Race-week hero: badge + title + countdown, top-5 tower + team bars */}
       <section className="race-hero bg-racing-grid">
@@ -105,34 +91,65 @@ export default async function MemberHomePage() {
         <TrackLine className="race-hero__track" />
         <div className="race-hero__inner">
           <span className="race-hero__roundbg" aria-hidden="true">
-            {event.round}
+            {postRace ? postRace.round : event.round}
           </span>
           <div className="race-hero__main">
-            <p className="round-badge">Round {event.round}</p>
-            <h1 className="race-hero__title">{event.raceName}</h1>
+            <p className="round-badge">{postRace ? `Round ${postRace.round} · Result` : `Round ${event.round}`}</p>
+            <h1 className="race-hero__title">{venue.raceName}</h1>
             <p className="race-hero__circuit">
-              {event.relocatedLabel ? (
+              {venue.relocatedLabel ? (
                 <span className="race-hero__relocated">
-                  {event.relocatedLabel} ·{" "}
+                  {venue.relocatedLabel} ·{" "}
                 </span>
               ) : null}
-              {event.circuitName} · {event.locality}, {event.country}
+              {venue.circuitName} · {venue.locality}, {venue.country}
             </p>
-            {event.isLive ? (
-              <p className="home-live-pill">Live now</p>
-            ) : event.nextSessionStart ? (
-              <CountdownBoxes
-                target={event.nextSessionStart}
-                className="race-hero__countdown"
-              />
+            {postRace ? (
+              <>
+              <div className="race-hero__podium" aria-label="Race podium">
+                <p className="race-hero__tower-heading">Podium</p>
+                <ol className="race-hero__tower-list">
+                  {postRace.podium.map((driver) => (
+                    <li
+                      key={driver.code}
+                      className="race-hero__tower-row"
+                      style={{ boxShadow: `inset 3px 0 0 ${constructorColor(driver.team)}` }}
+                    >
+                      <span className="race-hero__tower-pos">{driver.position}</span>
+                      <span className="race-hero__tower-code">{driver.code}</span>
+                      <span className="race-hero__tower-name">{driver.name}</span>
+                      <span className="race-hero__tower-gap">{driver.points} pts</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              {event.sessions.length > 0 ? (
+                <NextRaceStrip
+                  raceName={event.raceName}
+                  sessionLabel={event.sessions[0].label}
+                  sessionStart={event.sessions[0].start}
+                />
+              ) : null}
+              </>
             ) : (
-              <p className="home-muted">
-                {event.seasonOver ? 'Season complete — see you next year.' : 'Schedule unavailable right now.'}
-              </p>
+              <>
+                {event.isLive ? (
+                  <p className="home-live-pill">Live now</p>
+                ) : event.nextSessionStart ? (
+                  <CountdownBoxes
+                    target={event.nextSessionStart}
+                    className="race-hero__countdown"
+                  />
+                ) : (
+                  <p className="home-muted">
+                    {event.seasonOver ? 'Season complete — see you next year.' : 'Schedule unavailable right now.'}
+                  </p>
+                )}
+                {event.sessions.length > 0 ? (
+                  <SessionTimes sessions={event.sessions} />
+                ) : null}
+              </>
             )}
-            {event.sessions.length > 0 ? (
-              <SessionTimes sessions={event.sessions} />
-            ) : null}
             <GlossaryTerms terms={['DRS', 'Qualifying', 'Sprint', 'Pole', 'Gap']} />
           </div>
           {topDrivers.length > 0 ? (
@@ -150,7 +167,7 @@ export default async function MemberHomePage() {
                       <span className="race-hero__tower-pos">{driver.position}</span>
                       <span className="race-hero__tower-code">{driver.code}</span>
                       <span className="race-hero__tower-gap">
-                        {gap <= 0 ? `${driver.points} pts` : `+${gap} · ${driver.points} pts`}
+                        {gap <= 0 ? `${driver.points} pts` : `${gap} behind · ${driver.points} pts`}
                       </span>
                     </li>
                   );
@@ -279,6 +296,7 @@ export default async function MemberHomePage() {
           </div>
         </div>
       </footer>
+      <SiteFooter />
     </main>
   );
 }

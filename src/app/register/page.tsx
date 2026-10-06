@@ -593,8 +593,8 @@ export default async function RegisterPage() {
         {/* Bottom Legal Notice */}
         <div className="login-footer-bottom">
           <p>
-            © 2026 Formula One Digital Media Limited. Merchandise Wireframe
-            Proposal. All Rights Reserved.
+            Unofficial fan project for demonstration only. Not affiliated
+            with Formula 1, Formula One Digital Media Limited, or the FIA.
           </p>
           <div className="login-footer-legal">
             <Link href="#privacy">Privacy Policy</Link>

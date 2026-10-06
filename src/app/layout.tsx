@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Anton, Barlow_Condensed, Barlow } from 'next/font/google';
+import { Inter, Anton, Barlow_Condensed, Barlow, Space_Grotesk, Space_Mono } from 'next/font/google';
 import { AppShell } from '@/components/layout/AppShell';
 import './globals.css';
 
@@ -29,6 +29,21 @@ const pitBody = Barlow({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-pit-body',
+  display: 'swap',
+});
+
+/* Maximalist re-skin faces (new system; Anton above doubles as display). */
+const maxBody = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-max-body',
+  display: 'swap',
+});
+
+const maxMono = Space_Mono({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-max-mono',
   display: 'swap',
 });
 
@@ -91,7 +106,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${anton.variable} ${pitDisplay.variable} ${pitBody.variable} antialiased`}>
+    <html lang="en" className={`${inter.variable} ${anton.variable} ${pitDisplay.variable} ${pitBody.variable} ${maxBody.variable} ${maxMono.variable} antialiased`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

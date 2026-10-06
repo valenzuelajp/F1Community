@@ -488,6 +488,117 @@ export function describeRace(race: JRace): RaceDisplay {
   };
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Post-race podium hero                                                      */
+/* -------------------------------------------------------------------------- */
+
+/** How long after lights-out the hero celebrates the result before rolling on. */
+export const POST_RACE_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+export interface F1PodiumDriver {
+  position: number;
+  code: string;
+  name: string;
+  team: string;
+  points: number;
+}
+
+export interface PostRaceHero {
+  round: number;
+  raceName: string;
+  circuitName: string;
+  locality: string;
+  country: string;
+  relocatedLabel: string | null;
+  podium: F1PodiumDriver[];
+}
+
+/**
+ * Pure rollover rule — unit-testable with fixtures.
+ * Shows the last race's podium while it ended within the window AND the next
+ * weekend hasn't started; otherwise the hero counts down to the next round.
+ */
+export function shouldShowPodium(
+  nowMs: number,
+  lastRaceEndMs: number,
+  nextWeekendStartMs: number | null,
+  windowMs: number = POST_RACE_WINDOW_MS,
+): boolean {
+  if (nowMs < lastRaceEndMs) return false;
+  if (nowMs - lastRaceEndMs >= windowMs) return false;
+  if (nextWeekendStartMs !== null && nowMs >= nextWeekendStartMs) return false;
+  return true;
+}
+
+interface JRaceResultEntry {
+  position: string;
+  points: string;
+  Driver: { code: string; givenName: string; familyName: string };
+  Constructor: { name: string };
+}
+
+/** Most recent completed round's results. Throws when the API is unreachable. */
+async function fetchLastRaceResults(): Promise<{
+  round: string;
+  results: JRaceResultEntry[];
+}> {
+  const res = await fetch(`${JOLPICA_BASE_URL}/current/last/results/`, {
+    headers: { Accept: "application/json" },
+    next: { revalidate: REVALIDATE_SECONDS },
+  });
+  if (!res.ok) throw new Error(`Jolpica error: ${res.status}`);
+  const data = (await res.json()) as {
+    MRData: {
+      RaceTable: { Races: { round: string; Results?: JRaceResultEntry[] }[] };
+    };
+  };
+  const last = data.MRData.RaceTable.Races[0];
+  if (!last) throw new Error("Jolpica returned no last results");
+  return { round: last.round, results: last.Results ?? [] };
+}
+
+/**
+ * Post-race hero data, or null when there is no recent result to celebrate.
+ * Returns null (never a mismatched round) when results don't belong to the
+ * last completed round — the hero then falls back to the next-race
+ * countdown. Throws only when the API itself is unreachable, so callers
+ * should use `.catch(() => null)`.
+ */
+export async function getPostRaceHero(
+  nowMs: number = Date.now(),
+  nextWeekendStartMs: number | null = null,
+): Promise<PostRaceHero | null> {
+  const [calendar, last] = await Promise.all([
+    getSeasonCalendar(),
+    fetchLastRaceResults(),
+  ]);
+  const done = calendar.races.filter((r) => r.status === "completed");
+  const lastRace = done[done.length - 1];
+  if (!lastRace?.start) return null;
+  // Results must belong to the last completed round — never mix rounds.
+  if (Number(last.round) !== lastRace.round) return null;
+  const endMs = Date.parse(lastRace.start) + SESSION_WINDOW_MS;
+  if (!shouldShowPodium(nowMs, endMs, nextWeekendStartMs)) return null;
+  const podium = last.results.slice(0, 3).map((r) => ({
+    position: Number(r.position),
+    code: r.Driver.code,
+    name: `${r.Driver.givenName} ${r.Driver.familyName}`,
+    team: r.Constructor.name,
+    points: Number(r.points),
+  }));
+  if (podium.length === 0) return null;
+  return {
+    round: lastRace.round,
+    raceName: lastRace.raceName,
+    circuitName: lastRace.circuitName,
+    locality: lastRace.locality,
+    country: lastRace.country,
+    relocatedLabel:
+      RELOCATED_ROUNDS[`${calendar.season}-${lastRace.round}`] ?? null,
+    podium,
+  };
+}
+
 /** Build a normalized event from a race + the next/live session slot. */
 function buildEvent(
   race: JRace,

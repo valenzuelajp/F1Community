@@ -60,6 +60,9 @@ export function NewsCard({ item }: { item: F1NewsItem }) {
           {item.publishedAt ? ` · ${formatNewsShortDate(item.publishedAt)}` : ""}
         </p>
         <h3 className="news-card__title">{item.title}</h3>
+        {item.summary ? (
+          <p className="news-card__summary">{item.summary}</p>
+        ) : null}
       </div>
     </a>
   );

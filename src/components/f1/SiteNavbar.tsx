@@ -1,8 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { MobileMenu } from "./MobileMenu";
+import Image from "next/image";
 import "./site-navbar.css";
+import "./site-shell.css";
 
 /** Real routes in the navbar (mockup order). */
 export const NAV_LINKS = [
@@ -16,12 +19,13 @@ export const NAV_LINKS = [
 ];
 
 /**
- * Shared sticky navbar (home/schedule/standings/news/teams/drivers/new-to-f1).
- * Logo is always visible; on phones the links live behind the
- * hamburger menu, on larger screens they render inline.
- * The Log out button stays visible on every screen size.
+ * Shared sticky navbar (home/schedule/standings/news/drivers/new-to-f1).
+ * Official logo image (never replaced); on phones the links live behind
+ * the hamburger menu, on larger screens they render inline.
+ * Guests see Log in, signed-in visitors see Log out.
  */
-export function SiteNavbar() {
+export async function SiteNavbar() {
+  const session = await getServerSession(authOptions);
   return (
     <header className="site-navbar">
       <div className="site-navbar__inner">
@@ -29,8 +33,7 @@ export function SiteNavbar() {
           <Image
             src="/imgLogoF1.png"
             alt="F1 Store"
-            width={145}
-            height={40}
+            fill
             sizes="(max-width: 640px) 116px, (max-width: 1024px) 130px, 145px"
             priority
           />
@@ -43,7 +46,13 @@ export function SiteNavbar() {
           ))}
         </nav>
         <div className="site-navbar__actions">
-          <LogoutButton />
+          {session ? (
+            <LogoutButton />
+          ) : (
+            <Link href="/login" className="site-navbar__login">
+              Log in
+            </Link>
+          )}
           <MobileMenu />
         </div>
       </div>

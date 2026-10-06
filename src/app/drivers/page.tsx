@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { SiteNavbar } from "@/components/f1/SiteNavbar";
+import { SiteTicker } from "@/components/f1/SiteTicker";
+import { SiteFooter } from "@/components/f1/SiteFooter";
 import { getTopDrivers } from "@/lib/f1/jolpica";
 import { constructorColor } from "@/lib/f1/teams";
 import "../home/home.css";
@@ -23,6 +25,7 @@ export default async function DriversPage() {
     <main className="page font-sans selection:bg-[#ff1801] selection:text-white">
       <div className="page__glow" />
       <SiteNavbar />
+      <SiteTicker />
       <section className="home-section">
         <div className="home-section__inner">
           <p className="home-section__eyebrow">Drivers&apos; championship</p>
@@ -63,6 +66,7 @@ export default async function DriversPage() {
           )}
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }

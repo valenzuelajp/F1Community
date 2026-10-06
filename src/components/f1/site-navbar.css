@@ -50,6 +50,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #9ca3af;
+  white-space: nowrap;
 }
 
 .site-navbar__link:hover {
@@ -89,7 +90,7 @@
 }
 
 /* ==========================================================================
-   Phones-only hamburger menu (<640px). Desktop keeps the inline links row.
+   Hamburger menu below 900px. Inline links row serves 900px and up.
    ========================================================================== */
 
 .mobile-menu__button {
@@ -97,6 +98,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 5px;
+  min-height: 44px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.5rem;
   background-color: rgba(255, 255, 255, 0.05);
@@ -197,7 +199,10 @@
     width: 130px;
     height: 36px;
   }
+}
 
+/* Inline links appear at 900px+; below that the hamburger serves them. */
+@media (min-width: 900px) {
   .site-navbar__links {
     display: flex;
   }
