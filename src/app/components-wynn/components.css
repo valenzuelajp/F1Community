@@ -1860,3 +1860,97 @@
 .components-grid--wide .components-card {
   min-height: 0;
 }
+
+/* H01 — Login Navigation Bar specimen: full-bleed inside the card preview */
+.components-card-preview:has(.login-header) {
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 0;
+  padding: 0;
+  container-type: inline-size;
+  isolation: isolate;
+}
+
+/* The live header needs z-index: 40 to stack above the login hero, but
+   inside a specimen card that 40 outranks the control row (z-index: 2) and
+   paints over open dropdown menus. Neutralize it in the frame. */
+.components-card-preview .login-header {
+  z-index: auto;
+}
+
+.components-card-preview:has(.login-header) .login-header {
+  margin: 0 auto;
+}
+
+/* The F1 mark inside imgLogoContainer.png is a 1890x476 strip centred in the
+   3464x3464 canvas (left 22.719%, top 43.129%, 54.561% x 13.741%) — the same
+   bytes as icon.png. The live header's .login-logo box (750x200) is far larger
+   than the 72px bar, so inside the frame the box is cropped to the mark: it
+   then fits the container and :hover fires only over the logo image itself,
+   never on the empty black around it. */
+.components-card-preview:has(.login-header) .login-logo {
+  --mark-h: 28px;
+  --mark-canvas: calc(var(--mark-h) / 0.13741);
+  width: calc(var(--mark-canvas) * 0.54561); /* 111px at 28px tall */
+  height: var(--mark-h);
+  overflow: hidden;
+}
+
+/* next/image `fill` pins size/position inline — the crop has to win with
+   !important. The square source is scaled up to --mark-canvas and shifted so
+   the mark lands exactly on the box. pointer-events keeps the oversized img
+   from catching hovers in the empty black around the mark. */
+.components-card-preview:has(.login-header) .login-logo img {
+  position: absolute !important;
+  width: var(--mark-canvas) !important;
+  height: var(--mark-canvas) !important;
+  left: calc(var(--mark-canvas) * -0.22719) !important;
+  right: auto !important;
+  top: calc(var(--mark-canvas) * -0.43129) !important;
+  bottom: auto !important;
+  max-width: none !important;
+  pointer-events: none;
+}
+
+/* Red glow — scoped so it only lights up while the pointer is on the logo. */
+.components-card-preview:has(.login-header) .login-logo:hover {
+  filter: drop-shadow(0 0 5px rgba(255, 24, 1, 0.95))
+    drop-shadow(0 0 16px rgba(225, 24, 1, 0.8));
+}
+
+.components-card-preview:has(.login-header) .login-nav-items {
+  left: 0;
+}
+
+/* Mirror the live page's small-screen behaviour inside the frame: the link
+   row drops out when logo + links + pills stop fitting, then the mark
+   shrinks so the pills keep their space. */
+@container (max-width: 820px) {
+  .login-nav-items {
+    display: none;
+  }
+}
+
+@container (max-width: 480px) {
+  .login-header .login-header-inner .login-logo {
+    --mark-h: 22px;
+  }
+}
+
+@container (max-width: 340px) {
+  .login-header .login-header-inner .login-logo {
+    --mark-h: 12px;
+  }
+}
+
+@container (max-width: 240px) {
+  .login-header-inner {
+    padding: 0 0.5rem;
+  }
+
+  .login-sale-pill,
+  .login-menu-pill {
+    min-width: 0;
+    padding: 0 0.5rem;
+  }
+}

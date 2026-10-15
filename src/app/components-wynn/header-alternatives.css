@@ -1,0 +1,788 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap');
+
+/* ==========================================================================
+   H01 alternatives — three takes on the Login Navigation Bar.
+   Baseline reference: src/components/layout/LoginNavHeader.tsx
+   (+ src/app/login/login.css `.login-header*`).
+
+   Every variant fixes the baseline's readability / accessibility gaps:
+     · link text ≥ 12.8px (baseline: 11px links, 10px pills)
+     · interactive targets ≥ 44x44px (baseline: 30-34px tall)
+     · :focus-visible rings, not hover-only affordances
+     · real <ul>/<li> nav semantics + aria-current for the active page
+     · decorative divider noise moved to CSS (kept out of the a11y tree)
+     · prefers-reduced-motion honoured on every animation / transform
+     · body-text contrast ≥ 4.5:1 in resting AND hover states
+   ========================================================================== */
+
+/* ---- Shared base (all variants) ---- */
+
+.f1h {
+  --f1h-red: #ff1801;
+  --f1h-bar-h: 68px;
+  position: relative;
+  width: 100%;
+  color: #ffffff;
+}
+
+.f1h-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: var(--f1h-bar-h);
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Logo crop: imgLogoContainer.png is a 3464x3464 canvas with the F1 mark
+   centred at 22.719% / 43.129% and sized 54.561% x 13.741%. The box is cut
+   down to the mark so hover/focus only fires on the logo itself. */
+.f1h-logo {
+  --logo-h: 32px;
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  height: var(--logo-h);
+  width: calc(var(--logo-h) * 3.9707);
+  overflow: hidden;
+  transition: filter 0.3s ease-out; /* quick fade-out when pointer leaves */
+}
+
+/* slow ramp-in while hovered — the glow blooms instead of flashing */
+.f1h-logo:hover,
+.f1h-logo:focus-visible {
+  transition: filter 0.65s ease-in;
+}
+
+.f1h-logo img {
+  position: absolute !important;
+  width: calc(var(--logo-h) / 0.13741) !important;
+  height: calc(var(--logo-h) / 0.13741) !important;
+  left: calc((var(--logo-h) / 0.13741) * -0.22719) !important;
+  right: auto !important;
+  top: calc((var(--logo-h) / 0.13741) * -0.43129) !important;
+  bottom: auto !important;
+  max-width: none !important;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.f1h-nav-list {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.f1h-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.f1h a,
+.f1h button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.f1h :focus-visible {
+  outline: 2px solid var(--f1h-red);
+  outline-offset: 3px;
+}
+
+.f1h-inner {
+  container-type: inline-size;
+}
+
+/* Narrow frames: the link row drops out once logo + pills stop fitting. */
+@container (max-width: 760px) {
+  .f1h-nav {
+    display: none;
+  }
+}
+
+@container (max-width: 380px) {
+  .f1h-logo {
+    --logo-h: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .f1h *,
+  .f1h *::before,
+  .f1h *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   A — PIT WALL
+   Direction: refined telemetry editorial. Calm black bar, generous type,
+   red slab underline for state, numbered links like timing-sheet rows.
+   ========================================================================== */
+
+.f1h--pitwall {
+  background-color: #0a0a0c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.f1h--pitwall .f1h-inner {
+  --f1h-bar-h: 72px;
+  gap: 2rem;
+}
+
+.f1h--pitwall .f1h-logo:hover,
+.f1h--pitwall .f1h-logo:focus-visible {
+  filter: drop-shadow(0 0 5px rgba(255, 24, 1, 0.5));
+}
+
+.f1h--pitwall .f1h-nav-list {
+  gap: 0.25rem;
+}
+
+.f1h--pitwall .f1h-nav-list li + li::before {
+  content: '';
+  display: inline-block;
+  height: 14px;
+  width: 1px;
+  margin: 0 0.85rem 0 0.6rem;
+  vertical-align: middle;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.f1h--pitwall .f1h-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0 0.5rem;
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.84);
+  transition: color 0.15s ease;
+}
+
+.f1h--pitwall .f1h-idx {
+  font-size: 0.625rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: rgba(255, 24, 1, 0.7);
+}
+
+.f1h--pitwall .f1h-link::after {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 8px;
+  height: 2px;
+  background-color: var(--f1h-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s ease;
+}
+
+.f1h--pitwall .f1h-link:hover,
+.f1h--pitwall .f1h-link:focus-visible {
+  color: #ffffff;
+}
+
+.f1h--pitwall .f1h-link:hover::after,
+.f1h--pitwall .f1h-link:focus-visible::after,
+.f1h--pitwall .f1h-link[aria-current='page']::after {
+  transform: scaleX(1);
+}
+
+.f1h--pitwall .f1h-link[aria-current='page'] {
+  color: #ffffff;
+}
+
+.f1h--pitwall .f1h-cta {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 96px;
+  padding: 0 1.35rem;
+  border-radius: 4px;
+  background-color: var(--f1h-red);
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000000; /* 5.4:1 on #ff1801 — white would fail AA */
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* light sheen sweeping across the slab on hover */
+.f1h--pitwall .f1h-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.45s ease;
+}
+
+.f1h--pitwall .f1h-cta:hover {
+  background-color: #ff3d1f;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(255, 24, 1, 0.4);
+}
+
+.f1h--pitwall .f1h-cta:hover::after {
+  transform: translateX(100%);
+}
+
+.f1h--pitwall .f1h-cta:active {
+  transform: translateY(0);
+  box-shadow: none;
+  transition-duration: 0.06s;
+}
+
+.f1h--pitwall .f1h-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  background: transparent;
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.f1h--pitwall .f1h-menu:hover {
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 255, 255, 0.12);
+}
+
+.f1h--pitwall .f1h-menu:active {
+  transform: translateY(0);
+  box-shadow: none;
+  transition-duration: 0.06s;
+}
+
+/* ==========================================================================
+   B — GRANDSTAND
+   Direction: velocity. Forward-leaning italic display type, slipstream red
+   streaks, rev-sweep CTA fill. Motion is the identity — nothing bolted on.
+   ========================================================================== */
+
+.f1h--grandstand {
+  background-color: #000000;
+  border-bottom: none;
+}
+
+/* slipstream hem: red streak accelerating out to the right */
+.f1h--grandstand::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    #ff1801 0%,
+    rgba(255, 24, 1, 0.6) 35%,
+    rgba(255, 24, 1, 0.15) 70%,
+    transparent 100%
+  );
+}
+
+.f1h--grandstand .f1h-inner {
+  --f1h-bar-h: 76px;
+  gap: 1.5rem;
+}
+
+.f1h--grandstand .f1h-logo {
+  --logo-h: 36px;
+}
+
+.f1h--grandstand .f1h-logo:hover,
+.f1h--grandstand .f1h-logo:focus-visible {
+  filter: drop-shadow(0 0 5px rgba(255, 24, 1, 0.5)) drop-shadow(0 0 12px rgba(225, 24, 1, 0.3));
+}
+
+.f1h--grandstand .f1h-nav-list {
+  gap: 1.25rem;
+}
+
+.f1h--grandstand .f1h-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.15rem;
+  font-family: var(--font-display), 'Anton', Impact, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #ffffff;
+  transition: color 0.15s ease;
+  animation: f1h-rush 0.45s ease both;
+}
+
+/* links rush in from the left — momentum, not rise */
+.f1h--grandstand .f1h-nav-list li:nth-child(1) .f1h-link { animation-delay: 0.05s; }
+.f1h--grandstand .f1h-nav-list li:nth-child(2) .f1h-link { animation-delay: 0.1s; }
+.f1h--grandstand .f1h-nav-list li:nth-child(3) .f1h-link { animation-delay: 0.15s; }
+.f1h--grandstand .f1h-nav-list li:nth-child(4) .f1h-link { animation-delay: 0.2s; }
+
+@keyframes f1h-rush {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* speed streak underline — same forward lean as the type */
+.f1h--grandstand .f1h-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  height: 3px;
+  background-color: var(--f1h-red);
+  transform: skewX(-14deg) scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.f1h--grandstand .f1h-link:hover,
+.f1h--grandstand .f1h-link:focus-visible {
+  color: #ff2a10;
+}
+
+.f1h--grandstand .f1h-link:hover::after,
+.f1h--grandstand .f1h-link:focus-visible::after {
+  transform: skewX(-14deg) scaleX(1);
+}
+
+.f1h--grandstand .f1h-link[aria-current='page'] {
+  color: #ffffff;
+}
+
+/* --- Actions: pure type. SALE is red text; MENU is white — streaks on hover. --- */
+
+.f1h--grandstand .f1h-actions {
+  gap: 1.25rem;
+}
+
+.f1h--grandstand .f1h-cta,
+.f1h--grandstand .f1h-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0 0.6rem;
+  overflow: hidden;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-display), 'Anton', Impact, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.f1h--grandstand .f1h-cta > span,
+.f1h--grandstand .f1h-menu > span,
+.f1h--grandstand .f1h-menu svg {
+  position: relative;
+  z-index: 1;
+}
+
+/* SALE: red text CTA — same streak treatment as MENU, color sets hierarchy */
+.f1h--grandstand .f1h-cta {
+  color: #ff1801; /* 5.4:1 on black */
+  padding: 0 0.6rem;
+  transition: color 0.2s ease;
+}
+
+.f1h--grandstand .f1h-cta::after {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  bottom: 8px;
+  height: 3px;
+  background-color: var(--f1h-red);
+  transform: skewX(-14deg) scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.f1h--grandstand .f1h-cta:hover,
+.f1h--grandstand .f1h-cta:focus-visible {
+  color: #ff3d1f;
+}
+
+.f1h--grandstand .f1h-cta:hover::after,
+.f1h--grandstand .f1h-cta:focus-visible::after {
+  transform: skewX(-14deg) scaleX(1);
+}
+
+/* MENU: same speed streak as the nav links */
+.f1h--grandstand .f1h-menu::after {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  bottom: 8px;
+  height: 3px;
+  background-color: var(--f1h-red);
+  transform: skewX(-14deg) scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.f1h--grandstand .f1h-menu:hover,
+.f1h--grandstand .f1h-menu:focus-visible {
+  color: #ff2a10;
+}
+
+.f1h--grandstand .f1h-menu:hover::after,
+.f1h--grandstand .f1h-menu:focus-visible::after {
+  transform: skewX(-14deg) scaleX(1);
+}
+
+.f1h--grandstand :focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 4px;
+}
+
+/* ==========================================================================
+   C — TELEMETRY HUD
+   Direction: pit-wall instrument cluster. Angular Chakra Petch, bracketed
+   links, scanline texture, pulsing LED status, notched action boxes.
+   ========================================================================== */
+
+.f1h--hud {
+  background-color: #05070a;
+  border-bottom: 1px solid rgba(255, 24, 1, 0.45);
+}
+
+.f1h--hud::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.022) 0px,
+      rgba(255, 255, 255, 0.022) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(ellipse 220px 60px at 8% 50%, rgba(255, 24, 1, 0.14), transparent 70%);
+}
+
+.f1h--hud .f1h-inner {
+  --f1h-bar-h: 70px;
+  position: relative;
+  gap: 1.5rem;
+}
+
+/* Corner bracket — top-left only. */
+.f1h--hud .f1h-inner::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(255, 24, 1, 0.65);
+  pointer-events: none;
+  top: 8px;
+  left: 6px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.f1h--hud .f1h-logo {
+  --logo-h: 28px;
+}
+
+.f1h--hud .f1h-logo:hover,
+.f1h--hud .f1h-logo:focus-visible {
+  filter: drop-shadow(0 0 5px rgba(255, 24, 1, 0.5));
+}
+
+.f1h--hud .f1h-nav-list {
+  gap: 0.15rem;
+}
+
+.f1h--hud .f1h-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 0.55rem;
+  font-family: 'Chakra Petch', 'Segoe UI', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.78);
+  transition: color 0.15s ease;
+}
+
+.f1h--hud .f1h-bracket {
+  color: rgba(255, 24, 1, 0.75);
+  font-weight: 500;
+}
+
+.f1h--hud .f1h-link:hover,
+.f1h--hud .f1h-link:focus-visible,
+.f1h--hud .f1h-link[aria-current='page'] {
+  color: #ffffff;
+}
+
+.f1h--hud .f1h-link[aria-current='page'] .f1h-bracket {
+  color: var(--f1h-red);
+}
+
+.f1h--hud .f1h-link[aria-current='page']::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background-color: var(--f1h-red);
+  box-shadow: 0 0 6px var(--f1h-red);
+}
+
+/* --- Live-timing ticker: its own strip under the bar --- */
+
+.f1h--hud .f1h-ticker {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 26px;
+  padding: 0 1.25rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.025);
+  font-family: 'Chakra Petch', ui-monospace, monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.f1h--hud .f1h-ticker-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0 0.9rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.f1h--hud .f1h-ticker-cell:first-child {
+  padding-left: 0;
+}
+
+.f1h--hud .f1h-ticker-cell:last-child {
+  border-right: none;
+}
+
+.f1h--hud .f1h-ticker-cell--live {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.f1h--hud .f1h-ticker-cell--muted {
+  color: rgba(67, 176, 42, 0.9);
+}
+
+.f1h--hud .f1h-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--f1h-red);
+  box-shadow: 0 0 8px var(--f1h-red);
+  animation: f1h-pulse 2s ease-in-out infinite;
+}
+
+@keyframes f1h-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* --- Actions: quiet ghost MENU + flat technical SALE --- */
+
+.f1h--hud .f1h-actions {
+  gap: 0.5rem;
+}
+
+.f1h--hud .f1h-menu,
+.f1h--hud .f1h-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border-radius: 0;
+  font-family: 'Chakra Petch', 'Segoe UI', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.f1h--hud .f1h-menu {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.f1h--hud .f1h-menu:hover {
+  border-color: rgba(255, 24, 1, 0.7);
+  color: #ffffff;
+  background-color: rgba(255, 24, 1, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 24, 1, 0.2);
+}
+
+.f1h--hud .f1h-menu:active {
+  transform: translateY(0);
+  transition-duration: 0.06s;
+}
+
+/* SALE: inverted instrument switch — bright panel pops against the dark
+   cluster by contrast, not by another red treatment. LED marks it live.
+   Hover "arms" it: lift + red underside glow + baseline sweep + LED speeds up. */
+.f1h--hud .f1h-cta {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  background-color: #f2f2f2;
+  color: #0a0a0a;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.f1h--hud .f1h-cta::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--f1h-red), #ff7a5c);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.f1h--hud .f1h-cta-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--f1h-red);
+  box-shadow: 0 0 6px var(--f1h-red);
+  animation: f1h-pulse 2s ease-in-out infinite;
+  transition: box-shadow 0.15s ease;
+}
+
+.f1h--hud .f1h-cta:hover {
+  background-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 0 -1px rgba(255, 24, 1, 0.9),
+    0 8px 18px rgba(255, 24, 1, 0.35);
+}
+
+.f1h--hud .f1h-cta:hover::after {
+  transform: scaleX(1);
+}
+
+.f1h--hud .f1h-cta:hover .f1h-cta-led {
+  animation-duration: 0.7s;
+  box-shadow: 0 0 10px var(--f1h-red);
+}
+
+.f1h--hud .f1h-cta:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 -1px rgba(255, 24, 1, 0.9);
+  transition-duration: 0.06s;
+}
+
+.f1h--hud :focus-visible {
+  outline: 2px dashed var(--f1h-red);
+  outline-offset: 3px;
+}
+
+/* Specimen frame: full-bleed inside the components card preview. */
+.components-card-preview:has(.f1h) {
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 0;
+  padding: 0;
+}

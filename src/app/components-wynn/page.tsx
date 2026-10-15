@@ -3,9 +3,12 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { X, CheckCircle, ChevronDown, Plus, Minus, Loader2, Check, AlertCircle, Eye, EyeOff, Flag, Lock, Mail, ShoppingBag } from 'lucide-react';
 import '@/components/auth/auth-forms.css';
+import '../login/login.css';
 import './components.css';
 import { buildLoginTsx, buildLoginCss, buildMiniLoginTsx, buildMiniLoginCss } from './export-code';
 import { MiniLogin } from './MiniLoginExport';
+import { LoginNavHeader } from '@/components/layout/LoginNavHeader';
+import { HeaderPitWall, HeaderGrandstand, HeaderTelemetryHud } from './header-alternatives';
 
 /* Context */
 interface InteractionContextType {
@@ -1829,6 +1832,7 @@ function AuthHeaderBlock() {
 /* Page */
 function ComponentsShowcase() {
   const { openModal, showToast } = useInteractions();
+  const [headerVariant, setHeaderVariant] = useState('Classic');
 
   return (
     <main className="components-page">
@@ -1841,7 +1845,7 @@ function ComponentsShowcase() {
         </div>
         <div className="components-meta">
           <span className="components-meta-dot" aria-hidden />
-          <span>Basic 07+03 · Auth 13+02</span>
+          <span>Basic 07+03 · Auth 13+02 · Header 01</span>
         </div>
       </header>
 
@@ -1978,6 +1982,44 @@ function ComponentsShowcase() {
               }
             >
               <AuthHeaderBlock />
+            </ComponentCard>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset className="components-fieldset" style={{ marginTop: '2.5rem' }}>
+        <legend className="components-legend">Header</legend>
+
+        <div className="components-section components-section--nested">
+          <div className="components-section-head">
+            <span className="components-section-label">Login navigation bar</span>
+            <span className="components-section-rule" aria-hidden />
+          </div>
+
+          <div className="components-grid components-grid--wide">
+            <ComponentCard
+              id="H01 · Nav"
+              name="Login Navigation Bar"
+              tag="Navigation"
+              control={
+                <Dropdown
+                  label="Variant"
+                  items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
+                  value={headerVariant}
+                  onChange={setHeaderVariant}
+                  align="up"
+                />
+              }
+            >
+              {headerVariant === 'Pit Wall' ? (
+                <HeaderPitWall />
+              ) : headerVariant === 'Grandstand' ? (
+                <HeaderGrandstand />
+              ) : headerVariant === 'Telemetry HUD' ? (
+                <HeaderTelemetryHud />
+              ) : (
+                <LoginNavHeader />
+              )}
             </ComponentCard>
           </div>
         </div>
