@@ -8,7 +8,12 @@ import './components.css';
 import { buildLoginTsx, buildLoginCss, buildMiniLoginTsx, buildMiniLoginCss } from './export-code';
 import { MiniLogin } from './MiniLoginExport';
 import { LoginNavHeader } from '@/components/layout/LoginNavHeader';
+import { LoginFooter } from '@/components/layout/LoginFooter';
+import { ChampionshipStandings } from '@/components/f1/ChampionshipStandings';
+import type { F1StandingDriver } from '@/lib/f1/jolpica';
+import { StandingsPitWall, StandingsGrandstand, StandingsTelemetryHud } from './standings-alternatives';
 import { HeaderPitWall, HeaderGrandstand, HeaderTelemetryHud } from './header-alternatives';
+import { FooterPitWall, FooterGrandstand, FooterTelemetryHud } from './footer-alternatives';
 
 /* Context */
 interface InteractionContextType {
@@ -1833,6 +1838,8 @@ function AuthHeaderBlock() {
 function ComponentsShowcase() {
   const { openModal, showToast } = useInteractions();
   const [headerVariant, setHeaderVariant] = useState('Classic');
+  const [footerVariant, setFooterVariant] = useState('Classic');
+  const [standingsVariant, setStandingsVariant] = useState('Classic');
 
   return (
     <main className="components-page">
@@ -1845,7 +1852,7 @@ function ComponentsShowcase() {
         </div>
         <div className="components-meta">
           <span className="components-meta-dot" aria-hidden />
-          <span>Basic 07+03 · Auth 13+02 · Header 01</span>
+          <span>Basic 07+03 · Auth 13+02 · Header 01 · Footer 01 · Standings 01</span>
         </div>
       </header>
 
@@ -2025,6 +2032,82 @@ function ComponentsShowcase() {
         </div>
       </fieldset>
 
+      <fieldset className="components-fieldset" style={{ marginTop: '2.5rem' }}>
+        <legend className="components-legend">Footer</legend>
+
+        <div className="components-section components-section--nested">
+          <div className="components-section-head">
+            <span className="components-section-label">Site footer</span>
+            <span className="components-section-rule" aria-hidden />
+          </div>
+
+          <div className="components-grid components-grid--wide">
+            <ComponentCard
+              id="H02 · Footer"
+              name="Site Footer"
+              tag="Navigation"
+              control={
+                <Dropdown
+                  label="Variant"
+                  items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
+                  value={footerVariant}
+                  onChange={setFooterVariant}
+                  align="up"
+                />
+              }
+            >
+              {footerVariant === 'Pit Wall' ? (
+                <FooterPitWall />
+              ) : footerVariant === 'Grandstand' ? (
+                <FooterGrandstand />
+              ) : footerVariant === 'Telemetry HUD' ? (
+                <FooterTelemetryHud />
+              ) : (
+                <LoginFooter />
+              )}
+            </ComponentCard>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset className="components-fieldset" style={{ marginTop: '2.5rem' }}>
+        <legend className="components-legend">Standings</legend>
+
+        <div className="components-section components-section--nested">
+          <div className="components-section-head">
+            <span className="components-section-label">Championship leaderboard</span>
+            <span className="components-section-rule" aria-hidden />
+          </div>
+
+          <div className="components-grid components-grid--wide">
+            <ComponentCard
+              id="H03 · Standings"
+              name="Championship Standings"
+              tag="Data"
+              control={
+                <Dropdown
+                  label="Variant"
+                  items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
+                  value={standingsVariant}
+                  onChange={setStandingsVariant}
+                  align="up"
+                />
+              }
+            >
+              {standingsVariant === 'Pit Wall' ? (
+                <StandingsPitWall drivers={SAMPLE_STANDINGS} season="2026" />
+              ) : standingsVariant === 'Grandstand' ? (
+                <StandingsGrandstand drivers={SAMPLE_STANDINGS} season="2026" />
+              ) : standingsVariant === 'Telemetry HUD' ? (
+                <StandingsTelemetryHud drivers={SAMPLE_STANDINGS} season="2026" />
+              ) : (
+                <ChampionshipStandings drivers={SAMPLE_STANDINGS} season="2026" />
+              )}
+            </ComponentCard>
+          </div>
+        </div>
+      </fieldset>
+
       <details className="components-fieldset components-fieldset--disclosure">
         <summary className="components-legend components-legend--summary">
           <span className="components-legend-chevron" aria-hidden>
@@ -2051,6 +2134,13 @@ function ComponentsShowcase() {
     </main>
   );
 }
+
+/* Sample standings for the H03 specimen (mirrors the live top 3). */
+const SAMPLE_STANDINGS: F1StandingDriver[] = [
+  { position: 1, code: 'ANT', name: 'Andrea Kimi Antonelli', team: 'Mercedes', points: 340, wins: 4, photo: '/imgDriversAntonelli12.png' },
+  { position: 2, code: 'RUS', name: 'George Russell', team: 'Mercedes', points: 238, wins: 2, photo: '/imgDriversRussel63.png' },
+  { position: 3, code: 'HAM', name: 'Lewis Hamilton', team: 'Ferrari', points: 229, wins: 2, photo: '/imgDriversHamilton44.png' },
+];
 
 export default function ComponentsPage() {
   return (

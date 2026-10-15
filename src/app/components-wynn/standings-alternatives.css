@@ -1,0 +1,462 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap');
+
+/* ==========================================================================
+   H03 alternatives — three takes on the Championship Standings.
+   Baseline reference: src/components/f1/ChampionshipStandings.tsx
+   (+ src/app/login/login.css `.login-podium*`).
+
+   Same data shape as the Classic, restyled to pair with the matching
+   H01 header / H02 footer variant.
+   ========================================================================== */
+
+/* ---- Shared base (all variants) ---- */
+
+.f1st {
+  --f1st-red: #ff1801;
+  position: relative;
+  width: 100%;
+  color: #ffffff;
+  container-type: inline-size;
+  container-name: f1st;
+  padding: 2rem 1rem 2.25rem;
+}
+
+.f1st-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  text-align: center;
+  font-size: clamp(11px, 2.8vw, 14px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.f1st-title-rule {
+  height: 2px;
+  width: clamp(28px, 8vw, 96px);
+  background-color: var(--f1st-red);
+  opacity: 0.85;
+}
+
+.f1st-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+@container f1st (min-width: 640px) {
+  .f1st-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+.f1st-cell {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.f1st-rank {
+  align-self: center;
+  flex-shrink: 0;
+  font-size: clamp(2rem, 5.5vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.35);
+}
+
+.f1st-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.2rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+
+/* screen-reader-only position text (the big rank is decorative) */
+.f1st-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.f1st-name {
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+}
+
+.f1st-team {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.f1st-points {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+  font-size: 20px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.f1st-pts {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.f1st-photo {
+  position: relative;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 84px;
+  overflow: hidden;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: #06080d;
+}
+
+.f1st-photo::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 35%;
+  background: linear-gradient(180deg, transparent, #0b0f17);
+  pointer-events: none;
+}
+
+@container f1st (min-width: 900px) {
+  .f1st-photo {
+    width: 100px;
+  }
+  .f1st-name {
+    font-size: 14px;
+  }
+  .f1st-points {
+    font-size: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .f1st *,
+  .f1st *::before,
+  .f1st *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   A — PIT WALL
+   Timing-sheet editorial: calm #0a0a0c, Barlow Semi Condensed, small red
+   index numbers, gold / silver / bronze slab on the left edge,
+   monochrome portraits.
+   ========================================================================== */
+
+.f1st--pitwall {
+  background-color: #0a0a0c;
+  border-bottom: 2px solid #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+}
+
+.f1st--pitwall .f1st-title {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(11px, 2.8vw, 13px);
+  letter-spacing: 0.14em;
+}
+
+.f1st--pitwall .f1st-title-rule {
+  opacity: 0.75;
+}
+
+.f1st--pitwall .f1st-cell {
+  background-color: #0d0f14;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid rgba(255, 255, 255, 0.2);
+  padding: 0.9rem 1.15rem;
+}
+
+/* position slab: gold / silver / bronze */
+.f1st--pitwall .f1st-cell--1 {
+  border-left-color: #ffd700;
+}
+.f1st--pitwall .f1st-cell--2 {
+  border-left-color: #c0c0c0;
+}
+.f1st--pitwall .f1st-cell--3 {
+  border-left-color: #cd7f32;
+}
+
+/* rank reads as a small red timing index, not a watermark */
+.f1st--pitwall .f1st-rank {
+  align-self: flex-start;
+  padding-top: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 24, 1, 0.85);
+  -webkit-text-stroke: 0;
+}
+
+.f1st--pitwall .f1st-name {
+  font-family: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+}
+
+.f1st--pitwall .f1st-team {
+  font-family: inherit;
+  letter-spacing: 0.14em;
+}
+
+.f1st--pitwall .f1st-points {
+  font-family: inherit;
+  font-size: 1.2rem;
+  color: var(--f1st-red);
+}
+
+.f1st--pitwall .f1st-pts {
+  font-family: inherit;
+}
+
+.f1st--pitwall .f1st-photo {
+  width: 72px;
+}
+
+.f1st--pitwall .f1st-photo img {
+  filter: grayscale(1) contrast(1.06);
+}
+
+.f1st--pitwall .f1st-photo::after {
+  background: linear-gradient(180deg, transparent, #0d0f14);
+}
+
+@container f1st (min-width: 900px) {
+  .f1st--pitwall .f1st-photo {
+    width: 84px;
+  }
+}
+
+/* ==========================================================================
+   B — GRANDSTAND
+   Velocity: black with a slipstream hem across the top, solid red ranks
+   leaning forward, Anton display type, team-colour speed streaks.
+   ========================================================================== */
+
+.f1st--grandstand {
+  background-color: #000000;
+  font-family: var(--font-display), 'Anton', Impact, sans-serif;
+  background-image: linear-gradient(
+    90deg,
+    #ff1801 0%,
+    rgba(255, 24, 1, 0.6) 35%,
+    rgba(255, 24, 1, 0.15) 70%,
+    transparent 100%
+  );
+  background-size: 100% 5px;
+  background-repeat: no-repeat;
+}
+
+.f1st--grandstand .f1st-title {
+  color: #ffffff;
+  transform: skewX(-6deg);
+}
+
+.f1st--grandstand .f1st-cell {
+  background-color: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0;
+}
+
+/* solid red rank, leaning with the type */
+.f1st--grandstand .f1st-rank {
+  color: var(--f1st-red);
+  -webkit-text-stroke: 0;
+  font-size: clamp(2.2rem, 6vw, 3rem);
+  transform: skewX(-8deg);
+}
+
+.f1st--grandstand .f1st-name {
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+/* team-colour speed streak under the name */
+.f1st--grandstand .f1st-name::after {
+  content: '';
+  display: block;
+  width: 2.25rem;
+  height: 3px;
+  margin-top: 2px;
+  background-color: var(--team-c, var(--f1st-red));
+  transform: skewX(-14deg);
+}
+
+.f1st--grandstand .f1st-team {
+  font-family: inherit;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.f1st--grandstand .f1st-points {
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--f1st-red);
+}
+
+.f1st--grandstand .f1st-pts {
+  font-family: inherit;
+}
+
+.f1st--grandstand .f1st-photo {
+  background:
+    linear-gradient(180deg, rgba(255, 24, 1, 0.25), transparent 60%),
+    #06080d;
+}
+
+.f1st--grandstand .f1st-photo::after {
+  background: linear-gradient(180deg, transparent, #000000);
+}
+
+/* ==========================================================================
+   C — TELEMETRY HUD
+   Instrument cluster: scanlines + red glow, notched panels, LED team
+   strip, bracketed names, tabular timing numbers.
+   ========================================================================== */
+
+.f1st--hud {
+  background-color: #05070a;
+  font-family: 'Chakra Petch', 'Segoe UI', sans-serif;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.035) 0 1px,
+      transparent 1px 3px
+    ),
+    radial-gradient(ellipse at 88% 0%, rgba(255, 24, 1, 0.14), transparent 55%);
+}
+
+.f1st--hud .f1st-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(11px, 2.8vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.f1st--hud .f1st-title-rule {
+  opacity: 0.7;
+}
+
+.f1st--hud .f1st-cell {
+  background-color: rgba(11, 15, 23, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+/* LED strip: constructor colour glowing along the top edge */
+.f1st--hud .f1st-cell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--team-c, var(--f1st-red));
+  box-shadow: 0 0 8px var(--team-c, var(--f1st-red));
+  z-index: 1;
+}
+
+.f1st--hud .f1st-rank {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.4);
+}
+
+.f1st--hud .f1st-cell--1 .f1st-rank {
+  -webkit-text-stroke-color: var(--f1st-red);
+}
+
+.f1st--hud .f1st-name {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+/* bracketed driver code style — same language as the HUD nav */
+.f1st--hud .f1st-name::before {
+  content: '[';
+  margin-right: 0.35rem;
+  color: var(--f1st-red);
+}
+
+.f1st--hud .f1st-name::after {
+  content: ']';
+  margin-left: 0.35rem;
+  color: var(--f1st-red);
+}
+
+.f1st--hud .f1st-team {
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  font-variant-numeric: tabular-nums;
+}
+
+.f1st--hud .f1st-points {
+  font-family: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--f1st-red);
+}
+
+.f1st--hud .f1st-pts {
+  font-family: inherit;
+  letter-spacing: 0.14em;
+}
+
+.f1st--hud .f1st-photo {
+  border-left-color: rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(255, 24, 1, 0.18), transparent 60%),
+    #06080d;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.f1st--hud .f1st-photo::after {
+  background: linear-gradient(180deg, transparent, #05070a);
+}

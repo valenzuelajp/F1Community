@@ -1,0 +1,787 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap');
+
+/* ==========================================================================
+   H02 alternatives — three takes on the login page footer.
+   Baseline reference: src/components/layout/LoginFooter.tsx
+   (+ src/app/login/login.css `.login-footer*`).
+
+   Same wireframe content as the Classic, restyled to pair with the matching
+   H01 header variant. Every variant fixes the baseline's gaps:
+      · link rows ≥ 40px targets, newsletter controls ≥ 44px
+      · body text contrast ≥ 4.5:1 (black on red fills, not white)
+      · :focus-visible rings + form :focus-within ring
+      · decorative brackets / LEDs / hems kept out of the a11y tree
+      · prefers-reduced-motion honoured on every animation / transform
+   ========================================================================== */
+
+/* ---- Shared base (all variants) ---- */
+
+.f1f {
+  --f1f-red: #ff1801;
+  position: relative;
+  width: 100%;
+  color: #ffffff;
+  container-type: inline-size;
+  container-name: f1f;
+}
+
+.f1f-inner {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 1.75rem;
+}
+
+.f1f-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@container f1f (min-width: 640px) {
+  .f1f-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem 3rem;
+  }
+}
+
+@container f1f (min-width: 1000px) {
+  .f1f-grid {
+    grid-template-columns: 1.2fr 1fr 1fr 1.7fr;
+    gap: 3rem;
+  }
+}
+
+.f1f-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* Logo crop: imgLogoContainer.png is a 3464x3464 canvas with the F1 mark
+   centred at 22.719% / 43.129% and sized 54.561% x 13.741% — box cut to
+   the mark so the logo reads at full size (same math as the H01 header). */
+.f1f-logo {
+  --mark-h: 30px;
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  height: var(--mark-h);
+  width: calc((var(--mark-h) / 0.13741) * 0.54561);
+  overflow: hidden;
+}
+
+.f1f-logo img {
+  position: absolute !important;
+  width: calc(var(--mark-h) / 0.13741) !important;
+  height: calc(var(--mark-h) / 0.13741) !important;
+  left: calc((var(--mark-h) / 0.13741) * -0.22719) !important;
+  right: auto !important;
+  top: calc((var(--mark-h) / 0.13741) * -0.43129) !important;
+  bottom: auto !important;
+  max-width: none !important;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.f1f-socials {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.f1f-social {
+  display: flex;
+  height: 40px;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.f1f-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.f1f-col-title {
+  margin: 0 0 0.55rem;
+}
+
+.f1f-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  text-decoration: none;
+}
+
+.f1f-newsletter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.f1f-news-title {
+  margin: 0;
+}
+
+.f1f-news-desc {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.f1f-news-form {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.f1f-news-form:focus-within {
+  border-color: var(--f1f-red);
+}
+
+.f1f-news-input {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 44px;
+  background: transparent;
+  padding: 0 0.9rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  color: #ffffff;
+  outline: none;
+}
+
+.f1f-news-input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.f1f-news-btn {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 1.15rem;
+  border: none;
+  cursor: pointer;
+}
+
+.f1f-news-terms {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.f1f-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 2.75rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@container f1f (min-width: 760px) {
+  .f1f-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.f1f-copy {
+  margin: 0;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.f1f-legal {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.f1f-legal a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.f1f :focus-visible {
+  outline: 2px solid var(--f1f-red);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .f1f *,
+  .f1f *::before,
+  .f1f *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   A — PIT WALL
+   Refined telemetry editorial: calm #0a0a0c slab, Barlow Semi Condensed,
+   timing-sheet numbering (01/02) on column titles, red slab link states.
+   ========================================================================== */
+
+.f1f--pitwall {
+  background-color: #0a0a0c;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+}
+
+.f1f--pitwall .f1f-details {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.f1f--pitwall .f1f-col-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.f1f--pitwall .f1f-idx {
+  font-size: 0.625rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: rgba(255, 24, 1, 0.7);
+}
+
+.f1f--pitwall .f1f-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.84);
+  transition: color 0.15s ease;
+}
+
+/* red slab underline — same state language as the Pit Wall header links */
+.f1f--pitwall .f1f-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  height: 2px;
+  background-color: var(--f1f-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s ease;
+}
+
+.f1f--pitwall .f1f-link:hover,
+.f1f--pitwall .f1f-link:focus-visible {
+  color: #ffffff;
+}
+
+.f1f--pitwall .f1f-link:hover::after,
+.f1f--pitwall .f1f-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.f1f--pitwall .f1f-social {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+}
+
+.f1f--pitwall .f1f-social:hover {
+  border-color: var(--f1f-red);
+  background-color: rgba(255, 24, 1, 0.1);
+}
+
+.f1f--pitwall .f1f-news-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--f1f-red);
+}
+
+.f1f--pitwall .f1f-news-form {
+  background-color: #0b0f17;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.f1f--pitwall .f1f-news-btn {
+  background-color: var(--f1f-red);
+  color: #000000; /* 5.4:1 — white would fail AA on #ff1801 */
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 0 4px 4px 0;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.f1f--pitwall .f1f-news-btn:hover {
+  background-color: #ff3d1f;
+  transform: translateY(-1px);
+}
+
+.f1f--pitwall .f1f-news-btn:active {
+  transform: translateY(0);
+  transition-duration: 0.06s;
+}
+
+.f1f--pitwall .f1f-news-terms,
+.f1f--pitwall .f1f-copy {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.f1f--pitwall .f1f-bottom {
+  border-top-color: rgba(255, 255, 255, 0.1);
+  font-size: 0.68rem;
+}
+
+.f1f--pitwall .f1f-legal a:hover,
+.f1f--pitwall .f1f-legal a:focus-visible {
+  color: var(--f1f-red);
+}
+
+/* ==========================================================================
+   B — GRANDSTAND
+   Velocity: pure black, slipstream hem across the top edge, Anton display
+   type leaning forward, red speed streaks under titles and links.
+   ========================================================================== */
+
+.f1f--grandstand {
+  background-color: #000000;
+  font-family: var(--font-display), 'Anton', Impact, sans-serif;
+}
+
+/* slipstream hem: red streak accelerating out to the right */
+.f1f--grandstand::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    #ff1801 0%,
+    rgba(255, 24, 1, 0.6) 35%,
+    rgba(255, 24, 1, 0.15) 70%,
+    transparent 100%
+  );
+}
+
+.f1f--grandstand .f1f-details {
+  font-family: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.f1f--grandstand .f1f-col-title,
+.f1f--grandstand .f1f-news-title {
+  position: relative;
+  display: inline-block;
+  align-self: start;
+  margin-bottom: 0.8rem;
+  font-family: inherit;
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #ffffff;
+  transform: skewX(-6deg);
+  transform-origin: left;
+}
+
+/* fixed red streak — the title's forward lean made physical */
+.f1f--grandstand .f1f-col-title::after,
+.f1f--grandstand .f1f-news-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -7px;
+  width: 2.5rem;
+  height: 4px;
+  background-color: var(--f1f-red);
+  transform: skewX(-14deg);
+}
+
+.f1f--grandstand .f1f-links {
+  gap: 0.1rem;
+}
+
+.f1f--grandstand .f1f-link {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  transition: color 0.15s ease;
+}
+
+/* speed streak underline — same forward lean as the Grandstand header */
+.f1f--grandstand .f1f-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 5px;
+  height: 3px;
+  background-color: var(--f1f-red);
+  transform: skewX(-14deg) scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.f1f--grandstand .f1f-link:hover,
+.f1f--grandstand .f1f-link:focus-visible {
+  color: #ff2a10;
+}
+
+.f1f--grandstand .f1f-link:hover::after,
+.f1f--grandstand .f1f-link:focus-visible::after {
+  transform: skewX(-14deg) scaleX(1);
+}
+
+.f1f--grandstand .f1f-social {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0;
+}
+
+.f1f--grandstand .f1f-social:hover {
+  border-color: var(--f1f-red);
+  background-color: rgba(255, 24, 1, 0.15);
+  transform: translateY(-2px);
+}
+
+.f1f--grandstand .f1f-news-form {
+  background-color: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0;
+}
+
+.f1f--grandstand .f1f-news-btn {
+  background-color: var(--f1f-red);
+  color: #000000;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.f1f--grandstand .f1f-news-btn:hover {
+  background-color: #ff3d1f;
+  transform: translateX(3px); /* momentum nudge */
+}
+
+.f1f--grandstand .f1f-news-btn:active {
+  transform: translateX(1px);
+  transition-duration: 0.06s;
+}
+
+.f1f--grandstand .f1f-news-desc,
+.f1f--grandstand .f1f-news-terms {
+  font-family: var(--font-inter), 'Segoe UI', sans-serif;
+}
+
+.f1f--grandstand .f1f-copy {
+  font-family: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.f1f--grandstand .f1f-legal {
+  gap: 1.25rem;
+}
+
+.f1f--grandstand .f1f-legal a {
+  font-family: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.f1f--grandstand .f1f-legal a:hover,
+.f1f--grandstand .f1f-legal a:focus-visible {
+  color: #ff2a10;
+}
+
+/* ==========================================================================
+   C — TELEMETRY HUD
+   Instrument cluster: scanlines + red glow, Chakra Petch, notched panels,
+   LED markers, ticker-style bottom bar.
+   ========================================================================== */
+
+.f1f--hud {
+  background-color: #05070a;
+  font-family: 'Chakra Petch', 'Segoe UI', sans-serif;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.035) 0 1px,
+      transparent 1px 3px
+    ),
+    radial-gradient(ellipse at 88% 0%, rgba(255, 24, 1, 0.14), transparent 55%);
+}
+
+/* corner bracket — top-left only, same as the HUD header */
+.f1f--hud .f1f-inner::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(255, 24, 1, 0.65);
+  border-right: none;
+  border-bottom: none;
+  top: 14px;
+  left: 6px;
+  pointer-events: none;
+}
+
+.f1f--hud .f1f-details {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.f1f--hud .f1f-col-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* LED marker after each column title */
+.f1f--hud .f1f-col-title::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-left: 0.55rem;
+  background-color: var(--f1f-red);
+  box-shadow: 0 0 6px var(--f1f-red);
+  vertical-align: middle;
+}
+
+.f1f--hud .f1f-links {
+  gap: 0.05rem;
+}
+
+.f1f--hud .f1f-link {
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  transition: color 0.15s ease;
+}
+
+/* LED slot at the end of each link — lights up on hover/focus */
+.f1f--hud .f1f-link::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background-color: transparent;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.f1f--hud .f1f-link:hover,
+.f1f--hud .f1f-link:focus-visible {
+  color: #ffffff;
+}
+
+.f1f--hud .f1f-link:hover::after,
+.f1f--hud .f1f-link:focus-visible::after {
+  background-color: var(--f1f-red);
+  box-shadow: 0 0 6px var(--f1f-red);
+}
+
+.f1f--hud .f1f-social {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 0;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+
+.f1f--hud .f1f-social:hover {
+  border-color: rgba(255, 24, 1, 0.7);
+  background-color: rgba(255, 24, 1, 0.08);
+  transform: translateY(-2px);
+}
+
+.f1f--hud .f1f-news-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+/* pulsing LED marks the panel live */
+.f1f--hud .f1f-news-title::after {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 0.55rem;
+  border-radius: 50%;
+  background-color: var(--f1f-red);
+  box-shadow: 0 0 6px var(--f1f-red);
+  animation: f1f-pulse 2s ease-in-out infinite;
+  vertical-align: middle;
+}
+
+@keyframes f1f-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.f1f--hud .f1f-news-form {
+  background-color: rgba(11, 15, 23, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+}
+
+.f1f--hud .f1f-news-btn {
+  position: relative;
+  overflow: hidden;
+  background-color: #f2f2f2;
+  color: #0a0a0a;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* red baseline sweep on arm — same instrument switch as the HUD SALE */
+.f1f--hud .f1f-news-btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--f1f-red), #ff7a5c);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.f1f--hud .f1f-news-btn:hover {
+  background-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 0 -1px rgba(255, 24, 1, 0.9),
+    0 8px 18px rgba(255, 24, 1, 0.35);
+}
+
+.f1f--hud .f1f-news-btn:hover::after {
+  transform: scaleX(1);
+}
+
+.f1f--hud .f1f-news-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 -1px rgba(255, 24, 1, 0.9);
+  transition-duration: 0.06s;
+}
+
+.f1f--hud :focus-visible {
+  outline: 2px dashed var(--f1f-red);
+  outline-offset: 3px;
+}
+
+/* bottom bar as a live-timing ticker strip: full-bleed to the footer edge
+   with real breathing room on every side (base rule gives it 0 below) */
+.f1f--hud .f1f-bottom {
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.025);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.f1f--hud .f1f-copy {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.f1f--hud .f1f-legal {
+  gap: 0;
+}
+
+.f1f--hud .f1f-legal > span {
+  display: none;
+}
+
+.f1f--hud .f1f-legal a {
+  padding: 0 0.9rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.f1f--hud .f1f-legal a:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.f1f--hud .f1f-legal a:first-child {
+  padding-left: 0;
+}
+
+.f1f--hud .f1f-legal a:hover,
+.f1f--hud .f1f-legal a:focus-visible {
+  color: var(--f1f-red);
+}

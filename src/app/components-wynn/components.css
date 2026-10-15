@@ -1954,3 +1954,60 @@
     padding: 0 0.5rem;
   }
 }
+
+/* H02/H03 — Footer + Standings specimens: full-bleed inside the card preview */
+.components-card-preview:has(.login-footer),
+.components-card-preview:has(.f1f),
+.components-card-preview:has(.login-podium),
+.components-card-preview:has(.f1st) {
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 0;
+  padding: 0;
+  container-type: inline-size;
+}
+
+/* Classic footer: the grid follows the FRAME width, not the viewport —
+   login.css switches these off window media queries at 640/1024, which
+   would keep a 4-column grid inside the narrow specimen card. */
+@container (max-width: 960px) {
+  .components-card-preview:has(.login-footer) .login-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@container (max-width: 600px) {
+  .components-card-preview:has(.login-footer) .login-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .components-card-preview:has(.login-footer) .login-footer-bottom {
+    flex-direction: column;
+  }
+}
+
+/* Classic footer logo: crop the 3464² canvas box to the F1 mark (same
+   measured bbox as the H01 header — mark = 54.561% x 13.741% at
+   22.719% / 43.129%) so the specimen shows the mark at full size
+   instead of a speck inside object-contain. */
+.components-card-preview:has(.login-footer) .login-footer-logo {
+  --mark-h: 26px;
+  --mark-canvas: calc(var(--mark-h) / 0.13741);
+  width: calc(var(--mark-canvas) * 0.54561); /* 103px at 26px tall */
+  height: var(--mark-h);
+  overflow: hidden;
+}
+
+.components-card-preview:has(.login-footer) .login-footer-logo img {
+  position: absolute !important;
+  width: var(--mark-canvas) !important;
+  height: var(--mark-canvas) !important;
+  left: calc(var(--mark-canvas) * -0.22719) !important;
+  right: auto !important;
+  top: calc(var(--mark-canvas) * -0.43129) !important;
+  bottom: auto !important;
+  max-width: none !important;
+  pointer-events: none;
+}
