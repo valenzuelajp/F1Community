@@ -4,7 +4,6 @@ import Image from "next/image";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { LoginNavHeader } from "@/components/layout/LoginNavHeader";
 import { LoginFooter } from "@/components/layout/LoginFooter";
-import { ChampionshipStandings } from "@/components/f1/ChampionshipStandings";
 import { Countdown } from "@/components/f1/Countdown";
 import { fallbackF1Event, getNextF1Event, getTopDrivers } from "@/lib/f1/jolpica";
 import type { F1StandingDriver } from "@/lib/f1/jolpica";
@@ -263,7 +262,42 @@ export default async function LoginPage() {
           Live driver standings from the Jolpica schedule API (ISR hourly).
           Hidden entirely when the API is unavailable.
           ===================================================================== */}
-      <ChampionshipStandings drivers={topDrivers} season={event.season} />
+      {topDrivers.length > 0 && (
+        <section aria-label="Top 3 championship drivers" className="login-podium">
+          <h2 className="login-podium-title">
+            TOP 3 — {event.season} CHAMPIONSHIP
+          </h2>
+          <div className="login-podium-row">
+            {topDrivers.map((driver) => (
+              <div
+                key={driver.code}
+                className={`login-podium-cell login-podium-cell--${driver.position}`}
+              >
+                <span className="login-podium-info">
+                  <span className="login-podium-name">
+                    {driver.name.toUpperCase()}
+                  </span>
+                  <span className="login-podium-team">{driver.team.toUpperCase()}</span>
+                  <span className="login-podium-points">
+                    {driver.points} <span className="login-podium-pts">PTS</span>
+                  </span>
+                </span>
+                {driver.photo && (
+                  <span className="login-podium-photo">
+                    <Image
+                      src={driver.photo}
+                      alt={`${driver.name} portrait`}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 112px, (min-width: 640px) 96px, 72px"
+                    />
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* =====================================================================
           4. TRUSTED TEAMS SPONSORS STRIP

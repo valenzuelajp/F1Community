@@ -576,108 +576,71 @@
 .login-podium {
   width: 100%;
   background-color: var(--black);
-  padding: 2rem 1rem 2.25rem;
+  padding: 1.5rem 1rem 1.75rem;
   border-bottom: 2px solid #ffffff;
 }
 
-/* Title: red caps flanked by hairline rules — a proper section heading,
-   not floating microcopy. */
 .login-podium-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
   text-align: center;
-  font-size: clamp(11px, 2.8vw, 14px);
+  font-size: clamp(10px, 2.8vw, 13px);
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   color: var(--brand-red);
-}
-
-.login-podium-title-rule {
-  height: 2px;
-  width: clamp(28px, 8vw, 96px);
-  background-color: var(--brand-red);
-  opacity: 0.85;
+  margin-bottom: 1.25rem;
 }
 
 .login-podium-row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.85rem;
+  gap: 0.75rem;
   max-width: 1300px;
   margin: 0 auto;
-  list-style: none;
-  padding: 0;
 }
 
-/* Cell: constructor colour runs along the TOP edge (passed as --team-c),
-   the outlined position number anchors the left, portrait fades into the
-   card on the right. */
 .login-podium-cell {
-  position: relative;
   display: flex;
-  align-items: stretch;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding: 0.75rem 1rem;
   background-color: #0b0f17;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 3px solid var(--team-c, rgba(255, 255, 255, 0.35));
-  border-radius: 4px;
-  overflow: hidden;
+  border-left: 3px solid rgba(255, 255, 255, 0.35);
+  border-radius: 3px;
 }
 
-/* Outlined position number — timing-sheet watermark. Gold / silver /
-   bronze stroke for P1-3. */
-.login-podium-rank {
-  align-self: center;
+/* Position accent: gold / silver / bronze */
+.login-podium-cell--1 {
+  border-left-color: #ffd700;
+}
+.login-podium-cell--2 {
+  border-left-color: #c0c0c0;
+}
+.login-podium-cell--3 {
+  border-left-color: #cd7f32;
+}
+
+/* Driver portrait: plain portrait crop, no circle/ring, sits on the RIGHT of
+   the card while name / team / points stay on the LEFT (info flex: 1 pushes
+   the photo to the far edge). */
+.login-podium-photo {
+  position: relative;
   flex-shrink: 0;
-  font-size: clamp(2rem, 5.5vw, 2.75rem);
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  font-variant-numeric: tabular-nums;
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.35);
+  width: 72px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: #06080d;
 }
-
-.login-podium-cell--1 .login-podium-rank {
-  -webkit-text-stroke-color: #ffd700;
-}
-.login-podium-cell--2 .login-podium-rank {
-  -webkit-text-stroke-color: #c0c0c0;
-}
-.login-podium-cell--3 .login-podium-rank {
-  -webkit-text-stroke-color: #cd7f32;
-}
-
 .login-podium-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.2rem;
+  display: grid;
+  gap: 0.15rem;
   flex: 1 1 auto;
   min-width: 0;
   text-align: left;
 }
 
-/* screen-reader-only position text (the big number is decorative) */
-.login-podium-sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 .login-podium-name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -688,52 +651,25 @@
   font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.55);
 }
 
 .login-podium-points {
   display: flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  margin-top: 0.15rem;
-  font-size: 20px;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 16px;
   font-weight: 900;
   color: var(--brand-red);
   font-variant-numeric: tabular-nums;
 }
 
 .login-podium-pts {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.7);
-}
-
-/* Portrait: team-tinted backdrop, fading into the card at the bottom */
-.login-podium-photo {
-  position: relative;
-  flex-shrink: 0;
-  align-self: stretch;
-  width: 80px;
-  overflow: hidden;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--team-c, #ffffff) 20%, transparent),
-      transparent 60%
-    ),
-    #06080d;
-}
-
-.login-podium-photo::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 35%;
-  background: linear-gradient(180deg, transparent, #0b0f17);
-  pointer-events: none;
 }
 
 /* --- Teams Strip --- */
@@ -1084,6 +1020,9 @@
     min-height: 48px;
     font-size: 11px;
   }
+  .login-podium-photo {
+    width: 112px;
+  }
   .login-live-cell {
     height: 48px;
     gap: 0.75rem;
@@ -1110,10 +1049,16 @@
   }
   .login-podium-cell {
     gap: 1rem;
-    padding: 1rem 1.15rem;
+    padding: 1rem;
   }
   .login-podium-photo {
     width: 96px;
+  }
+  .login-podium-info {
+    min-width: 0;
+  }
+  .login-podium-name {
+    font-size: 13px;
   }
 
   .login-teams {
@@ -1156,15 +1101,6 @@
   .login-header-inner {
     height: 72px;
     padding: 0 3.5rem;
-  }
-  .login-podium-photo {
-    width: 120px;
-  }
-  .login-podium-name {
-    font-size: 14px;
-  }
-  .login-podium-points {
-    font-size: 22px;
   }
   .login-hero {
     min-height: 640px;

@@ -9,9 +9,8 @@ import { buildLoginTsx, buildLoginCss, buildMiniLoginTsx, buildMiniLoginCss } fr
 import { MiniLogin } from './MiniLoginExport';
 import { LoginNavHeader } from '@/components/layout/LoginNavHeader';
 import { LoginFooter } from '@/components/layout/LoginFooter';
-import { ChampionshipStandings } from '@/components/f1/ChampionshipStandings';
 import type { F1StandingDriver } from '@/lib/f1/jolpica';
-import { StandingsPitWall, StandingsGrandstand, StandingsTelemetryHud } from './standings-alternatives';
+import { StandingsClassic, StandingsPitWall, StandingsGrandstand, StandingsTelemetryHud } from './standings-alternatives';
 import { HeaderPitWall, HeaderGrandstand, HeaderTelemetryHud } from './header-alternatives';
 import { FooterPitWall, FooterGrandstand, FooterTelemetryHud } from './footer-alternatives';
 
@@ -2101,7 +2100,7 @@ function ComponentsShowcase() {
               ) : standingsVariant === 'Telemetry HUD' ? (
                 <StandingsTelemetryHud drivers={SAMPLE_STANDINGS} season="2026" />
               ) : (
-                <ChampionshipStandings drivers={SAMPLE_STANDINGS} season="2026" />
+                <StandingsClassic drivers={SAMPLE_STANDINGS} season="2026" />
               )}
             </ComponentCard>
           </div>

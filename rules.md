@@ -17,6 +17,19 @@ Rules the AI assistant MUST always follow when working in this repository.
   written memory record on disk).
 - Follow the existing conventions in `f1storewiki/DEVELOPMENT.md`.
 
+## Change scope — components only (Wynn)
+
+- **Only change the `/components-wynn` showcase** (its page, cards, and
+  `*-alternatives.*` files) unless the user explicitly asks to change a live
+  page.
+- **Do not touch the live `/login` page** — its markup (`src/app/login/page.tsx`),
+  its styles (`src/app/login/login.css`), or shared components the login page
+  uses (e.g. `LoginNavHeader`, `LoginFooter`).
+- Baseline/"Classic" variants in the showcase must render the live design
+  as-is (via the live classes, e.g. `.login-podium*` from `login.css`); do not
+  restyle them.
+- If a showcase task seems to require a live-page edit, stop and ask first.
+
 ## Progress → Wiki (Wynn)
 
 Every time progress is made (feature, fix, refactor, UI change), update the
