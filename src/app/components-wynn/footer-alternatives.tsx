@@ -147,3 +147,83 @@ export function FooterGrandstand() {
 export function FooterTelemetryHud() {
   return <FooterFrame variant="f1f--hud" />;
 }
+
+/* ==========================================================================
+   LOADING SKELETON — the H02 loading state, one per variant.
+
+   Renders on the SAME root classes as the real footers (`.login-footer` /
+   `.f1f f1f--*`), so the variant chrome (backgrounds, hems, scanlines,
+   borders, type family) is real and only the content blocks shimmer.
+   Mirrors the real footer grid — brand + 2 directory columns + newsletter +
+   legal bar — so the swap to loaded content causes no layout shift.
+
+   a11y: all blocks decorative (aria-hidden); one visually-hidden
+   role="status" announces "Loading footer…" to screen readers.
+   ========================================================================== */
+
+export type FooterSkeletonVariant =
+  | 'Classic'
+  | 'Pit Wall'
+  | 'Grandstand'
+  | 'Telemetry HUD';
+
+const FOOTER_SK_CLASS: Record<FooterSkeletonVariant, string> = {
+  Classic: 'login-footer f1fsk f1fsk--classic',
+  'Pit Wall': 'f1f f1f--pitwall f1fsk f1fsk--pitwall',
+  Grandstand: 'f1f f1f--grandstand f1fsk f1fsk--grandstand',
+  'Telemetry HUD': 'f1f f1f--hud f1fsk f1fsk--hud',
+};
+
+export function FooterSkeleton({ variant = 'Classic' }: { variant?: FooterSkeletonVariant }) {
+  return (
+    <footer className={FOOTER_SK_CLASS[variant]}>
+      <div className="f1fsk-inner" aria-hidden="true">
+        <div className="f1fsk-grid">
+          {/* Brand Column */}
+          <div className="f1fsk-brand">
+            <span className="f1fsk-logo" />
+            <span className="f1fsk-bar f1fsk-bar--details" />
+            <div className="f1fsk-socials">
+              {[0, 1, 2, 3].map((i) => (
+                <span key={i} className="f1fsk-social" />
+              ))}
+            </div>
+          </div>
+
+          {/* Directory Columns */}
+          {[0, 1].map((i) => (
+            <div className="f1fsk-col" key={`sk-col-${i}`}>
+              <span className="f1fsk-title" />
+              <span className="f1fsk-bar f1fsk-bar--link" />
+              <span className="f1fsk-bar f1fsk-bar--link" />
+              <span className="f1fsk-bar f1fsk-bar--link" />
+              <span className="f1fsk-bar f1fsk-bar--link" />
+            </div>
+          ))}
+
+          {/* Newsletter Column */}
+          <div className="f1fsk-news">
+            <span className="f1fsk-bar f1fsk-bar--news-title" />
+            <span className="f1fsk-bar f1fsk-bar--desc" />
+            <span className="f1fsk-bar f1fsk-bar--desc f1fsk-bar--desc-short" />
+            <div className="f1fsk-form">
+              <span className="f1fsk-input" />
+              <span className="f1fsk-submit" />
+            </div>
+            <span className="f1fsk-bar f1fsk-bar--terms" />
+          </div>
+        </div>
+
+        {/* Bottom Legal Notice */}
+        <div className="f1fsk-bottom">
+          <span className="f1fsk-bar f1fsk-bar--copy" />
+          <span className="f1fsk-bar f1fsk-bar--legal" />
+        </div>
+      </div>
+
+      <span className="components-sr" role="status">
+        Loading footer…
+      </span>
+    </footer>
+  );
+}

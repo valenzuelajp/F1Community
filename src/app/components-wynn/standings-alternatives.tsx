@@ -4,7 +4,7 @@ import type { F1StandingDriver } from '@/lib/f1/jolpica';
 import './standings-alternatives.css';
 
 /**
- * H03 alternatives — three restyles of the Championship Standings
+ * H04 alternatives — three restyles of the Championship Standings
  * (baseline: the live `.login-podium` markup on /login, styles in login.css).
  *
  * Classic renders the original login markup via the shared `.login-podium*`
@@ -176,4 +176,55 @@ export function StandingsTelemetryHud({
   season: string | number;
 }) {
   return <StandingsFrame variant="f1st--hud" drivers={drivers} season={season} />;
+}
+
+/* ==========================================================================
+   LOADING SKELETON — the H04 loading state, one per variant.
+
+   Geometry mirrors each variant's real standings (same title/row/cell/photo
+   proportions), so the swap to loaded content causes zero layout shift.
+   Usage: render <StandingsSkeleton variant={...} /> while loading, swap to
+   the matching standings component when data lands.
+
+   a11y: every block is decorative (aria-hidden); one visually-hidden
+   role="status" announces "Loading standings…" to screen readers.
+   ========================================================================== */
+
+export type StandingsSkeletonVariant = 'Classic' | 'Pit Wall' | 'Grandstand' | 'Telemetry HUD';
+
+const SKELETON_CLASS: Record<StandingsSkeletonVariant, string> = {
+  Classic: 'f1sk f1sk--classic',
+  'Pit Wall': 'f1sk f1sk--pitwall',
+  Grandstand: 'f1sk f1sk--grandstand',
+  'Telemetry HUD': 'f1sk f1sk--hud',
+};
+
+export function StandingsSkeleton({ variant = 'Classic' }: { variant?: StandingsSkeletonVariant }) {
+  return (
+    <section className={SKELETON_CLASS[variant]}>
+      <div className="f1sk-body" aria-hidden="true">
+        <div className="f1sk-head">
+          <span className="f1sk-rule" />
+          <span className="f1sk-title" />
+          <span className="f1sk-rule" />
+        </div>
+        <ol className="f1sk-row">
+          {[1, 2, 3].map((p) => (
+            <li key={p} className={`f1sk-cell f1sk-cell--${p}`}>
+              <span className="f1sk-rank" />
+              <span className="f1sk-info">
+                <span className="f1sk-bar f1sk-bar--name" />
+                <span className="f1sk-bar f1sk-bar--team" />
+                <span className="f1sk-bar f1sk-bar--pts" />
+              </span>
+              <span className="f1sk-photo" />
+            </li>
+          ))}
+        </ol>
+      </div>
+      <span className="components-sr" role="status">
+        Loading standings…
+      </span>
+    </section>
+  );
 }

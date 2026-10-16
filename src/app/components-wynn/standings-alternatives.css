@@ -1,12 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap');
 
 /* ==========================================================================
-   H03 alternatives — three takes on the Championship Standings.
-   Baseline reference: src/components/f1/ChampionshipStandings.tsx
+   H04 alternatives — three takes on the Championship Standings.
+   Baseline reference: the live `.login-podium` markup on /login
    (+ src/app/login/login.css `.login-podium*`).
 
-   Same data shape as the Classic, restyled to pair with the matching
-   H01 header / H02 footer variant.
+   Shared variant pattern (same system across H01–H05 alternatives):
+      · Pit Wall: #0a0a0c, Barlow Semi Condensed, 4px radius, hairline
+        frame rgba(255,255,255,.14) + inset highlight, red index numbers
+        (0.6875rem, solid red), 2px red slab underlines, media calm
+      · Grandstand: #000, 5px slipstream hem on the TOP edge, Anton type
+        skewed -6°, -14° speed streaks (3px), hover #ff2a10
+      · Telemetry HUD: #05070a, scanlines (0.03) + 88% 0% red radial as
+        background-image, 12px top-left bracket, 8px notches, dashed red
+        focus, LED markers, inset red glow, 0.45 red edge
+      · Titles centred, flanked by 2px red rules; body text ≥ 11px
    ========================================================================== */
 
 /* ---- Shared base (all variants) ---- */
@@ -112,7 +120,7 @@
 }
 
 .f1st-team {
-  font-size: 9px;
+  font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -130,7 +138,7 @@
 }
 
 .f1st-pts {
-  font-size: 9px;
+  font-size: 0.6875rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   color: rgba(255, 255, 255, 0.7);
@@ -186,7 +194,7 @@
 
 .f1st--pitwall {
   background-color: #0a0a0c;
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
 }
@@ -194,6 +202,7 @@
 .f1st--pitwall .f1st-title {
   color: rgba(255, 255, 255, 0.92);
   font-size: clamp(11px, 2.8vw, 13px);
+  font-weight: 700;
   letter-spacing: 0.14em;
 }
 
@@ -226,7 +235,7 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: rgba(255, 24, 1, 0.85);
+  color: var(--f1st-red);
   -webkit-text-stroke: 0;
 }
 
@@ -278,19 +287,29 @@
 .f1st--grandstand {
   background-color: #000000;
   font-family: var(--font-display), 'Anton', Impact, sans-serif;
-  background-image: linear-gradient(
+}
+
+/* slipstream hem — TOP edge, same 5px gradient as H01/H02/H03/H05 */
+.f1st--grandstand::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
     90deg,
     #ff1801 0%,
     rgba(255, 24, 1, 0.6) 35%,
     rgba(255, 24, 1, 0.15) 70%,
     transparent 100%
   );
-  background-size: 100% 5px;
-  background-repeat: no-repeat;
 }
 
 .f1st--grandstand .f1st-title {
   color: #ffffff;
+  font-size: clamp(15px, 3.4vw, 22px);
+  font-weight: 400;
   transform: skewX(-6deg);
 }
 
@@ -365,10 +384,26 @@
   background-image:
     repeating-linear-gradient(
       0deg,
-      rgba(255, 255, 255, 0.035) 0 1px,
+      rgba(255, 255, 255, 0.03) 0 1px,
       transparent 1px 3px
     ),
     radial-gradient(ellipse at 88% 0%, rgba(255, 24, 1, 0.14), transparent 55%);
+  border-top: 1px solid rgba(255, 24, 1, 0.45);
+  box-shadow: inset 0 2px 8px rgba(255, 24, 1, 0.18);
+}
+
+/* corner bracket — top-left only, 12px (same as H01/H02/H03/H05) */
+.f1st--hud::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(255, 24, 1, 0.65);
+  border-right: none;
+  border-bottom: none;
+  top: 8px;
+  left: 6px;
+  pointer-events: none;
 }
 
 .f1st--hud .f1st-title {
@@ -459,4 +494,409 @@
 
 .f1st--hud .f1st-photo::after {
   background: linear-gradient(180deg, transparent, #05070a);
+}
+
+/* ==========================================================================
+   LOADING SKELETON — one per variant. Root carries the REAL variant chrome
+   (medal slabs, hems, scanlines, frames). Blocks mirror the real cell
+   anatomy: outlined rank standing in for the stroked position numerals
+   (small red index in Pit Wall, big red skew in Grandstand), label-
+   proportioned name/team bars, the points block (red on Classic — the live
+   points are brand red), and the right-hand portrait well with its divider.
+   Classic keeps the live red title. Blocks sweep right-to-left in a
+   staggered wave across cells; the loaded swap causes no layout shift.
+   ========================================================================== */
+
+.f1sk {
+  --f1sk-a: #333a47; /* block base — reads against panel fills */
+  --f1sk-b: #4a5464; /* shimmer highlight */
+  position: relative;
+  width: 100%;
+  container-type: inline-size;
+  container-name: f1sk;
+  padding: 2rem 1rem 2.25rem;
+}
+
+.f1sk-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.f1sk-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.f1sk-rule {
+  height: 2px;
+  width: clamp(28px, 8vw, 96px);
+  background-color: #ff1801;
+  opacity: 0.85;
+}
+
+.f1sk-title {
+  width: clamp(150px, 42%, 230px);
+  height: 12px;
+  border-radius: 3px;
+}
+
+.f1sk-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+@container f1sk (min-width: 640px) {
+  .f1sk-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+.f1sk-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 116px;
+  padding: 1rem 1.25rem;
+  background-color: var(--f1sk-cell-bg, #0b0f17);
+  border: 1px solid var(--f1sk-cell-bd, rgba(255, 255, 255, 0.1));
+  border-left: 3px solid var(--f1sk-medal, rgba(255, 255, 255, 0.35));
+  border-radius: var(--f1sk-cell-radius, 4px);
+  overflow: hidden;
+}
+
+.f1sk-cell--1 { --f1sk-medal: #ffd700; --f1sk-d: 0.05s; }
+.f1sk-cell--2 { --f1sk-medal: #c0c0c0; --f1sk-d: 0.17s; }
+.f1sk-cell--3 { --f1sk-medal: #cd7f32; --f1sk-d: 0.29s; }
+
+/* Rank: an outlined block standing in for the stroked position numerals —
+   keeps its own transparent fill + sweep (the dark block rule below must
+   not paint over it). */
+.f1sk-rank {
+  position: relative;
+  flex-shrink: 0;
+  align-self: center;
+  width: 44px;
+  height: 36px;
+  border-radius: 4px;
+  background-color: transparent;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.14) 50%,
+    transparent 56%
+  );
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.35);
+  background-size: 200% 100%;
+  animation: f1sk-shimmer 1.6s linear infinite;
+}
+
+.f1sk-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.f1sk-bar {
+  border-radius: 3px;
+}
+
+.f1sk-bar--name { height: 12px; }
+.f1sk-bar--team { width: 46%; height: 8px; }
+.f1sk-bar--pts { width: 76px; height: 18px; }
+
+/* Names vary in length across the real top 3 — vary the stand-ins too. */
+.f1sk-cell--1 .f1sk-bar--name { width: 78%; }
+.f1sk-cell--2 .f1sk-bar--name { width: 64%; }
+.f1sk-cell--3 .f1sk-bar--name { width: 70%; }
+
+/* Portrait well: right-hand column with the real 1px divider. */
+.f1sk-photo {
+  position: relative;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 84px;
+  min-height: 96px;
+  border-radius: 3px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Dark text blocks — right-to-left sweep (rules are static red chrome,
+   ranks carry their own ring treatment above). */
+.f1sk-title,
+.f1sk-bar,
+.f1sk-photo {
+  background-color: var(--f1sk-a);
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    var(--f1sk-b) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1sk-shimmer 1.6s linear infinite;
+}
+
+@keyframes f1sk-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- Classic: mirrors the live `.login-podium` — red title, red points,
+   no rank number, 72px 3:4 portrait ---- */
+
+.f1sk--classic {
+  background-color: var(--black, #000000);
+  border-bottom: 2px solid #ffffff;
+  padding: 1.5rem 1rem 1.75rem;
+}
+
+.f1sk--classic .f1sk-rule,
+.f1sk--classic .f1sk-rank {
+  display: none;
+}
+
+.f1sk--classic .f1sk-cell {
+  min-height: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 3px;
+}
+
+.f1sk--classic .f1sk-info {
+  gap: 0.35rem;
+}
+
+.f1sk--classic .f1sk-bar--name { height: 11px; }
+.f1sk--classic .f1sk-bar--team { width: 48%; height: 8px; }
+
+/* Live title and points are brand red — keep them red while loading. */
+.f1sk--classic .f1sk-title {
+  background-color: #ff1801;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 56%
+  );
+}
+
+.f1sk--classic .f1sk-bar--pts {
+  width: 64px;
+  height: 16px;
+  background-color: #ff1801;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 56%
+  );
+}
+
+.f1sk--classic .f1sk-photo {
+  align-self: center;
+  width: 72px;
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+}
+
+/* ---- Pit Wall: timing-sheet frame, small RED index where the real
+   index numbers sit, hairline structure ---- */
+
+.f1sk--pitwall {
+  background-color: #0a0a0c;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+}
+
+.f1sk--pitwall .f1sk-cell {
+  --f1sk-cell-bg: #0d0f14;
+  --f1sk-cell-bd: rgba(255, 255, 255, 0.1);
+}
+
+.f1sk--pitwall .f1sk-rank {
+  align-self: flex-start;
+  width: 26px;
+  height: 10px;
+  border-radius: 2px;
+  background-color: #ff1801;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 56%
+  );
+  box-shadow: none;
+}
+
+/* ---- Grandstand: black + slipstream hem, BIG RED leaning rank, red
+   streak under the name (Anton lean on the title) ---- */
+
+.f1sk--grandstand {
+  background-color: #000000;
+}
+
+.f1sk--grandstand::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    #ff1801 0%,
+    rgba(255, 24, 1, 0.6) 35%,
+    rgba(255, 24, 1, 0.15) 70%,
+    transparent 100%
+  );
+}
+
+.f1sk--grandstand .f1sk-title {
+  height: 16px;
+  transform: skewX(-6deg);
+}
+
+.f1sk--grandstand .f1sk-cell {
+  --f1sk-cell-bg: #000000;
+  --f1sk-cell-bd: rgba(255, 255, 255, 0.18);
+  --f1sk-medal: rgba(255, 255, 255, 0.18);
+  --f1sk-cell-radius: 0;
+}
+
+.f1sk--grandstand .f1sk-rank {
+  width: 52px;
+  height: 40px;
+  border-radius: 2px;
+  background-color: #ff1801;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 56%
+  );
+  box-shadow: none;
+  transform: skewX(-8deg);
+}
+
+/* Red speed streak leaning off the name, like the real one. */
+.f1sk--grandstand .f1sk-bar--name {
+  position: relative;
+}
+
+.f1sk--grandstand .f1sk-bar--name::after {
+  content: '';
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 40px;
+  height: 2.5px;
+  background-color: #ff1801;
+  transform: skewX(-14deg);
+  opacity: 0.85;
+}
+
+/* ---- Telemetry HUD: scanlines, notched cells, LED edge, stronger
+   outline rank, bracket ---- */
+
+.f1sk--hud {
+  background-color: #05070a;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.03) 0 1px,
+      transparent 1px 3px
+    ),
+    radial-gradient(ellipse at 88% 0%, rgba(255, 24, 1, 0.14), transparent 55%);
+  border-top: 1px solid rgba(255, 24, 1, 0.45);
+  box-shadow: inset 0 2px 8px rgba(255, 24, 1, 0.18);
+}
+
+.f1sk--hud::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(255, 24, 1, 0.65);
+  border-right: none;
+  border-bottom: none;
+  top: 8px;
+  left: 6px;
+  pointer-events: none;
+}
+
+.f1sk--hud .f1sk-cell {
+  --f1sk-cell-bg: rgba(11, 15, 23, 0.85);
+  --f1sk-cell-bd: rgba(255, 255, 255, 0.16);
+  --f1sk-medal: rgba(255, 255, 255, 0.16);
+  --f1sk-cell-radius: 0;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.f1sk--hud .f1sk-rank {
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.4);
+}
+
+.f1sk--hud .f1sk-cell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: rgba(255, 24, 1, 0.55);
+  box-shadow: 0 0 8px rgba(255, 24, 1, 0.5);
+  z-index: 1;
+}
+
+/* Wave timing — MUST come after every `animation:` shorthand, which would
+   otherwise reset the delay. Group delay per cell (--f1sk-d) + position
+   delay inside the cell (--f1sk-i): rank → name → team → points → photo. */
+.f1sk-title,
+.f1sk-rank,
+.f1sk-bar,
+.f1sk-photo {
+  animation-delay: calc(var(--f1sk-d, 0s) + var(--f1sk-i, 0s));
+}
+
+.f1sk-bar--name { --f1sk-i: 0.05s; }
+.f1sk-bar--team { --f1sk-i: 0.1s; }
+.f1sk-bar--pts { --f1sk-i: 0.15s; }
+.f1sk-photo { --f1sk-i: 0.2s; }
+
+/* ==========================================================================
+   F1 TOUCH: checkered-flag ghost in each portrait well — large two-tone
+   squares (14px) so it reads as a flag, never a faint transparency checker.
+   ========================================================================== */
+
+.f1sk-photo {
+  overflow: hidden;
+}
+
+.f1sk-photo::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.14) 0% 25%,
+    rgba(0, 0, 0, 0.24) 0% 50%
+  );
+  background-size: 28px 28px;
+  animation: f1-flag-wave 2.8s ease-in-out infinite;
 }

@@ -5,14 +5,16 @@ import { X, CheckCircle, ChevronDown, Plus, Minus, Loader2, Check, AlertCircle, 
 import '@/components/auth/auth-forms.css';
 import '../login/login.css';
 import './components.css';
-import { buildLoginTsx, buildLoginCss, buildMiniLoginTsx, buildMiniLoginCss } from './export-code';
+import { buildAiPrompt, buildLoginComponentPrompt, buildMiniLoginPrompt, type AiPromptKey } from './ai-prompt';
 import { MiniLogin } from './MiniLoginExport';
 import { LoginNavHeader } from '@/components/layout/LoginNavHeader';
 import { LoginFooter } from '@/components/layout/LoginFooter';
 import type { F1StandingDriver } from '@/lib/f1/jolpica';
-import { StandingsClassic, StandingsPitWall, StandingsGrandstand, StandingsTelemetryHud } from './standings-alternatives';
-import { HeaderPitWall, HeaderGrandstand, HeaderTelemetryHud } from './header-alternatives';
-import { FooterPitWall, FooterGrandstand, FooterTelemetryHud } from './footer-alternatives';
+import { StandingsClassic, StandingsPitWall, StandingsGrandstand, StandingsTelemetryHud, StandingsSkeleton, type StandingsSkeletonVariant } from './standings-alternatives';
+import { HeaderPitWall, HeaderGrandstand, HeaderTelemetryHud, HeaderSkeleton, type HeaderSkeletonVariant } from './header-alternatives';
+import { FooterPitWall, FooterGrandstand, FooterTelemetryHud, FooterSkeleton, type FooterSkeletonVariant } from './footer-alternatives';
+import { SponsorsClassic, SponsorsPitWall, SponsorsGrandstand, SponsorsTelemetryHud, SponsorsSkeleton, type SponsorsSkeletonVariant } from './sponsors-alternatives';
+import { TelemetryClassic, TelemetryNoLive, TelemetryPitWall, TelemetryGrandstand, TelemetryHud, TelemetrySkeleton, type TelemetrySkeletonVariant } from './telemetry-alternatives';
 
 /* Context */
 interface InteractionContextType {
@@ -345,12 +347,14 @@ function ComponentCard({
   name,
   tag,
   control,
+  headControl,
   children,
 }: {
   id: string;
   name: string;
   tag: string;
   control?: ReactNode;
+  headControl?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -362,6 +366,7 @@ function ComponentCard({
         </div>
         <div className="components-card-head-end">
           <span className="components-card-tag">{tag}</span>
+          {headControl}
         </div>
       </header>
       <div className="components-card-preview">{children}</div>
@@ -578,33 +583,11 @@ async function copyTextToClipboard(text: string) {
   }
 }
 
-function LoginCardControls({
-  def,
-  variant,
-  onVariantChange,
-  exportOpts,
-  num,
-  onNumChange,
-}: {
-  def: {
-    id: string;
-    name: string;
-    tag: string;
-    paletteLabel: string;
-    type: string;
-    variants?: string[];
-    usage?: string;
-    defaultInMini?: boolean;
-  };
-  variant: string;
-  onVariantChange?: (v: string) => void;
-  exportOpts?: { label?: string; note?: string; link?: string; num?: string };
-  num?: string;
-  onNumChange?: (v: string) => void;
-}) {
-  const [copied, setCopied] = useState<'tsx' | 'css' | null>(null);
+/* Section-head chip: copies an AI implementation prompt (task + code
+   references + copy-time selections + guidance) for one H01–H05 fieldset. */
+function AiPromptCopyChip({ promptKey, variant, skeleton }: { promptKey: AiPromptKey; variant: string; skeleton: string }) {
+  const [copied, setCopied] = useState(false);
   const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const hasVariants = (def.variants?.length ?? 0) > 1;
 
   React.useEffect(
     () => () => {
@@ -613,78 +596,61 @@ function LoginCardControls({
     [],
   );
 
-  const flashCopied = (kind: 'tsx' | 'css') => {
-    setCopied(kind);
+  const onCopy = async () => {
+    await copyTextToClipboard(buildAiPrompt(promptKey, variant, skeleton));
+    setCopied(true);
     if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setCopied(null), 1600);
-  };
-
-  const copyTsx = async () => {
-    await copyTextToClipboard(buildLoginTsx(def, variant, exportOpts));
-    flashCopied('tsx');
-  };
-
-  const copyCss = async () => {
-    await copyTextToClipboard(buildLoginCss(def, variant, exportOpts));
-    flashCopied('css');
+    timerRef.current = setTimeout(() => setCopied(false), 1600);
   };
 
   return (
-    <div className="components-card-meta">
-      {hasVariants ? (
-        <Dropdown
-          label="Variant"
-          items={def.variants ?? ['Classic']}
-          value={variant}
-          onChange={(v) => onVariantChange?.(v)}
-        />
-      ) : (
-        <button
-          type="button"
-          className="components-variant-readonly"
-          disabled
-          title="No variants"
-          aria-disabled="true"
-        >
-          Classic
-        </button>
-      )}
-      {onNumChange ? (
-        <label
-          className="components-builder-field components-card-num"
-          title="Watermark number — accepts 2 digits (00–99)"
-        >
-          <span className="components-card-num__label" aria-hidden="true">
-            №
-          </span>
-          <input
-            type="text"
-            inputMode="numeric"
-            value={num ?? ''}
-            maxLength={2}
-            placeholder="01"
-            aria-label="Watermark number, 00 to 99"
-            onChange={(e) => onNumChange(e.target.value.replace(/\D/g, '').slice(0, 2))}
-          />
-        </label>
-      ) : null}
-      <button
-        type="button"
-        className={`components-builder-chip components-builder-chip--copy ${copied === 'tsx' ? 'is-copied' : ''}`}
-        onClick={copyTsx}
-        title="Copy paste-ready TSX component"
-      >
-        {copied === 'tsx' ? 'Copied' : 'Copy TSX'}
-      </button>
-      <button
-        type="button"
-        className={`components-builder-chip components-builder-chip--copy ${copied === 'css' ? 'is-copied' : ''}`}
-        onClick={copyCss}
-        title="Copy paste-ready CSS rules"
-      >
-        {copied === 'css' ? 'Copied' : 'Copy CSS'}
-      </button>
-    </div>
+    <button
+      type="button"
+      className={`components-builder-chip components-builder-chip--copy ${copied ? 'is-copied' : ''}`}
+      onClick={onCopy}
+      title="Copy an AI prompt: code references + guidance to implement this component on the main page"
+    >
+      {copied ? 'Copied' : 'Copy AI Prompt'}
+    </button>
+  );
+}
+
+/* Per-card chip: copies an AI prompt describing how this modular login
+   block is built from the Mini Login builder (palette label, MiniBody
+   recipe, builder config panel, current variant). */
+function LoginComponentPromptChip({
+  def,
+  variant,
+}: {
+  def: { type: string; name: string; tag: string; paletteLabel: string; usage?: string; variants?: string[] };
+  variant: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(
+    () => () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    },
+    [],
+  );
+
+  const onCopy = async () => {
+    await copyTextToClipboard(buildLoginComponentPrompt(def, variant));
+    setCopied(true);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(false), 1600);
+  };
+
+  return (
+    <button
+      type="button"
+      className={`components-builder-chip components-builder-chip--copy ${copied ? 'is-copied' : ''}`}
+      onClick={onCopy}
+      title="Copy an AI prompt: how this block is built from the Mini Login builder + guidance"
+    >
+      {copied ? 'Copied' : 'Copy AI Prompt'}
+    </button>
   );
 }
 
@@ -708,20 +674,38 @@ function LoginShowcaseCard({ def }: { def: LoginComponentDef }) {
       id={def.id}
       name={def.name}
       tag={def.tag}
-      control={
-        <LoginCardControls
-          def={def}
-          variant={activeVariant}
-          onVariantChange={setVariant}
-          num={num}
-          onNumChange={isSticker ? setNum : undefined}
-          exportOpts={{
-            label: def.type === 'login' ? MINI_DEFAULTS.loginLabel : def.type === 'guest' ? MINI_DEFAULTS.guestLabel : undefined,
-            note: def.type === 'footer' ? MINI_DEFAULTS.footerNote : undefined,
-            link: def.type === 'footer' ? MINI_DEFAULTS.footerLink : undefined,
-            num: isSticker ? num : undefined,
-          }}
-        />
+      headControl={
+        <>
+          {isSticker ? (
+            <label
+              className="components-builder-field components-card-num"
+              title="Watermark number — accepts 2 digits (00–99)"
+            >
+              <span className="components-card-num__label" aria-hidden="true">
+                №
+              </span>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={num}
+                maxLength={2}
+                placeholder="01"
+                aria-label="Watermark number, 00 to 99"
+                onChange={(e) => setNum(e.target.value.replace(/\D/g, '').slice(0, 2))}
+              />
+            </label>
+          ) : null}
+          {hasVariants ? (
+            <Dropdown
+              label="Variant"
+              items={def.variants ?? ['Classic']}
+              value={variant}
+              onChange={setVariant}
+              align="down"
+            />
+          ) : null}
+          <LoginComponentPromptChip def={def} variant={activeVariant} />
+        </>
       }
     >
       {body}
@@ -1368,7 +1352,7 @@ function MiniLoginCard() {
   const [draggingUid, setDraggingUid] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [overIndex, setOverIndex] = useState<number | null>(null);
-  const [copied, setCopied] = useState<'tsx' | 'css' | null>(null);
+  const [copied, setCopied] = useState(false);
   const [glow, setGlow] = useState(false);
   const [backOn, setBackOn] = useState(true);
   const [backVariant, setBackVariant] = useState('Classic');
@@ -1429,20 +1413,21 @@ function MiniLoginCard() {
     };
   };
 
-  const flashCopied = (kind: 'tsx' | 'css') => {
-    setCopied(kind);
+  const flashCopied = () => {
+    setCopied(true);
     if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
-    copyTimerRef.current = setTimeout(() => setCopied(null), 1600);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 1600);
   };
 
-  const copyTsx = async () => {
-    await copyTextToClipboard(buildMiniLoginTsx(buildMiniLoginSnapshot()));
-    flashCopied('tsx');
-  };
-
-  const copyCss = async () => {
-    await copyTextToClipboard(buildMiniLoginCss(buildMiniLoginSnapshot()));
-    flashCopied('css');
+  const copyAiPrompt = async () => {
+    const snap = buildMiniLoginSnapshot();
+    await copyTextToClipboard(
+      buildMiniLoginPrompt({
+        ...snap,
+        order: snap.order.map((type) => ({ type, label: miniLabel(type) })),
+      }),
+    );
+    flashCopied();
   };
 
   React.useEffect(() => () => {
@@ -1748,19 +1733,11 @@ function MiniLoginCard() {
           <div className="components-mini-palette-actions">
             <button
               type="button"
-              className={`components-builder-chip components-builder-chip--copy ${copied === 'tsx' ? 'is-copied' : ''}`}
-              onClick={copyTsx}
-              title="Copy Mini Login as paste-ready TSX"
+              className={`components-builder-chip components-builder-chip--ai ${copied ? 'is-copied' : ''}`}
+              onClick={copyAiPrompt}
+              title="Copy an AI prompt: this builder's current composition (blocks, width, cfg, back image) + guidance"
             >
-              {copied === 'tsx' ? 'Copied' : 'Copy TSX'}
-            </button>
-            <button
-              type="button"
-              className={`components-builder-chip components-builder-chip--copy ${copied === 'css' ? 'is-copied' : ''}`}
-              onClick={copyCss}
-              title="Copy Mini Login as paste-ready CSS"
-            >
-              {copied === 'css' ? 'Copied' : 'Copy CSS'}
+              {copied ? 'Copied' : 'Copy AI Prompt'}
             </button>
             <button
               type="button"
@@ -1836,9 +1813,12 @@ function AuthHeaderBlock() {
 /* Page */
 function ComponentsShowcase() {
   const { openModal, showToast } = useInteractions();
+  // one state per family — the skeleton card is locked to the original's variant
   const [headerVariant, setHeaderVariant] = useState('Classic');
   const [footerVariant, setFooterVariant] = useState('Classic');
+  const [telemetryVariant, setTelemetryVariant] = useState('Classic');
   const [standingsVariant, setStandingsVariant] = useState('Classic');
+  const [sponsorsVariant, setSponsorsVariant] = useState('Classic');
 
   return (
     <main className="components-page">
@@ -1851,7 +1831,7 @@ function ComponentsShowcase() {
         </div>
         <div className="components-meta">
           <span className="components-meta-dot" aria-hidden />
-          <span>Basic 07+03 · Auth 13+02 · Header 01 · Footer 01 · Standings 01</span>
+          <span>Basic 07+03 · Auth 13+02 · Header 01+01 · Footer 01+01 · Telemetry 01+02 · Standings 01+01 · Sponsors 01+01</span>
         </div>
       </header>
 
@@ -1973,11 +1953,10 @@ function ComponentsShowcase() {
               id="L14 · Brand"
               name="Auth Header"
               tag="Composite"
-              control={
-                <LoginCardControls
+              headControl={
+                <LoginComponentPromptChip
                   def={{
                     type: 'auth-header',
-                    id: 'L14 · Brand',
                     name: 'Auth Header',
                     tag: 'Composite',
                     paletteLabel: 'Auth header',
@@ -2000,6 +1979,14 @@ function ComponentsShowcase() {
           <div className="components-section-head">
             <span className="components-section-label">Login navigation bar</span>
             <span className="components-section-rule" aria-hidden />
+            <Dropdown
+              label="Variant"
+              items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
+              value={headerVariant}
+              onChange={setHeaderVariant}
+              align="down"
+            />
+            <AiPromptCopyChip promptKey="header" variant={headerVariant} skeleton={headerVariant} />
           </div>
 
           <div className="components-grid components-grid--wide">
@@ -2007,15 +1994,6 @@ function ComponentsShowcase() {
               id="H01 · Nav"
               name="Login Navigation Bar"
               tag="Navigation"
-              control={
-                <Dropdown
-                  label="Variant"
-                  items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
-                  value={headerVariant}
-                  onChange={setHeaderVariant}
-                  align="up"
-                />
-              }
             >
               {headerVariant === 'Pit Wall' ? (
                 <HeaderPitWall />
@@ -2026,6 +2004,14 @@ function ComponentsShowcase() {
               ) : (
                 <LoginNavHeader />
               )}
+            </ComponentCard>
+
+            <ComponentCard
+              id="H01 · Skeleton"
+              name="Header Loading Skeleton"
+              tag="State"
+            >
+              <HeaderSkeleton variant={headerVariant as HeaderSkeletonVariant} />
             </ComponentCard>
           </div>
         </div>
@@ -2038,6 +2024,14 @@ function ComponentsShowcase() {
           <div className="components-section-head">
             <span className="components-section-label">Site footer</span>
             <span className="components-section-rule" aria-hidden />
+            <Dropdown
+              label="Variant"
+              items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
+              value={footerVariant}
+              onChange={setFooterVariant}
+              align="down"
+            />
+            <AiPromptCopyChip promptKey="footer" variant={footerVariant} skeleton={footerVariant} />
           </div>
 
           <div className="components-grid components-grid--wide">
@@ -2045,15 +2039,6 @@ function ComponentsShowcase() {
               id="H02 · Footer"
               name="Site Footer"
               tag="Navigation"
-              control={
-                <Dropdown
-                  label="Variant"
-                  items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
-                  value={footerVariant}
-                  onChange={setFooterVariant}
-                  align="up"
-                />
-              }
             >
               {footerVariant === 'Pit Wall' ? (
                 <FooterPitWall />
@@ -2064,6 +2049,67 @@ function ComponentsShowcase() {
               ) : (
                 <LoginFooter />
               )}
+            </ComponentCard>
+
+            <ComponentCard
+              id="H02 · Skeleton"
+              name="Footer Loading Skeleton"
+              tag="State"
+            >
+              <FooterSkeleton variant={footerVariant as FooterSkeletonVariant} />
+            </ComponentCard>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset className="components-fieldset" style={{ marginTop: '2.5rem' }}>
+        <legend className="components-legend">Telemetry</legend>
+
+        <div className="components-section components-section--nested">
+          <div className="components-section-head">
+            <span className="components-section-label">Live timing ticker</span>
+            <span className="components-section-rule" aria-hidden />
+            <Dropdown
+              label="Variant"
+              items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
+              value={telemetryVariant}
+              onChange={setTelemetryVariant}
+              align="down"
+            />
+            <AiPromptCopyChip promptKey="telemetry" variant={telemetryVariant} skeleton={telemetryVariant} />
+          </div>
+
+          <div className="components-grid components-grid--wide">
+            <ComponentCard
+              id="H03 · Telemetry"
+              name="Live Timing Ticker"
+              tag="Data"
+            >
+              {telemetryVariant === 'Pit Wall' ? (
+                <TelemetryPitWall />
+              ) : telemetryVariant === 'Grandstand' ? (
+                <TelemetryGrandstand />
+              ) : telemetryVariant === 'Telemetry HUD' ? (
+                <TelemetryHud />
+              ) : (
+                <TelemetryClassic />
+              )}
+            </ComponentCard>
+
+            <ComponentCard
+              id="H03 · No Races"
+              name="No Live Races"
+              tag="State"
+            >
+              <TelemetryNoLive />
+            </ComponentCard>
+
+            <ComponentCard
+              id="H03 · Skeleton"
+              name="Telemetry Loading Skeleton"
+              tag="State"
+            >
+              <TelemetrySkeleton variant={telemetryVariant as TelemetrySkeletonVariant} />
             </ComponentCard>
           </div>
         </div>
@@ -2076,22 +2122,21 @@ function ComponentsShowcase() {
           <div className="components-section-head">
             <span className="components-section-label">Championship leaderboard</span>
             <span className="components-section-rule" aria-hidden />
+            <Dropdown
+              label="Variant"
+              items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
+              value={standingsVariant}
+              onChange={setStandingsVariant}
+              align="down"
+            />
+            <AiPromptCopyChip promptKey="standings" variant={standingsVariant} skeleton={standingsVariant} />
           </div>
 
           <div className="components-grid components-grid--wide">
             <ComponentCard
-              id="H03 · Standings"
+              id="H04 · Standings"
               name="Championship Standings"
               tag="Data"
-              control={
-                <Dropdown
-                  label="Variant"
-                  items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
-                  value={standingsVariant}
-                  onChange={setStandingsVariant}
-                  align="up"
-                />
-              }
             >
               {standingsVariant === 'Pit Wall' ? (
                 <StandingsPitWall drivers={SAMPLE_STANDINGS} season="2026" />
@@ -2102,6 +2147,59 @@ function ComponentsShowcase() {
               ) : (
                 <StandingsClassic drivers={SAMPLE_STANDINGS} season="2026" />
               )}
+            </ComponentCard>
+
+            <ComponentCard
+              id="H04 · Skeleton"
+              name="Standings Loading Skeleton"
+              tag="State"
+            >
+              <StandingsSkeleton variant={standingsVariant as StandingsSkeletonVariant} />
+            </ComponentCard>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset className="components-fieldset" style={{ marginTop: '2.5rem' }}>
+        <legend className="components-legend">Sponsors</legend>
+
+        <div className="components-section components-section--nested">
+          <div className="components-section-head">
+            <span className="components-section-label">Team sponsors carousel</span>
+            <span className="components-section-rule" aria-hidden />
+            <Dropdown
+              label="Variant"
+              items={['Classic', 'Pit Wall', 'Grandstand', 'Telemetry HUD']}
+              value={sponsorsVariant}
+              onChange={setSponsorsVariant}
+              align="down"
+            />
+            <AiPromptCopyChip promptKey="sponsors" variant={sponsorsVariant} skeleton={sponsorsVariant} />
+          </div>
+
+          <div className="components-grid components-grid--wide">
+            <ComponentCard
+              id="H05 · Sponsors"
+              name="Team Sponsors Carousel"
+              tag="Brand"
+            >
+              {sponsorsVariant === 'Pit Wall' ? (
+                <SponsorsPitWall />
+              ) : sponsorsVariant === 'Grandstand' ? (
+                <SponsorsGrandstand />
+              ) : sponsorsVariant === 'Telemetry HUD' ? (
+                <SponsorsTelemetryHud />
+              ) : (
+                <SponsorsClassic />
+              )}
+            </ComponentCard>
+
+            <ComponentCard
+              id="H05 · Skeleton"
+              name="Sponsors Loading Skeleton"
+              tag="State"
+            >
+              <SponsorsSkeleton variant={sponsorsVariant as SponsorsSkeletonVariant} />
             </ComponentCard>
           </div>
         </div>
@@ -2134,7 +2232,7 @@ function ComponentsShowcase() {
   );
 }
 
-/* Sample standings for the H03 specimen (mirrors the live top 3). */
+          /* Sample standings for the H04 specimen (mirrors the live top 3). */
 const SAMPLE_STANDINGS: F1StandingDriver[] = [
   { position: 1, code: 'ANT', name: 'Andrea Kimi Antonelli', team: 'Mercedes', points: 340, wins: 4, photo: '/imgDriversAntonelli12.png' },
   { position: 2, code: 'RUS', name: 'George Russell', team: 'Mercedes', points: 238, wins: 2, photo: '/imgDriversRussel63.png' },

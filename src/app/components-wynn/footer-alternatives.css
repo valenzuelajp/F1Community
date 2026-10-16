@@ -5,6 +5,17 @@
    Baseline reference: src/components/layout/LoginFooter.tsx
    (+ src/app/login/login.css `.login-footer*`).
 
+   Shared variant pattern (same system across H01–H05 alternatives):
+      · Pit Wall: #0a0a0c, Barlow Semi Condensed, 4px radius, hairline
+        frame rgba(255,255,255,.14) + inset highlight, red index numbers
+        (0.6875rem, solid red), 2px red slab underlines, media calm
+      · Grandstand: #000, 5px slipstream hem on the TOP edge, Anton type
+        skewed -6°, -14° speed streaks (3px), hover #ff2a10
+      · Telemetry HUD: #05070a, scanlines (0.03) + 88% 0% red radial as
+        background-image, 12px top-left bracket, 8px notches, dashed red
+        focus, LED markers, inset red glow, 0.45 red edge
+      · Titles centred, flanked by 2px red rules; body text ≥ 11px
+
    Same wireframe content as the Classic, restyled to pair with the matching
    H01 header variant. Every variant fixes the baseline's gaps:
       · link rows ≥ 40px targets, newsletter controls ≥ 44px
@@ -175,7 +186,7 @@
 
 .f1f-news-terms {
   margin: 0;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   line-height: 1.4;
   color: rgba(255, 255, 255, 0.6);
 }
@@ -199,7 +210,7 @@
 
 .f1f-copy {
   margin: 0;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.65);
 }
 
@@ -263,11 +274,11 @@
 }
 
 .f1f--pitwall .f1f-idx {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
-  color: rgba(255, 24, 1, 0.7);
+  color: var(--f1f-red);
 }
 
 .f1f--pitwall .f1f-link {
@@ -322,7 +333,7 @@
 }
 
 .f1f--pitwall .f1f-news-form {
-  background-color: #0b0f17;
+  background-color: #0d0f14;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
 }
@@ -552,10 +563,12 @@
   background-image:
     repeating-linear-gradient(
       0deg,
-      rgba(255, 255, 255, 0.035) 0 1px,
+      rgba(255, 255, 255, 0.03) 0 1px,
       transparent 1px 3px
     ),
     radial-gradient(ellipse at 88% 0%, rgba(255, 24, 1, 0.14), transparent 55%);
+  border-top: 1px solid rgba(255, 24, 1, 0.45);
+  box-shadow: inset 0 2px 8px rgba(255, 24, 1, 0.18);
 }
 
 /* corner bracket — top-left only, same as the HUD header */
@@ -573,7 +586,7 @@
 }
 
 .f1f--hud .f1f-details {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -640,7 +653,7 @@
 .f1f--hud .f1f-social {
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 0;
-  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
 
 .f1f--hud .f1f-social:hover {
@@ -684,7 +697,7 @@
   background-color: rgba(11, 15, 23, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 0;
-  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
 
 .f1f--hud .f1f-news-btn {
@@ -697,7 +710,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
   transition:
     background-color 0.15s ease,
     transform 0.15s ease,
@@ -749,7 +762,7 @@
   padding: 1.25rem 1.5rem;
   border-top: 1px dashed rgba(255, 255, 255, 0.16);
   background-color: rgba(255, 255, 255, 0.025);
-  font-size: 0.66rem;
+  font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
@@ -784,4 +797,370 @@
 .f1f--hud .f1f-legal a:hover,
 .f1f--hud .f1f-legal a:focus-visible {
   color: var(--f1f-red);
+}
+
+/* ==========================================================================
+   LOADING SKELETON — one per variant. Root carries the REAL variant classes
+   (`.login-footer` / `.f1f f1f--*`), so background, hem, scanlines, borders
+   and type family are authentic chrome. Blocks mirror the real footer
+   anatomy: text-proportioned bars, ringed social buttons (24px circles on
+   Classic), an outlined input with its placeholder line, the red SUBSCRIBE
+   block, and the directory-title accents (Pit Wall index, Grandstand red
+   streak, HUD LED). Blocks sweep right-to-left in a staggered wave that
+   walks column by column. The loaded swap causes no layout shift.
+   ========================================================================== */
+
+.f1fsk {
+  --f1fsk-a: #333a47; /* block base — reads against black chrome */
+  --f1fsk-b: #4a5464; /* shimmer highlight */
+  position: relative;
+  width: 100%;
+  container-type: inline-size;
+  container-name: f1fsk;
+}
+
+/* Variant roots get `.f1f-inner`-equivalent padding here; Classic takes its
+   padding from the live `.login-footer` root, so no rule may restate it. */
+.f1fsk--pitwall,
+.f1fsk--grandstand,
+.f1fsk--hud {
+  padding: 3rem 1.5rem 1.75rem;
+}
+
+.f1fsk-inner {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.f1fsk-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@container f1fsk (min-width: 640px) {
+  .f1fsk-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@container f1fsk (min-width: 1000px) {
+  .f1fsk-grid {
+    grid-template-columns: 1.3fr 0.8fr 0.8fr 1.4fr;
+  }
+}
+
+.f1fsk-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.f1fsk-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.f1fsk-news {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.f1fsk-socials {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.f1fsk-form {
+  display: flex;
+  gap: 0.5rem;
+  height: 44px;
+  margin-top: 0.25rem;
+}
+
+.f1fsk-input {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.f1fsk-submit {
+  flex-shrink: 0;
+  width: 132px;
+}
+
+.f1fsk-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 2.75rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Block geometry — sized to the real strings/shapes they stand in for */
+.f1fsk-logo { width: 120px; height: 28px; }
+.f1fsk-title { position: relative; width: 90px; height: 10px; }
+.f1fsk-bar--details { width: 84px; height: 10px; }
+.f1fsk-bar--link { width: 64px; height: 12px; }
+.f1fsk-bar--news-title { width: 180px; height: 12px; }
+.f1fsk-bar--desc { width: 100%; height: 10px; }
+.f1fsk-bar--desc-short { width: 70%; }
+.f1fsk-bar--terms { width: 80%; height: 8px; margin-top: 0.25rem; }
+.f1fsk-bar--copy { width: min(320px, 100%); height: 10px; }
+.f1fsk-bar--legal { width: min(210px, 100%); height: 10px; }
+
+/* Dark text blocks — right-to-left sweep. */
+.f1fsk-logo,
+.f1fsk-bar,
+.f1fsk-title {
+  background-color: var(--f1fsk-a);
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    var(--f1fsk-b) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1fsk-shimmer 1.6s linear infinite;
+}
+
+/* Social buttons are outline rings (the live pills are bordered circles). */
+.f1fsk-social {
+  width: 36px;
+  height: 36px;
+  background-color: transparent;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 56%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+  background-size: 200% 100%;
+  animation: f1fsk-shimmer 1.6s linear infinite;
+}
+
+/* Newsletter input: outlined field with its placeholder line inside. */
+.f1fsk-input {
+  background-color: transparent;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 56%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+  background-size: 200% 100%;
+  animation: f1fsk-shimmer 1.6s linear infinite;
+}
+
+.f1fsk-input::before {
+  content: '';
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  width: 55%;
+  height: 8px;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-50%);
+}
+
+/* SUBSCRIBE: red fill — the real button is brand red in every variant. */
+.f1fsk-submit {
+  border-radius: 4px;
+  background-color: #ff1801;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1fsk-shimmer 1.6s linear infinite;
+}
+
+@keyframes f1fsk-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- Wave timing: column groups (--f1fsk-d) walk left to right, blocks
+   inside each column step down with position (--f1fsk-i), social buttons
+   add a micro-offset (--f1fsk-si). MUST come after every `animation:`
+   shorthand, which would otherwise reset the delay. ---- */
+
+.f1fsk-grid > *:nth-child(1) { --f1fsk-d: 0s; }
+.f1fsk-grid > *:nth-child(2) { --f1fsk-d: 0.1s; }
+.f1fsk-grid > *:nth-child(3) { --f1fsk-d: 0.2s; }
+.f1fsk-grid > *:nth-child(4) { --f1fsk-d: 0.3s; }
+.f1fsk-bottom { --f1fsk-d: 0.4s; }
+
+.f1fsk-grid > * > *:nth-child(2) { --f1fsk-i: 0.05s; }
+.f1fsk-grid > * > *:nth-child(3) { --f1fsk-i: 0.1s; }
+.f1fsk-grid > * > *:nth-child(4) { --f1fsk-i: 0.15s; }
+.f1fsk-grid > * > *:nth-child(5) { --f1fsk-i: 0.2s; }
+.f1fsk-grid > * > *:nth-child(6) { --f1fsk-i: 0.25s; }
+
+.f1fsk-social:nth-child(2) { --f1fsk-si: 0.04s; }
+.f1fsk-social:nth-child(3) { --f1fsk-si: 0.08s; }
+.f1fsk-social:nth-child(4) { --f1fsk-si: 0.12s; }
+
+.f1fsk-logo,
+.f1fsk-bar,
+.f1fsk-title,
+.f1fsk-input,
+.f1fsk-submit,
+.f1fsk-social {
+  animation-delay: calc(
+    var(--f1fsk-d, 0s) + var(--f1fsk-i, 0s) + var(--f1fsk-si, 0s)
+  );
+}
+
+/* ---- Classic: live `.login-footer` chrome — 24px circular social rings,
+   round input, red block button ---- */
+
+.f1fsk--classic .f1fsk-social {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.f1fsk--classic .f1fsk-input {
+  border-radius: 4px;
+}
+
+/* ---- Pit Wall: index block over each directory title, square geometry ---- */
+
+.f1fsk--pitwall .f1fsk-title::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 0;
+  width: 18px;
+  height: 8px;
+  background-color: #ff1801;
+}
+
+.f1fsk--pitwall .f1fsk-social {
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+/* ---- Grandstand: forward-leaning red streak off each directory title ---- */
+
+.f1fsk--grandstand .f1fsk-title::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-left: 8px;
+  width: 40px;
+  height: 2.5px;
+  background-color: #ff1801;
+  transform: translateY(-50%) skewX(-14deg);
+  opacity: 0.85;
+}
+
+.f1fsk--grandstand .f1fsk-social,
+.f1fsk--grandstand .f1fsk-input,
+.f1fsk--grandstand .f1fsk-submit {
+  border-radius: 0;
+}
+
+/* ---- Telemetry HUD: corner bracket, LED title marker, red legal edge,
+   notched panels ---- */
+
+.f1fsk--hud .f1fsk-inner::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(255, 24, 1, 0.65);
+  border-right: none;
+  border-bottom: none;
+  top: 14px;
+  left: 6px;
+  pointer-events: none;
+}
+
+.f1fsk--hud .f1fsk-title::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-left: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ff1801;
+  box-shadow: 0 0 6px rgba(255, 24, 1, 0.8);
+  transform: translateY(-50%);
+}
+
+.f1fsk--hud .f1fsk-bottom {
+  border-top-color: rgba(255, 24, 1, 0.45);
+}
+
+.f1fsk--hud .f1fsk-social,
+.f1fsk--hud .f1fsk-input,
+.f1fsk--hud .f1fsk-submit {
+  border-radius: 0;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+
+/* ==========================================================================
+   F1 TOUCHES: checkered-flag ghost in the brand logo well (large two-tone
+   squares — a flag, never a transparency checker) and social rings hubbed
+   like wheels.
+   ========================================================================== */
+
+.f1fsk-logo {
+  position: relative;
+  overflow: hidden;
+}
+
+.f1fsk-logo::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.14) 0% 25%,
+    rgba(0, 0, 0, 0.24) 0% 50%
+  );
+  background-size: 28px 28px;
+  animation: f1-flag-wave 2.8s ease-in-out infinite;
+}
+
+.f1fsk-social {
+  position: relative;
+}
+
+.f1fsk-social::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+.f1fsk--classic .f1fsk-social::after {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
 }

@@ -190,3 +190,66 @@ export function HeaderTelemetryHud() {
     </header>
   );
 }
+
+/* ==========================================================================
+   LOADING SKELETON — the H01 loading state, one per variant.
+
+   Renders on the SAME root classes as the real headers (`.login-header` /
+   `.f1h f1h--*`), so the variant chrome (backgrounds, hems, scanlines,
+   borders, bar height) is real and only the content blocks shimmer.
+   Geometry mirrors the real bar — logo / 4 nav links / Sale + Menu pills —
+   so the swap to loaded content causes no layout shift. The HUD variant
+   keeps its ticker strip skeletonized too.
+
+   a11y: all blocks decorative (aria-hidden); one visually-hidden
+   role="status" announces "Loading navigation…" to screen readers.
+   ========================================================================== */
+
+export type HeaderSkeletonVariant =
+  | 'Classic'
+  | 'Pit Wall'
+  | 'Grandstand'
+  | 'Telemetry HUD';
+
+const HEADER_SK_CLASS: Record<HeaderSkeletonVariant, string> = {
+  Classic: 'login-header f1hsk f1hsk--classic',
+  'Pit Wall': 'f1h f1h--pitwall f1hsk f1hsk--pitwall',
+  Grandstand: 'f1h f1h--grandstand f1hsk f1hsk--grandstand',
+  'Telemetry HUD': 'f1h f1h--hud f1hsk f1hsk--hud',
+};
+
+const TICKER_CELL_WIDTHS = [48, 64, 56, 44, 72, 52] as const;
+
+export function HeaderSkeleton({ variant = 'Classic' }: { variant?: HeaderSkeletonVariant }) {
+  return (
+    <header className={HEADER_SK_CLASS[variant]}>
+      <div className="f1hsk-inner" aria-hidden="true">
+        <span className="f1hsk-logo" />
+        <span className="f1hsk-links">
+          {[0, 1, 2, 3].map((i) => (
+            <span key={i} className="f1hsk-link" />
+          ))}
+        </span>
+        <span className="f1hsk-actions">
+          <span className="f1hsk-pill f1hsk-pill--cta" />
+          <span className="f1hsk-pill f1hsk-pill--menu" />
+        </span>
+      </div>
+
+      {variant === 'Telemetry HUD' && (
+        <div className="f1hsk-ticker" aria-hidden="true">
+          {TICKER_CELL_WIDTHS.map((w, i) => (
+            <span key={i} className="f1hsk-ticker-cell">
+              {i === 0 && <span className="f1hsk-led" />}
+              <span className="f1hsk-ticker-bar" style={{ width: w }} />
+            </span>
+          ))}
+        </div>
+      )}
+
+      <span className="components-sr" role="status">
+        Loading navigation…
+      </span>
+    </header>
+  );
+}

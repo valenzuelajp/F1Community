@@ -5,14 +5,25 @@
    Baseline reference: src/components/layout/LoginNavHeader.tsx
    (+ src/app/login/login.css `.login-header*`).
 
+   Shared variant pattern (same system across H01–H05 alternatives):
+      · Pit Wall: #0a0a0c, Barlow Semi Condensed, 4px radius, hairline
+        frame rgba(255,255,255,.14) + inset highlight, red index numbers
+        (0.6875rem, solid red), 2px red slab underlines, media calm
+      · Grandstand: #000, 5px slipstream hem on the TOP edge, Anton type
+        skewed -6°, -14° speed streaks (3px), hover #ff2a10
+      · Telemetry HUD: #05070a, scanlines (0.03) + 88% 0% red radial as
+        background-image, 12px top-left bracket, 8px notches, dashed red
+        focus, LED markers, inset red glow, 0.45 red edge
+      · Titles centred, flanked by 2px red rules; body text ≥ 11px
+
    Every variant fixes the baseline's readability / accessibility gaps:
-     · link text ≥ 12.8px (baseline: 11px links, 10px pills)
-     · interactive targets ≥ 44x44px (baseline: 30-34px tall)
-     · :focus-visible rings, not hover-only affordances
-     · real <ul>/<li> nav semantics + aria-current for the active page
-     · decorative divider noise moved to CSS (kept out of the a11y tree)
-     · prefers-reduced-motion honoured on every animation / transform
-     · body-text contrast ≥ 4.5:1 in resting AND hover states
+      · link text ≥ 12.8px (baseline: 11px links, 10px pills)
+      · interactive targets ≥ 44x44px (baseline: 30-34px tall)
+      · :focus-visible rings, not hover-only affordances
+      · real <ul>/<li> nav semantics + aria-current for the active page
+      · decorative divider noise moved to CSS (kept out of the a11y tree)
+      · prefers-reduced-motion honoured on every animation / transform
+      · body-text contrast ≥ 4.5:1 in resting AND hover states
    ========================================================================== */
 
 /* ---- Shared base (all variants) ---- */
@@ -141,7 +152,7 @@
 
 .f1h--pitwall .f1h-logo:hover,
 .f1h--pitwall .f1h-logo:focus-visible {
-  filter: drop-shadow(0 0 5px rgba(255, 24, 1, 0.5));
+  filter: brightness(1.2);
 }
 
 .f1h--pitwall .f1h-nav-list {
@@ -176,11 +187,11 @@
 }
 
 .f1h--pitwall .f1h-idx {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
-  color: rgba(255, 24, 1, 0.7);
+  color: var(--f1h-red);
 }
 
 .f1h--pitwall .f1h-link::after {
@@ -239,9 +250,9 @@
   inset: 0;
   background: linear-gradient(
     110deg,
-    transparent 30%,
+    transparent 44%,
     rgba(255, 255, 255, 0.45) 50%,
-    transparent 70%
+    transparent 56%
   );
   transform: translateX(-100%);
   transition: transform 0.45s ease;
@@ -311,13 +322,14 @@
   border-bottom: none;
 }
 
-/* slipstream hem: red streak accelerating out to the right */
+/* slipstream hem: red streak accelerating out to the right — TOP edge,
+   same 5px gradient as the Grandstand footer / standings / sponsors */
 .f1h--grandstand::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  top: 0;
   height: 5px;
   background: linear-gradient(
     90deg,
@@ -499,10 +511,7 @@
   transform: skewX(-14deg) scaleX(1);
 }
 
-.f1h--grandstand :focus-visible {
-  outline: 3px solid #ffffff;
-  outline-offset: 4px;
-}
+/* focus: shared red ring (no white override — same as H02/H04/H05) */
 
 /* ==========================================================================
    C — TELEMETRY HUD
@@ -512,23 +521,15 @@
 
 .f1h--hud {
   background-color: #05070a;
-  border-bottom: 1px solid rgba(255, 24, 1, 0.45);
-}
-
-.f1h--hud::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
+  background-image:
     repeating-linear-gradient(
       0deg,
-      rgba(255, 255, 255, 0.022) 0px,
-      rgba(255, 255, 255, 0.022) 1px,
-      transparent 1px,
-      transparent 3px
+      rgba(255, 255, 255, 0.03) 0 1px,
+      transparent 1px 3px
     ),
-    radial-gradient(ellipse 220px 60px at 8% 50%, rgba(255, 24, 1, 0.14), transparent 70%);
+    radial-gradient(ellipse at 88% 0%, rgba(255, 24, 1, 0.14), transparent 55%);
+  border-bottom: 1px solid rgba(255, 24, 1, 0.45);
+  box-shadow: inset 0 2px 8px rgba(255, 24, 1, 0.18);
 }
 
 .f1h--hud .f1h-inner {
@@ -537,15 +538,15 @@
   gap: 1.5rem;
 }
 
-/* Corner bracket — top-left only. */
+/* Corner bracket — top-left only, 12px (same as H02/H03/H04/H05). */
 .f1h--hud .f1h-inner::before {
   content: '';
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border: 1px solid rgba(255, 24, 1, 0.65);
   pointer-events: none;
-  top: 8px;
+  top: 10px;
   left: 6px;
   border-right: none;
   border-bottom: none;
@@ -614,7 +615,7 @@
   border-top: 1px dashed rgba(255, 255, 255, 0.16);
   background-color: rgba(255, 255, 255, 0.025);
   font-family: 'Chakra Petch', ui-monospace, monospace;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -685,7 +686,7 @@
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
@@ -785,4 +786,311 @@
   justify-content: stretch;
   min-height: 0;
   padding: 0;
+}
+
+/* ==========================================================================
+   LOADING SKELETON — one per variant. Root carries the REAL variant classes
+   (`.login-header` / `.f1h f1h--*`), so background, hem, scanlines, borders
+   and bar height are authentic chrome. Blocks mirror the real bar anatomy:
+   label-proportioned nav links with the live vertical dividers, notched
+   light Sale block vs outline Menu ring (red-filled Sale in the variants,
+   HUD adds its LED), HUD ticker strip with the live red LED cell. Blocks
+   sweep right-to-left in a staggered wave (group + position delays).
+   ========================================================================== */
+
+.f1hsk {
+  --f1hsk-a: #333a47; /* block base — reads against black chrome */
+  --f1hsk-b: #4a5464; /* shimmer highlight */
+  --f1hsk-h: 68px; /* bar height: classic */
+  position: relative;
+  container-type: inline-size;
+  container-name: f1hsk;
+}
+
+.f1hsk--pitwall { --f1hsk-h: 72px; }
+.f1hsk--grandstand { --f1hsk-h: 76px; }
+.f1hsk--hud { --f1hsk-h: 70px; }
+
+.f1hsk-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: var(--f1hsk-h);
+  padding: 0 clamp(1rem, 4.5vw, 4rem);
+}
+
+.f1hsk-logo {
+  flex-shrink: 0;
+  width: 128px;
+  height: 30px;
+}
+
+.f1hsk-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Nav links sized to their real labels — Home / Schedules / News / Store —
+   each with its own position delay so the sweep walks along the row. */
+.f1hsk-link {
+  position: relative;
+  height: 12px;
+}
+
+.f1hsk-link:nth-child(1) { width: 38px; --f1hsk-i: 0.06s; }
+.f1hsk-link:nth-child(2) { width: 74px; --f1hsk-i: 0.12s; }
+.f1hsk-link:nth-child(3) { width: 42px; --f1hsk-i: 0.18s; }
+.f1hsk-link:nth-child(4) { width: 46px; --f1hsk-i: 0.24s; }
+
+.f1hsk-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.75rem;
+}
+
+.f1hsk-pill {
+  position: relative;
+  height: 44px;
+}
+
+.f1hsk-pill--cta { width: 96px; --f1hsk-i: 0.3s; }
+.f1hsk-pill--menu { width: 88px; --f1hsk-i: 0.36s; }
+
+/* Same drop-out as the real bar: links vanish when they stop fitting. */
+@container f1hsk (max-width: 820px) {
+  .f1hsk-links {
+    display: none;
+  }
+}
+
+/* Dark text blocks (logo, links, ticker bars) — right-to-left sweep. */
+.f1hsk-logo,
+.f1hsk-link,
+.f1hsk-ticker-bar {
+  background-color: var(--f1hsk-a);
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    var(--f1hsk-b) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1hsk-shimmer 1.6s linear infinite;
+}
+
+/* Sale block: filled, colour-matched to the real CTA (red in the variants). */
+.f1hsk-pill--cta {
+  border-radius: 999px;
+  background-color: #ff1801;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1hsk-shimmer 1.6s linear infinite;
+}
+
+/* Menu: outline ring — the real Menu is a transparent pill with a border. */
+.f1hsk-pill--menu {
+  border-radius: 999px;
+  background-color: transparent;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 56%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.32);
+  background-size: 200% 100%;
+  animation: f1hsk-shimmer 1.6s linear infinite;
+}
+
+@keyframes f1hsk-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- Classic: live `.login-header` anatomy — 38px pills, notched light
+   Sale, round Menu ring, 20px white dividers between the links ---- */
+
+.f1hsk--classic .f1hsk-pill {
+  height: 38px;
+}
+
+.f1hsk--classic .f1hsk-pill--cta {
+  background-color: #d4d4d4;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    #ffffff 50%,
+    transparent 56%
+  );
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+}
+
+.f1hsk--classic .f1hsk-link + .f1hsk-link::before,
+.f1hsk--pitwall .f1hsk-link + .f1hsk-link::before {
+  content: '';
+  position: absolute;
+  left: -0.65rem;
+  top: 50%;
+  width: 2px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-50%);
+}
+
+/* ---- Pit Wall: timing-sheet geometry — small links, hairline dividers,
+   square red Sale, outlined Menu ---- */
+
+.f1hsk--pitwall .f1hsk-pill {
+  border-radius: 4px;
+}
+
+.f1hsk--pitwall .f1hsk-link {
+  height: 10px;
+}
+
+.f1hsk--pitwall .f1hsk-link + .f1hsk-link::before {
+  width: 1px;
+  height: 16px;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.f1hsk--pitwall .f1hsk-pill--menu {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+/* ---- Grandstand: forward-leaning blocks, taller display geometry ---- */
+
+.f1hsk--grandstand .f1hsk-pill {
+  border-radius: 0;
+  transform: skewX(-8deg);
+}
+
+.f1hsk--grandstand .f1hsk-link {
+  height: 14px;
+}
+
+.f1hsk--grandstand .f1hsk-logo {
+  transform: skewX(-4deg);
+}
+
+/* ---- Telemetry HUD: notched boxes, LED inside the Sale block, skeleton
+   ticker strip with the live red LED cell ---- */
+
+.f1hsk--hud .f1hsk-pill {
+  border-radius: 0;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.f1hsk--hud .f1hsk-link {
+  height: 10px;
+}
+
+.f1hsk--hud .f1hsk-pill--cta {
+  background-color: transparent;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 56%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.f1hsk--hud .f1hsk-pill--cta::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ff1801;
+  box-shadow: 0 0 6px rgba(255, 24, 1, 0.85);
+  transform: translateY(-50%);
+}
+
+.f1hsk-ticker {
+  display: flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 1.25rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.025);
+  overflow: hidden;
+  --f1hsk-d: 0.4s;
+}
+
+.f1hsk-ticker-cell {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 0.9rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.f1hsk-ticker-cell:first-child {
+  padding-left: 0;
+}
+
+.f1hsk-led {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  background-color: #ff1801;
+  box-shadow: 0 0 6px rgba(255, 24, 1, 0.85);
+}
+
+.f1hsk-ticker-bar {
+  height: 8px;
+  border-radius: 2px;
+}
+
+.f1hsk-ticker-cell:nth-child(2) .f1hsk-ticker-bar { --f1hsk-i: 0.05s; }
+.f1hsk-ticker-cell:nth-child(3) .f1hsk-ticker-bar { --f1hsk-i: 0.1s; }
+.f1hsk-ticker-cell:nth-child(4) .f1hsk-ticker-bar { --f1hsk-i: 0.15s; }
+.f1hsk-ticker-cell:nth-child(5) .f1hsk-ticker-bar { --f1hsk-i: 0.2s; }
+.f1hsk-ticker-cell:nth-child(6) .f1hsk-ticker-bar { --f1hsk-i: 0.25s; }
+
+/* Wave timing — MUST come after every `animation:` shorthand, which would
+   otherwise reset the delay. Group delay (--f1hsk-d) + position delay. */
+.f1hsk-logo,
+.f1hsk-link,
+.f1hsk-pill,
+.f1hsk-ticker-bar {
+  animation-delay: calc(var(--f1hsk-d, 0s) + var(--f1hsk-i, 0s));
+}
+
+/* ==========================================================================
+   F1 TOUCH: checkered-flag ghost in the logo well — large two-tone squares
+   (14px) so it reads as a flag, never a faint transparency checker.
+   ========================================================================== */
+
+.f1hsk-logo {
+  position: relative;
+  overflow: hidden;
+}
+
+.f1hsk-logo::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.14) 0% 25%,
+    rgba(0, 0, 0, 0.24) 0% 50%
+  );
+  background-size: 28px 28px;
+  animation: f1-flag-wave 2.8s ease-in-out infinite;
 }
