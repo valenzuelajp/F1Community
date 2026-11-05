@@ -1,0 +1,493 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap');
+
+/* ==========================================================================
+   H05 alternatives — three takes on the login page sponsors strip.
+   Baseline reference: the live `.login-teams` markup on /login
+   (+ src/app/login/login.css `.login-teams*`).
+
+   Shared variant pattern (same system across H01–H05 alternatives):
+      · Pit Wall: #0a0a0c, Barlow Semi Condensed, 4px radius, hairline
+        frame rgba(255,255,255,.14) + inset highlight, red index numbers
+        (0.6875rem, solid red), 2px red slab underlines, media calm
+      · Grandstand: #000, 5px slipstream hem on the TOP edge, Anton type
+        skewed -6°, -14° speed streaks (3px), hover #ff2a10
+      · Telemetry HUD: #05070a, scanlines (0.03) + 88% 0% red radial as
+        background-image, 12px top-left bracket, 8px notches, dashed red
+        focus, LED markers, inset red glow, 0.45 red edge
+      · Titles centred, flanked by 2px red rules; body text ≥ 11px
+
+   Classic = live static wrap row. Variants = scrolling carousel with a
+   SINGLE item set (no duplicated logos):
+      · each item is absolutely positioned and animates across the
+        viewport on its own timeline (translateX from just past the right
+        edge to just past the left edge — both ends off-screen)
+      · staggered negative animation-delay (--f1sp-i * duration / -10)
+        turns the one set into a continuous parade; a restart is invisible
+      · the loop is continuous — no hover pause
+      · viewport only ever clips — never a scrollable container
+        (no reduced-motion pause: showcase specimens always scroll)
+      · :focus-visible rings on every logo link
+   ========================================================================== */
+
+/* ---- Shared base (carousel variants only) ---- */
+
+.f1sp {
+  --f1sp-red: #ff1801;
+  --f1sp-dur: 40s;
+  position: relative;
+  width: 100%;
+  color: #ffffff;
+  container-type: inline-size;
+  container-name: f1sp;
+  overflow: hidden;
+  padding: 2rem 1rem 2.25rem;
+}
+
+.f1sp-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  text-align: center;
+  font-size: clamp(11px, 2.8vw, 14px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.f1sp-heading-rule {
+  height: 2px;
+  width: clamp(28px, 8vw, 96px);
+  background-color: var(--f1sp-red);
+  opacity: 0.85;
+}
+
+.f1sp-viewport {
+  position: relative;
+  overflow: hidden; /* clips only — never scrollable */
+  width: 100%;
+  height: 88px;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.f1sp-group {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.f1sp-item {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  /* Parked just past the right edge until its cycle starts. */
+  transform: translate(100cqi, -50%);
+  will-change: transform;
+  animation: f1sp-item-scroll var(--f1sp-dur) linear infinite;
+  animation-delay: calc((var(--f1sp-i, 0) - 10) * var(--f1sp-dur) / 10);
+}
+
+.f1sp-logo {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  height: 64px;
+  width: 72px;
+  transition: opacity 0.15s ease, transform 0.15s ease, filter 0.15s ease;
+}
+
+.f1sp-logo:focus-visible {
+  outline: 2px solid var(--f1sp-red);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* One full journey: enters just past the right edge (100cqi of the
+   container), exits just past the left edge (-100% of the item). */
+@keyframes f1sp-item-scroll {
+  from {
+    transform: translate(100cqi, -50%);
+  }
+  to {
+    transform: translate(calc(-100% - 6px), -50%);
+  }
+}
+
+/* ==========================================================================
+   A — PIT WALL
+   ========================================================================== */
+
+.f1sp--pitwall {
+  --f1sp-dur: 58s;
+  background-color: #0a0a0c;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+}
+
+.f1sp--pitwall .f1sp-heading {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(11px, 2.8vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.f1sp--pitwall .f1sp-heading-rule {
+  opacity: 0.75;
+}
+
+.f1sp--pitwall .f1sp-idx {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--f1sp-red);
+  font-variant-numeric: tabular-nums;
+}
+
+.f1sp--pitwall .f1sp-logo {
+  opacity: 0.8;
+  filter: grayscale(1) contrast(1.05);
+}
+
+.f1sp--pitwall .f1sp-logo:hover {
+  opacity: 1;
+  filter: grayscale(0);
+  transform: scale(1.06);
+}
+
+/* ==========================================================================
+   B — GRANDSTAND
+   ========================================================================== */
+
+.f1sp--grandstand {
+  --f1sp-dur: 30s;
+  background-color: #000000;
+}
+
+/* slipstream hem — TOP edge, same 5px gradient as H01/H02/H03/H04 */
+.f1sp--grandstand::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    #ff1801 0%,
+    rgba(255, 24, 1, 0.6) 35%,
+    rgba(255, 24, 1, 0.15) 70%,
+    transparent 100%
+  );
+}
+
+.f1sp--grandstand .f1sp-heading {
+  font-family: var(--font-display, 'Anton', sans-serif);
+  font-size: clamp(15px, 3.4vw, 22px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+  transform: skewX(-6deg);
+}
+
+.f1sp--grandstand .f1sp-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 18%;
+  bottom: -6px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--f1sp-red), transparent);
+  transform: skewX(-14deg);
+  opacity: 0.85;
+}
+
+.f1sp--grandstand .f1sp-logo {
+  opacity: 0.95;
+}
+
+.f1sp--grandstand .f1sp-logo:hover {
+  opacity: 1;
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 6px rgba(255, 24, 1, 0.55));
+}
+
+/* ==========================================================================
+   C — TELEMETRY HUD
+   ========================================================================== */
+
+.f1sp--hud {
+  --f1sp-dur: 42s;
+  background-color: #05070a;
+  font-family: 'Chakra Petch', 'Segoe UI', sans-serif;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.03) 0 1px,
+      transparent 1px 3px
+    ),
+    radial-gradient(ellipse at 88% 0%, rgba(255, 24, 1, 0.14), transparent 55%);
+  border-top: 1px solid rgba(255, 24, 1, 0.45);
+  box-shadow: inset 0 2px 8px rgba(255, 24, 1, 0.18);
+}
+
+.f1sp--hud .f1sp-viewport {
+  height: 96px;
+}
+
+/* corner bracket — top-left only, 12px (same as H01/H02/H03/H04) */
+.f1sp--hud::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(255, 24, 1, 0.65);
+  border-right: none;
+  border-bottom: none;
+  top: 8px;
+  left: 6px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.f1sp--hud .f1sp-heading {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(11px, 2.8vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.f1sp--hud .f1sp-heading-rule {
+  opacity: 0.7;
+}
+
+.f1sp--hud .f1sp-logo:focus-visible {
+  outline: 2px dashed var(--f1sp-red);
+  outline-offset: 3px;
+}
+
+.f1sp--hud .f1sp-item {
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  background: rgba(11, 15, 23, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 0.5rem 0.7rem 0.5rem 0.55rem;
+}
+
+.f1sp--hud .f1sp-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--f1sp-red);
+  box-shadow: 0 0 5px rgba(255, 24, 1, 0.8);
+}
+
+.f1sp--hud .f1sp-logo {
+  opacity: 0.88;
+}
+
+.f1sp--hud .f1sp-logo:hover {
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(255, 24, 1, 0.5));
+}
+
+/* ==========================================================================
+   LOADING SKELETON — one per variant. Root carries the REAL variant classes
+   (`.login-teams` / `.f1sp f1sp--*`), so background, hem, scanlines and the
+   flanked red heading rules are authentic chrome. One block per real logo,
+   sized to the real cells, with a per-position delay (--f1ssk-i) so the
+   shimmer cascades along the row in the same right-to-left direction as the
+   loaded carousel. Static row — shimmer is the only motion while data
+   loads. The loaded swap causes no layout shift.
+   ========================================================================== */
+
+.f1ssk {
+  --f1ssk-a: #333a47; /* block base — reads against black chrome */
+  --f1ssk-b: #4a5464; /* shimmer highlight */
+  position: relative;
+  container-type: inline-size;
+  container-name: f1ssk;
+}
+
+.f1ssk-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+}
+
+.f1ssk-rule {
+  height: 2px;
+  width: clamp(28px, 8vw, 96px);
+  background-color: #ff1801;
+  opacity: 0.85;
+}
+
+.f1ssk-title {
+  width: clamp(150px, 42%, 260px);
+  height: 12px;
+  border-radius: 3px;
+}
+
+.f1ssk-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.f1ssk-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.f1ssk-logo {
+  position: relative;
+  width: 72px;
+  height: 64px;
+}
+
+.f1ssk-idx {
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Title bar shimmer — the red heading rules stay static: variant chrome,
+   not content. */
+.f1ssk-title {
+  background-color: var(--f1ssk-a);
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    var(--f1ssk-b) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1ssk-shimmer 1.6s linear infinite;
+}
+
+/* Logo blocks — same sweep, offset per position so the wave walks the row
+   right-to-left like the loaded carousel. */
+.f1ssk-logo {
+  background-color: var(--f1ssk-a);
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    var(--f1ssk-b) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1ssk-shimmer 1.6s linear infinite;
+  animation-delay: calc(var(--f1ssk-i, 0) * 0.06s);
+}
+
+@keyframes f1ssk-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- Classic: live `.login-teams` chrome (plain heading, small cells) ---- */
+
+.f1ssk--classic .f1ssk-rule {
+  display: none;
+}
+
+.f1ssk--classic .f1ssk-title {
+  width: clamp(140px, 50%, 240px);
+  height: 10px;
+}
+
+.f1ssk--classic .f1ssk-logo {
+  width: 46px;
+  height: 40px;
+}
+
+/* ---- Pit Wall: indexed cells, timing-sheet geometry ---- */
+
+.f1ssk--pitwall .f1ssk-logo {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+
+/* ---- Grandstand: forward-leaning red streak off each logo block ---- */
+
+.f1ssk--grandstand .f1ssk-logo {
+  border-radius: 0;
+}
+
+.f1ssk--grandstand .f1ssk-item::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 15%;
+  width: 70%;
+  height: 3px;
+  background-color: #ff1801;
+  transform: skewX(-14deg);
+  opacity: 0.85;
+}
+
+/* ---- Telemetry HUD: notched logo cells with a dim red LED edge ---- */
+
+.f1ssk--hud .f1ssk-logo {
+  border-radius: 0;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.f1ssk--hud .f1ssk-logo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: rgba(255, 24, 1, 0.55);
+  box-shadow: 0 0 8px rgba(255, 24, 1, 0.5);
+  z-index: 1;
+}
+
+/* ==========================================================================
+   F1 TOUCH: checkered-flag ghost inside every logo block — large two-tone
+   squares (14px) so it reads as a flag, never a faint transparency checker.
+   ========================================================================== */
+
+.f1ssk-logo {
+  overflow: hidden;
+}
+
+.f1ssk-logo::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.14) 0% 25%,
+    rgba(0, 0, 0, 0.24) 0% 50%
+  );
+  background-size: 28px 28px;
+  animation: f1-flag-wave 2.8s ease-in-out infinite;
+}

@@ -17,6 +17,12 @@ Rules the AI assistant MUST always follow when working in this repository.
   written memory record on disk).
 - Follow the existing conventions in `f1storewiki/DEVELOPMENT.md`.
 
+## Personal rules
+
+Developers may keep **personal scope rules** in a sibling file
+(`rules-<name>.md`, e.g. `rules-wynn.md`). Those apply **only** to that
+developer's sessions — the rules in this file apply to everyone.
+
 ## Progress → Wiki (Wynn)
 
 Every time progress is made (feature, fix, refactor, UI change), update the

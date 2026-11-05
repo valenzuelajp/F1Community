@@ -1,0 +1,627 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Chakra+Petch:wght@500;600;700&display=swap');
+
+/* ==========================================================================
+   H03 alternatives — three takes on the Live Timing Telemetry Ticker.
+   Baseline reference: the live `.login-telemetry` markup on /login
+   (+ src/app/login/login.css `.login-telemetry*`, `.login-live-*`).
+
+   Shared variant pattern (same system across H01–H05 alternatives):
+      · Pit Wall: #0a0a0c, Barlow Semi Condensed, hairline frame
+        rgba(255,255,255,.14) + inset highlight, red index slab on the
+        LIVE cell, stacked label / value cells with hairline rules
+      · Grandstand: #000, 5px slipstream hem on the TOP edge, Anton type
+        skewed -6°, skewed slash separators, red phase
+      · Telemetry HUD: #05070a, scanlines (0.03) + 88% 0% red radial as
+        background-image, 12px top-left bracket, 8px notches, bracketed
+        values, LED labels, inset red glow, 0.45 red edge
+      · LIVE + phase stay brand red (>= 4.5:1 on every panel — red on
+        black, never white on red); labels >= 9px, values >= 12px
+      · No reduced-motion gate on purpose: the variants carry no animated
+        chrome, and the skeleton sweep must keep running (the variant
+        skeleton roots reuse .f1tk, so a .f1tk-wide gate would kill it).
+   ========================================================================== */
+
+/* ---- Shared base (all variants) ---- */
+
+.f1tk {
+  --f1tk-red: #ff1801;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: 52px;
+  color: #ffffff;
+  container-type: inline-size;
+  container-name: f1tk;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.f1tk::-webkit-scrollbar {
+  display: none;
+}
+
+.f1tk-live {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding: 0 1.25rem;
+  border-right: 2px solid rgba(255, 255, 255, 0.6);
+  color: var(--f1tk-red);
+}
+
+.f1tk-dot {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background-color: var(--f1tk-red);
+  box-shadow: 0 0 10px var(--f1tk-red);
+}
+
+.f1tk-data {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0 1.25rem;
+  list-style: none;
+}
+
+.f1tk-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.f1tk-label {
+  display: none;
+}
+
+.f1tk-value {
+  font-weight: 900;
+}
+
+.f1tk-phase {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-right: 1.25rem;
+  color: var(--f1tk-red);
+}
+
+/* screen-reader-only cell text (the label collapses / the visual parts
+   are aria-hidden in the markup) */
+.f1tk-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   LOADING SKELETON — shared block language. Root carries the REAL variant
+   chrome (Classic reuses the live .login-telemetry* classes outright;
+   variants carry .f1tk*), blocks mirror the real strip anatomy: red LIVE
+   badge + red phase (brand red in every state), label stand-ins where the
+   variant stacks them, static slash blocks where the real strip prints
+   slashes. Everything sweeps right-to-left in a staggered wave.
+   ========================================================================== */
+
+.f1tsk {
+  --f1tsk-a: #333a47; /* block base — reads against panel fills */
+  --f1tsk-b: #4a5464; /* shimmer highlight */
+  position: relative;
+}
+
+.f1tsk-bar {
+  flex-shrink: 0;
+  border-radius: 3px;
+  background-color: var(--f1tsk-a);
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    var(--f1tsk-b) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1tsk-shimmer 1.6s linear infinite;
+}
+
+/* The dot keeps the live red + glow + size from .login-live-dot; the
+   sweep rides on top as a background-image. */
+.f1tsk-dot {
+  flex-shrink: 0;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 56%
+  );
+  background-size: 200% 100%;
+  animation: f1tsk-shimmer 1.6s linear infinite;
+}
+
+/* LIVE badge and phase are brand red in the real strip (and in every
+   variant) — keep them red while loading. */
+.f1tsk-bar--badge,
+.f1tsk-bar--phase {
+  background-color: #ff1801;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 56%
+  );
+}
+
+.f1tsk-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+
+/* bar runs mirror the measured text runs of each strip (badge = the LIVE
+   word, values = label+value cells) so the swap keeps every edge in place;
+   variants re-size these below */
+.f1tsk-bar--badge { width: 28px; height: 10px; }
+.f1tsk-bar--lap { width: 72px; height: 11px; }
+.f1tsk-bar--ver { width: 83px; height: 11px; }
+.f1tsk-bar--nor { width: 74px; height: 11px; }
+.f1tsk-bar--lec { width: 71px; height: 11px; }
+.f1tsk-bar--phase { width: 70px; height: 11px; }
+
+/* label stand-in — only the stacking variants show it (and Grandstand
+   shows it inline, sized below) */
+.f1tsk-bar--label {
+  display: none;
+  width: 32px;
+  height: 7px;
+}
+
+/* slash stand-in — static like the real glyph, never sweeps. Base size
+   matches the Classic upright "/" run; the variant blocks re-skew. */
+.f1tsk-slash {
+  flex-shrink: 0;
+  align-self: center;
+  width: 8px;
+  height: 14px;
+  background-color: rgba(255, 255, 255, 0.35);
+  transform: skewX(-12deg);
+}
+
+.f1tsk--classic .f1tsk-slash {
+  width: 6px;
+  transform: none;
+}
+
+@keyframes f1tsk-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Wave timing — MUST come after every `animation:` shorthand, which would
+   otherwise reset the delay. Position delay inside the strip
+   (--f1tsk-i): badge → lap → ver → nor → lec → phase; --f1tsk-d is a
+   free group delay hook (0 by default). */
+.f1tsk-bar,
+.f1tsk-dot {
+  animation-delay: calc(var(--f1tsk-d, 0s) + var(--f1tsk-i, 0s));
+}
+
+.f1tsk-cell--lap { --f1tsk-i: 0.05s; }
+.f1tsk-cell--ver { --f1tsk-i: 0.1s; }
+.f1tsk-cell--nor { --f1tsk-i: 0.15s; }
+.f1tsk-cell--lec { --f1tsk-i: 0.2s; }
+.f1tsk-cell--phase { --f1tsk-i: 0.25s; }
+
+/* The live 640px window media grows the dot to 18px — the variants are
+   14px in the specimen, so pin the skeleton dots to match. */
+.f1tsk--pitwall .login-live-dot,
+.f1tsk--grandstand .login-live-dot,
+.f1tsk--hud .login-live-dot {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==========================================================================
+   A — PIT WALL
+   Timing-sheet editorial: calm #0a0a0c, Barlow Semi Condensed, red index
+   slab on the LIVE cell, hairline cell rules, stacked label / value.
+   ========================================================================== */
+
+.f1tk--pitwall {
+  background-color: #0a0a0c;
+  min-height: 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-family: 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+}
+
+.f1tk--pitwall .f1tk-live {
+  border-right: none;
+  border-left: 3px solid var(--f1tk-red);
+  padding: 0 1rem;
+}
+
+.f1tk--pitwall .f1tk-data {
+  gap: 0;
+  padding: 0;
+}
+
+.f1tk--pitwall .f1tk-cell {
+  padding: 0 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.f1tk--pitwall .f1tk-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.f1tk--pitwall .f1tk-value {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* phase: right-hand column of the sheet */
+.f1tk--pitwall .f1tk-phase {
+  padding: 0 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Skeleton: the same sheet in blocks — the live child classes are
+   re-skinned so the bar grows past the live 44/48px geometry. */
+.f1tsk--pitwall .login-live-cell {
+  height: auto;
+  align-self: stretch;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  border-right: none;
+  border-left: 3px solid #ff1801;
+}
+
+.f1tsk--pitwall .login-telemetry-data {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+}
+
+.f1tsk--pitwall .f1tsk-cell {
+  padding: 0 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.f1tsk--pitwall .f1tsk-bar--label {
+  display: block;
+}
+
+.f1tsk--pitwall .f1tsk-slash {
+  display: none;
+}
+
+.f1tsk--pitwall .f1tsk-cell--phase {
+  margin-left: auto;
+}
+
+.f1tsk--pitwall .f1tsk-bar--badge { width: 32px; }
+.f1tsk--pitwall .f1tsk-bar--lap { width: 45px; }
+.f1tsk--pitwall .f1tsk-bar--ver { width: 58px; }
+.f1tsk--pitwall .f1tsk-bar--nor { width: 45px; }
+.f1tsk--pitwall .f1tsk-bar--lec { width: 45px; }
+.f1tsk--pitwall .f1tsk-bar--phase { width: 81px; }
+
+/* ==========================================================================
+   B — GRANDSTAND
+   Velocity: black with a slipstream hem across the top, Anton values
+   leaning forward inline with their codes, skewed slash separators.
+   ========================================================================== */
+
+.f1tk--grandstand {
+  background-color: #000000;
+  font-family: var(--font-display), 'Anton', Impact, sans-serif;
+}
+
+/* slipstream hem — TOP edge, same 5px gradient as H01/H02/H04/H05 */
+.f1tk--grandstand::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    #ff1801 0%,
+    rgba(255, 24, 1, 0.6) 35%,
+    rgba(255, 24, 1, 0.15) 70%,
+    transparent 100%
+  );
+}
+
+/* one leaning line: code + value, like the live "VER 1:31.482".
+   baseline aligns the codes to the value feet, but it top-jams a
+   stretched row — align-self snaps the whole line back to the strip's
+   vertical center (the skeleton bars center the same way) */
+.f1tk--grandstand .f1tk-cell,
+.f1tk--grandstand .f1tk-phase {
+  flex-direction: row;
+  align-items: baseline;
+  align-self: center;
+  gap: 0.45rem;
+}
+
+.f1tk--grandstand .f1tk-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  transform: skewX(-6deg);
+}
+
+.f1tk--grandstand .f1tk-value {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transform: skewX(-6deg);
+}
+
+/* skewed slash separators between the timing cells */
+.f1tk--grandstand .f1tk-cell + .f1tk-cell::before {
+  content: '/';
+  margin-right: 0.1rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 400;
+  transform: skewX(-6deg);
+}
+
+/* Skeleton: inline label stand-in + leaning value bars, red phase. */
+.f1tsk--grandstand .login-live-cell {
+  height: auto;
+  align-self: stretch;
+  gap: 0.5rem;
+  padding: 0 1.25rem;
+  border-right: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.f1tsk--grandstand .login-telemetry-data {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: stretch;
+  gap: 1rem;
+  padding: 0 1.25rem;
+}
+
+.f1tsk--grandstand .f1tsk-cell {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.f1tsk--grandstand .f1tsk-bar--label {
+  display: block;
+  width: 34px;
+  height: 12px;
+}
+
+.f1tsk--grandstand .f1tsk-bar--lap,
+.f1tsk--grandstand .f1tsk-bar--ver,
+.f1tsk--grandstand .f1tsk-bar--nor,
+.f1tsk--grandstand .f1tsk-bar--lec,
+.f1tsk--grandstand .f1tsk-bar--phase,
+.f1tsk--grandstand .f1tsk-bar--badge {
+  height: 14px;
+  transform: skewX(-6deg);
+}
+
+.f1tsk--grandstand .f1tsk-bar--badge {
+  width: 20px;
+  height: 12px;
+}
+
+.f1tsk--grandstand .f1tsk-bar--lap { width: 31px; }
+.f1tsk--grandstand .f1tsk-bar--ver { width: 50px; }
+.f1tsk--grandstand .f1tsk-bar--nor { width: 39px; }
+.f1tsk--grandstand .f1tsk-bar--lec { width: 37px; }
+.f1tsk--grandstand .f1tsk-bar--phase { width: 82px; }
+
+.f1tsk--grandstand .f1tsk-slash {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: skewX(-6deg);
+  /* pull the sibling slash back into the gap so the strip matches the
+     variant's in-cell slash position */
+  margin-inline: -0.3rem;
+}
+
+.f1tsk--grandstand .f1tsk-cell--phase {
+  margin-left: auto;
+}
+
+/* ==========================================================================
+   C — TELEMETRY HUD
+   Instrument cluster: scanlines + red glow, notched cells, bracketed
+   values, LED labels, red-edged phase chip.
+   ========================================================================== */
+
+.f1tk--hud {
+  background-color: #05070a;
+  min-height: 56px;
+  font-family: 'Chakra Petch', 'Segoe UI', sans-serif;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.03) 0 1px,
+      transparent 1px 3px
+    ),
+    radial-gradient(ellipse at 88% 0%, rgba(255, 24, 1, 0.14), transparent 55%);
+  border-top: 1px solid rgba(255, 24, 1, 0.45);
+  box-shadow: inset 0 2px 8px rgba(255, 24, 1, 0.18);
+}
+
+/* corner bracket — top-left only, 12px (same as H01/H02/H04/H05) */
+.f1tk--hud::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(255, 24, 1, 0.65);
+  border-right: none;
+  border-bottom: none;
+  top: 8px;
+  left: 6px;
+  pointer-events: none;
+}
+
+.f1tk--hud .f1tk-live {
+  border-right: 1px solid rgba(255, 24, 1, 0.45);
+  padding: 0 1rem;
+}
+
+.f1tk--hud .f1tk-data {
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.f1tk--hud .f1tk-cell {
+  padding: 0.35rem 0.7rem;
+  background-color: rgba(11, 15, 23, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  clip-path: polygon(
+    8px 0,
+    100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+}
+
+.f1tk--hud .f1tk-label {
+  display: block;
+  color: var(--f1tk-red);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.f1tk--hud .f1tk-value {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.f1tk--hud .f1tk-value::before {
+  content: '[';
+  margin-right: 0.3rem;
+  color: var(--f1tk-red);
+}
+
+.f1tk--hud .f1tk-value::after {
+  content: ']';
+  margin-left: 0.3rem;
+  color: var(--f1tk-red);
+}
+
+.f1tk--hud .f1tk-phase {
+  padding: 0.35rem 0.7rem;
+  background-color: rgba(11, 15, 23, 0.85);
+  border: 1px solid rgba(255, 24, 1, 0.45);
+  box-shadow: inset 0 0 6px rgba(255, 24, 1, 0.25);
+  clip-path: polygon(
+    8px 0,
+    100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+}
+
+/* Skeleton: notched cells + LED label bars + red phase chip. */
+.f1tsk--hud .login-live-cell {
+  height: auto;
+  align-self: stretch;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  border-right: 1px solid rgba(255, 24, 1, 0.45);
+}
+
+.f1tsk--hud .login-telemetry-data {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0 0 0 1rem; /* right inset comes from the phase chip itself */
+}
+
+.f1tsk--hud .f1tsk-cell {
+  padding: 0.35rem 0.7rem;
+  background-color: rgba(11, 15, 23, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  clip-path: polygon(
+    8px 0,
+    100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+}
+
+.f1tsk--hud .f1tsk-bar--label {
+  display: block;
+  background-color: #ff1801;
+  background-image: linear-gradient(
+    100deg,
+    transparent 44%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 56%
+  );
+}
+
+.f1tsk--hud .f1tsk-slash {
+  display: none;
+}
+
+.f1tsk--hud .f1tsk-cell--phase {
+  margin-left: auto;
+  border-color: rgba(255, 24, 1, 0.45);
+  box-shadow: inset 0 0 6px rgba(255, 24, 1, 0.25);
+}
+
+.f1tsk--hud .f1tsk-bar--badge { width: 27px; }
+.f1tsk--hud .f1tsk-bar--lap { width: 62px; }
+.f1tsk--hud .f1tsk-bar--ver { width: 71px; }
+.f1tsk--hud .f1tsk-bar--nor { width: 62px; }
+.f1tsk--hud .f1tsk-bar--lec { width: 62px; }
+.f1tsk--hud .f1tsk-bar--phase { width: 86px; }

@@ -1,8 +1,9 @@
 import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { LoginNavHeader } from "@/components/layout/LoginNavHeader";
+import { LoginFooter } from "@/components/layout/LoginFooter";
 import { Countdown } from "@/components/f1/Countdown";
 import { fallbackF1Event, getNextF1Event } from "@/lib/f1/jolpica";
 import "./login.css";
@@ -49,26 +50,7 @@ export default async function LoginPage() {
       {/* =====================================================================
           1. TOP NAVIGATION HEADER
           ===================================================================== */}
-      <header className="login-header">
-        <div className="login-header-inner">
-          {/* Original wordmark */}
-          <Link href="/login" className="login-logo" aria-label="Formula 1 Login">
-            <Image
-              src="/imgLogoF1.png"
-              alt="Formula 1"
-              width={164}
-              height={42}
-              sizes="(max-width: 640px) 164px, (max-width: 1024px) 172px, 188px"
-              priority
-            />
-          </Link>
-          <div className="login-header-actions">
-            <Link href="/register" className="login-sale-pill">
-              JOIN THE GRID
-            </Link>
-          </div>
-        </div>
-      </header>
+      <LoginNavHeader />
 
       {/* =====================================================================
           2. HERO BANNER & LOGIN CARD STAGE
@@ -471,147 +453,7 @@ export default async function LoginPage() {
       {/* =====================================================================
           6. WIREFRAME PROPOSAL FOOTER
           ===================================================================== */}
-      <footer className="login-footer">
-        <div className="login-footer-grid">
-          {/* Brand Column */}
-          <div className="login-footer-brand">
-            <div className="login-footer-logo">
-              <Image src="/imgLogoF1.png" alt="Formula 1" width={150} height={40} />
-            </div>
-            <span className="login-footer-details">[Details]</span>
-            <div className="login-footer-socials">
-              <Link
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="login-social-pill"
-                aria-label="Facebook"
-              >
-                <Image
-                  src="/imgFacebook.svg"
-                  alt="Facebook"
-                  width={14}
-                  height={14}
-                />
-              </Link>
-              <Link
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="login-social-pill"
-                aria-label="Twitter"
-              >
-                <Image
-                  src="/imgTwitter.svg"
-                  alt="Twitter"
-                  width={14}
-                  height={14}
-                />
-              </Link>
-              <Link
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="login-social-pill"
-                aria-label="Instagram"
-              >
-                <Image
-                  src="/imgInstagram.svg"
-                  alt="Instagram"
-                  width={14}
-                  height={14}
-                />
-              </Link>
-              <Link
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="login-social-pill"
-                aria-label="YouTube"
-              >
-                <Image
-                  src="/imgYoutube.svg"
-                  alt="YouTube"
-                  width={14}
-                  height={14}
-                />
-              </Link>
-            </div>
-          </div>
-
-          {/* Directory Column 1 */}
-          <div className="login-footer-links">
-            <h3 className="login-footer-col-title">[PAGE]</h3>
-            <Link href="#page1" className="login-footer-link">
-              [Page]
-            </Link>
-            <Link href="#page2" className="login-footer-link">
-              [Page]
-            </Link>
-            <Link href="#page3" className="login-footer-link">
-              [Page]
-            </Link>
-            <Link href="#page4" className="login-footer-link">
-              [Page]
-            </Link>
-          </div>
-
-          {/* Directory Column 2 */}
-          <div className="login-footer-links">
-            <h3 className="login-footer-col-title">[PAGE]</h3>
-            <Link href="#page1" className="login-footer-link">
-              [Page]
-            </Link>
-            <Link href="#page2" className="login-footer-link">
-              [Page]
-            </Link>
-            <Link href="#page3" className="login-footer-link">
-              [Page]
-            </Link>
-            <Link href="#page4" className="login-footer-link">
-              [Page]
-            </Link>
-          </div>
-
-          {/* Newsletter Column */}
-          <div className="login-footer-newsletter">
-            <h3 className="login-newsletter-title">JOIN THE NEWSLETTER</h3>
-            <p className="login-newsletter-desc">
-              Subscribe for exclusive drop access and pre-season testing
-              details.
-            </p>
-            <form action="#newsletter" className="login-newsletter-form">
-              <input
-                type="email"
-                placeholder="Enter your email address..."
-                className="login-newsletter-input"
-                aria-label="Email address for newsletter"
-              />
-              <button type="submit" className="login-newsletter-btn">
-                SUBSCRIBE
-              </button>
-            </form>
-            <p className="login-newsletter-terms">
-              By subscribing, you agree to our Privacy Policy and Terms of Use.
-            </p>
-          </div>
-        </div>
-
-        {/* Bottom Legal Notice */}
-        <div className="login-footer-bottom">
-          <p>
-            Unofficial fan project for demonstration only. Not affiliated
-            with Formula 1, Formula One Digital Media Limited, or the FIA.
-          </p>
-          <div className="login-footer-legal">
-            <Link href="#privacy">Privacy Policy</Link>
-            <span aria-hidden="true">.</span>
-            <Link href="#terms">Terms of Use</Link>
-            <span aria-hidden="true">.</span>
-            <Link href="#cookies">Cookies</Link>
-          </div>
-        </div>
-      </footer>
+      <LoginFooter />
     </main>
   );
 }

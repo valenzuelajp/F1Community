@@ -304,6 +304,62 @@
   background: linear-gradient(90deg, rgba(255, 24, 1, 0.45), rgba(255, 255, 255, 0.06) 40%, transparent);
 }
 
+/* H01–H05 section heads: variant dropdown + Copy AI Prompt chip sit
+   after the rule; both must keep their intrinsic width when the rule
+   shrinks on narrow viewports. */
+.components-section-head .components-dropdown {
+  flex-shrink: 0;
+}
+
+/* Copy AI Prompt chip — rides at the end of the H01–H05 section heads:
+   larger than the builder chips; yellow while waiting (higher
+   specificity than the shared .components-builder-chip--copy rules, so
+   the red states never leak in), go-green on successful copy. */
+.components-section-head .components-builder-chip--copy {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  padding: 0.5rem 1.1rem;
+  border-color: rgba(250, 204, 21, 0.55);
+  color: #facc15;
+}
+
+.components-section-head .components-builder-chip--copy:hover {
+  border-color: #facc15;
+  color: #ffffff;
+  background: rgba(250, 204, 21, 0.16);
+}
+
+.components-section-head .components-builder-chip--copy.is-copied {
+  border-color: #22c55e;
+  color: #052e16;
+  background: #22c55e;
+}
+
+/* Login specimen cards: Copy AI Prompt chip rides in the card head
+   beside the tag (and the variant dropdown where the block has one) —
+   same yellow/green identity as the section-head chips. */
+.components-card-head .components-builder-chip--copy {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.9rem;
+  border-color: rgba(250, 204, 21, 0.55);
+  color: #facc15;
+}
+
+.components-card-head .components-builder-chip--copy:hover {
+  border-color: #facc15;
+  color: #ffffff;
+  background: rgba(250, 204, 21, 0.16);
+}
+
+.components-card-head .components-builder-chip--copy.is-copied {
+  border-color: #22c55e;
+  color: #052e16;
+  background: #22c55e;
+}
+
 /* ---- Card ---- */
 
 .components-card {
@@ -369,6 +425,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 0.75rem;
   margin-bottom: 1.25rem;
 }
@@ -378,6 +435,7 @@
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .components-card-id {
@@ -964,6 +1022,26 @@
   text-align: center;
 }
 
+/* Mini Login builder: Copy AI Prompt — same yellow/green identity as
+   the other Copy AI Prompt chips; distinct class so the red TSX/CSS
+   export chips keep their accent styling. */
+.components-mini-palette-actions .components-builder-chip--ai {
+  border-color: rgba(250, 204, 21, 0.55);
+  color: #facc15;
+}
+
+.components-mini-palette-actions .components-builder-chip--ai:hover {
+  border-color: #facc15;
+  color: #ffffff;
+  background: rgba(250, 204, 21, 0.16);
+}
+
+.components-mini-palette-actions .components-builder-chip--ai.is-copied {
+  border-color: #22c55e;
+  color: #052e16;
+  background: #22c55e;
+}
+
 .components-builder-chip--copy {
   border-color: color-mix(in srgb, var(--auth-accent, #ff1801) 45%, transparent);
   color: var(--auth-accent, #ff1801);
@@ -983,36 +1061,6 @@
 
 .components-builder-chip--reset {
   border-style: dashed;
-}
-
-.components-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-}
-
-.components-variant-readonly {
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.55rem 1.1rem;
-  border-radius: 0.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
-  color: #9ca3af;
-  cursor: not-allowed;
-  opacity: 0.85;
-}
-
-.components-variant-readonly:disabled {
-  cursor: not-allowed;
-}
-
-.components-card-meta .components-builder-chip--copy {
-  margin-left: auto;
 }
 
 /* L15 card-meta watermark number pill — compact single-row control */
@@ -1080,10 +1128,6 @@
 .components-card-num input[type='text']::placeholder {
   color: #4b5563;
   font-weight: 600;
-}
-
-.components-card-meta .components-builder-chip--copy + .components-builder-chip--copy {
-  margin-left: 0;
 }
 
 /* Accent overrides scoped to builder form */
@@ -1859,4 +1903,231 @@
 
 .components-grid--wide .components-card {
   min-height: 0;
+}
+
+/* H01 — Login Navigation Bar specimen: full-bleed inside the card preview */
+.components-card-preview:has(.login-header) {
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 0;
+  padding: 0;
+  container-type: inline-size;
+  isolation: isolate;
+}
+
+/* The live header needs z-index: 40 to stack above the login hero, but
+   inside a specimen card that 40 outranks the control row (z-index: 2) and
+   paints over open dropdown menus. Neutralize it in the frame. */
+.components-card-preview .login-header {
+  z-index: auto;
+}
+
+.components-card-preview:has(.login-header) .login-header {
+  margin: 0 auto;
+}
+
+/* The F1 mark inside imgLogoContainer.png is a 1890x476 strip centred in the
+   3464x3464 canvas (left 22.719%, top 43.129%, 54.561% x 13.741%) — the same
+   bytes as icon.png. The live header's .login-logo box (750x200) is far larger
+   than the 72px bar, so inside the frame the box is cropped to the mark: it
+   then fits the container and :hover fires only over the logo image itself,
+   never on the empty black around it. */
+.components-card-preview:has(.login-header) .login-logo {
+  --mark-h: 28px;
+  --mark-canvas: calc(var(--mark-h) / 0.13741);
+  width: calc(var(--mark-canvas) * 0.54561); /* 111px at 28px tall */
+  height: var(--mark-h);
+  overflow: hidden;
+}
+
+/* next/image `fill` pins size/position inline — the crop has to win with
+   !important. The square source is scaled up to --mark-canvas and shifted so
+   the mark lands exactly on the box. pointer-events keeps the oversized img
+   from catching hovers in the empty black around the mark. */
+.components-card-preview:has(.login-header) .login-logo img {
+  position: absolute !important;
+  width: var(--mark-canvas) !important;
+  height: var(--mark-canvas) !important;
+  left: calc(var(--mark-canvas) * -0.22719) !important;
+  right: auto !important;
+  top: calc(var(--mark-canvas) * -0.43129) !important;
+  bottom: auto !important;
+  max-width: none !important;
+  pointer-events: none;
+}
+
+/* Red glow — scoped so it only lights up while the pointer is on the logo. */
+.components-card-preview:has(.login-header) .login-logo:hover {
+  filter: drop-shadow(0 0 5px rgba(255, 24, 1, 0.95))
+    drop-shadow(0 0 16px rgba(225, 24, 1, 0.8));
+}
+
+.components-card-preview:has(.login-header) .login-nav-items {
+  left: 0;
+}
+
+/* Mirror the live page's small-screen behaviour inside the frame: the link
+   row drops out when logo + links + pills stop fitting, then the mark
+   shrinks so the pills keep their space. */
+@container (max-width: 820px) {
+  .login-nav-items {
+    display: none;
+  }
+}
+
+@container (max-width: 480px) {
+  .login-header .login-header-inner .login-logo {
+    --mark-h: 22px;
+  }
+}
+
+@container (max-width: 340px) {
+  .login-header .login-header-inner .login-logo {
+    --mark-h: 12px;
+  }
+}
+
+@container (max-width: 240px) {
+  .login-header-inner {
+    padding: 0 0.5rem;
+  }
+
+  .login-sale-pill,
+  .login-menu-pill {
+    min-width: 0;
+    padding: 0 0.5rem;
+  }
+}
+
+/* H02/H03/H04/H05 — Footer + Telemetry + Standings + Sponsors specimens: full-bleed inside the card preview */
+.components-card-preview:has(.login-footer),
+.components-card-preview:has(.f1f),
+.components-card-preview:has(.login-telemetry),
+.components-card-preview:has(.f1tk),
+.components-card-preview:has(.login-podium),
+.components-card-preview:has(.f1st),
+.components-card-preview:has(.f1sk),
+.components-card-preview:has(.login-teams),
+.components-card-preview:has(.f1sp) {
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 0;
+  padding: 0;
+  container-type: inline-size;
+}
+
+/* Classic ticker: login.css sizes the bar from the WINDOW (640px media),
+   but inside a specimen frame the CONTAINER decides — same rule as the
+   classic footer grid above. Hits the live specimen AND its skeleton
+   (both carry the .login-telemetry* classes; variant roots do not). */
+@container (max-width: 640px) {
+  .components-card-preview:has(.login-telemetry) .login-telemetry {
+    min-height: 44px;
+    font-size: 10px;
+  }
+
+  .components-card-preview:has(.login-telemetry) .login-live-cell {
+    height: 44px;
+    gap: 0.5rem;
+    padding: 0 1.25rem;
+  }
+
+  .components-card-preview:has(.login-telemetry) .login-live-dot {
+    width: 14px;
+    height: 14px;
+  }
+
+  .components-card-preview:has(.login-telemetry) .login-telemetry-data {
+    gap: 1rem;
+    padding: 0 1.25rem;
+  }
+
+  .components-card-preview:has(.login-telemetry) .login-telemetry-slash {
+    font-size: 13px;
+  }
+
+  .components-card-preview:has(.login-telemetry) .login-telemetry-phase {
+    margin-left: 1rem;
+  }
+}
+
+/* Classic footer: the grid follows the FRAME width, not the viewport —
+   login.css switches these off window media queries at 640/1024, which
+   would keep a 4-column grid inside the narrow specimen card. */
+@container (max-width: 960px) {
+  .components-card-preview:has(.login-footer) .login-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@container (max-width: 600px) {
+  .components-card-preview:has(.login-footer) .login-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .components-card-preview:has(.login-footer) .login-footer-bottom {
+    flex-direction: column;
+  }
+}
+
+/* Classic footer logo: crop the 3464² canvas box to the F1 mark (same
+   measured bbox as the H01 header — mark = 54.561% x 13.741% at
+   22.719% / 43.129%) so the specimen shows the mark at full size
+   instead of a speck inside object-contain. */
+.components-card-preview:has(.login-footer) .login-footer-logo {
+  --mark-h: 26px;
+  --mark-canvas: calc(var(--mark-h) / 0.13741);
+  width: calc(var(--mark-canvas) * 0.54561); /* 103px at 26px tall */
+  height: var(--mark-h);
+  overflow: hidden;
+}
+
+.components-card-preview:has(.login-footer) .login-footer-logo img {
+  position: absolute !important;
+  width: var(--mark-canvas) !important;
+  height: var(--mark-canvas) !important;
+  left: calc(var(--mark-canvas) * -0.22719) !important;
+  right: auto !important;
+  top: calc(var(--mark-canvas) * -0.43129) !important;
+  bottom: auto !important;
+  max-width: none !important;
+  pointer-events: none;
+}
+
+/* Shared visually-hidden status line for the H0x loading skeletons:
+   the shimmer blocks are aria-hidden decoration; this carries the
+   accessible "Loading…" announcement. */
+.components-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* Checkered-flag wave — the ghost checker ripples like fabric in the wind:
+   the pattern slides one half-tile diagonally and back (seamless — a 14px
+   offset of a 28px tile is phase-identical) while the layer breathes with
+   a light skew. Shared by all four skeleton wells; each well clips the
+   overhang (inset -6px) so the flutter never spills past its frame. */
+@keyframes f1-flag-wave {
+  0% {
+    background-position: 0 0;
+    transform: skewX(0deg);
+  }
+  50% {
+    background-position: 14px 14px;
+    transform: skewX(-3deg);
+  }
+  100% {
+    background-position: 0 0;
+    transform: skewX(0deg);
+  }
 }
