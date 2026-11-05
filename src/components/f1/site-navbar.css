@@ -1,0 +1,225 @@
+/* ==========================================================================
+   Shared site navbar (sticky) — imported by the SiteNavbar component,
+   used on home/news/schedule/standings/new-to-f1.
+   Logo is pinned left and runs a touch smaller than the
+   login/register header tiers.
+   ========================================================================== */
+
+.site-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: rgba(9, 11, 16, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.site-navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.site-navbar__logo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 116px;
+  height: 32px;
+}
+
+.site-navbar__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.site-navbar__links {
+  display: none;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.site-navbar__link {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.site-navbar__link:hover {
+  color: #ffffff;
+}
+
+/* Always visible (sits outside the collapsing links row). */
+.site-navbar__logout {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, #ff1801, #e01500);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.site-navbar__logout:hover {
+  filter: brightness(1.1);
+}
+
+.site-navbar__logout:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Logout + hamburger sit together on the right edge. */
+.site-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Hamburger menu below 900px. Inline links row serves 900px and up.
+   ========================================================================== */
+
+.mobile-menu__button {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 0.6rem 0.65rem;
+  cursor: pointer;
+}
+
+.mobile-menu__bar {
+  display: block;
+  height: 2px;
+  width: 20px;
+  background-color: #ffffff;
+  border-radius: 2px;
+}
+
+.mobile-menu__panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.25rem;
+  background-color: rgba(9, 11, 16, 0.98);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.25rem 1.5rem 1.5rem;
+  animation: mobile-menu-drop 0.25s ease;
+}
+
+.mobile-menu__close {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-size: 1.125rem;
+  line-height: 1;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+}
+
+.mobile-menu__links {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+.mobile-menu__link {
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #e5e7eb;
+  padding: 0.65rem 0.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mobile-menu__link:hover {
+  color: #ff1801;
+}
+
+.mobile-menu__logout {
+  border: 0;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, #ff1801, #e01500);
+  padding: 0.75rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+@keyframes mobile-menu-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .site-navbar__inner {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .site-navbar__logo {
+    width: 130px;
+    height: 36px;
+  }
+}
+
+/* Inline links appear at 900px+; below that the hamburger serves them. */
+@media (min-width: 900px) {
+  .site-navbar__links {
+    display: flex;
+  }
+
+  .mobile-menu__button {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-navbar__inner {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+
+  .site-navbar__logo {
+    width: 145px;
+    height: 40px;
+  }
+}

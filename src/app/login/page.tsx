@@ -5,8 +5,7 @@ import { LoginForm } from "@/components/auth/LoginForm";
 import { LoginNavHeader } from "@/components/layout/LoginNavHeader";
 import { LoginFooter } from "@/components/layout/LoginFooter";
 import { Countdown } from "@/components/f1/Countdown";
-import { fallbackF1Event, getNextF1Event, getTopDrivers } from "@/lib/f1/jolpica";
-import type { F1StandingDriver } from "@/lib/f1/jolpica";
+import { fallbackF1Event, getNextF1Event } from "@/lib/f1/jolpica";
 import "./login.css";
 
 export const metadata: Metadata = {
@@ -38,15 +37,6 @@ export default async function LoginPage() {
     event = await getNextF1Event();
   } catch {
     // keep fallback
-  }
-
-  // Championship top 3 by points (same Jolpica client, same ISR caching).
-  // Empty array on failure → the leaderboard section hides itself.
-  let topDrivers: F1StandingDriver[] = [];
-  try {
-    topDrivers = await getTopDrivers(3);
-  } catch {
-    // keep empty
   }
 
   const roundLabel = `ROUND ${String(event.round).padStart(2, "0")}`;
@@ -130,11 +120,17 @@ export default async function LoginPage() {
                   )}
                 </span>
                 {!event.isLive && !event.seasonOver && (
-                  <Countdown
-                    target={event.nextSessionStart!}
-                    className="login-countdown"
-                    showStartTime
-                  />
+                  event.nextSessionStart ? (
+                    <Countdown
+                      target={event.nextSessionStart}
+                      className="login-countdown"
+                      showStartTime
+                    />
+                  ) : (
+                    <span className="login-countdown">
+                      Schedule unavailable right now.
+                    </span>
+                  )
                 )}
               </div>
 
@@ -211,9 +207,7 @@ export default async function LoginPage() {
           ===================================================================== */}
       <section
         aria-label={
-          event.isLive
-            ? "Live race telemetry timing"
-            : "Race telemetry offline"
+          event.isLive ? "Live race telemetry timing" : "Race telemetry offline"
         }
         className="login-telemetry"
       >
@@ -237,9 +231,7 @@ export default async function LoginPage() {
               <span className="login-telemetry-slash">/</span>
               <span>[NAM3] [TIMEDATA3]</span>
               <span className="login-telemetry-slash">/</span>
-              <span className="login-telemetry-phase">
-                {event.headline}
-              </span>
+              <span className="login-telemetry-phase">{event.headline}</span>
             </>
           ) : (
             <>
@@ -256,48 +248,6 @@ export default async function LoginPage() {
           )}
         </div>
       </section>
-
-      {/* =====================================================================
-          3b. CHAMPIONSHIP LEADERBOARD (TOP 3 BY POINTS)
-          Live driver standings from the Jolpica schedule API (ISR hourly).
-          Hidden entirely when the API is unavailable.
-          ===================================================================== */}
-      {topDrivers.length > 0 && (
-        <section aria-label="Top 3 championship drivers" className="login-podium">
-          <h2 className="login-podium-title">
-            TOP 3 — {event.season} CHAMPIONSHIP
-          </h2>
-          <div className="login-podium-row">
-            {topDrivers.map((driver) => (
-              <div
-                key={driver.code}
-                className={`login-podium-cell login-podium-cell--${driver.position}`}
-              >
-                <span className="login-podium-info">
-                  <span className="login-podium-name">
-                    {driver.name.toUpperCase()}
-                  </span>
-                  <span className="login-podium-team">{driver.team.toUpperCase()}</span>
-                  <span className="login-podium-points">
-                    {driver.points} <span className="login-podium-pts">PTS</span>
-                  </span>
-                </span>
-                {driver.photo && (
-                  <span className="login-podium-photo">
-                    <Image
-                      src={driver.photo}
-                      alt={`${driver.name} portrait`}
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 1024px) 112px, (min-width: 640px) 96px, 72px"
-                    />
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* =====================================================================
           4. TRUSTED TEAMS SPONSORS STRIP

@@ -1,63 +1,32 @@
 /* ==========================================================================
-   Home Page Styles
-   Cleanly separated for simple reading, editing, and teammate onboarding.
+   Home content sections (+ newsroom) - shared stylesheet.
+   Imported by /home, /news, /schedule, and /standings pages.
+   Page shell (.page/.page__glow) lives in ../globals.css;
+   the navbar lives in the SiteNavbar component + site-navbar.css.
+   (Hero + home-navbar styles were removed: dead after the news-first
+   redesign. bg-racing-grid stays in globals.css in case pages reuse it.)
    ========================================================================== */
 
-.page {
+/* ==========================================================================
+   Home content sections
+   (shared page sections for home/news/schedule/standings)
+   Mobile-first; same dark tokens as the hero above.
+   ========================================================================== */
+
+.home-section {
   position: relative;
-  flex: 1 1 0%;
-  overflow: hidden;
-  background-color: #090b10;
-  color: #e5e7eb;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.page__glow {
-  pointer-events: none;
-  position: absolute;
-  left: 25%;
-  top: 0;
-  height: 24rem;
-  width: 24rem;
-  border-radius: 9999px;
-  background-color: rgba(220, 38, 38, 0.1);
-  filter: blur(48px);
-}
-
-.hero {
-  position: relative;
-}
-
-.hero__inner {
-  position: relative;
+.home-section__inner {
   margin: 0 auto;
   width: 100%;
   max-width: 64rem;
-  padding: 5rem 1.5rem;
+  padding: 3rem 1.5rem;
   text-align: center;
 }
 
-@media (min-width: 640px) {
-  .hero__inner {
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero__inner {
-    padding: 7rem 4rem;
-  }
-}
-
-.hero__badge {
-  margin-bottom: 1.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  background-color: rgba(69, 10, 10, 0.8);
-  padding: 0.5rem 1rem;
+.home-section__eyebrow {
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -65,78 +34,1651 @@
   color: #f87171;
 }
 
-.hero__headline {
-  font-size: 2.25rem;
+.home-section__title {
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  line-height: 1;
   letter-spacing: -0.025em;
+  color: #ffffff;
 }
 
-@media (min-width: 640px) {
-  .hero__headline {
-    font-size: 3.75rem;
-  }
-}
-
-.hero__subtext {
-  margin: 1.5rem auto 0;
+.home-section__subtext {
+  margin: 0.75rem auto 0;
   max-width: 42rem;
   font-size: 0.875rem;
   line-height: 1.625;
   color: #9ca3af;
 }
 
-@media (min-width: 640px) {
-  .hero__subtext {
-    font-size: 1rem;
-  }
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding-top: 2rem;
-}
-
-.hero__btn--primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 0.5rem;
-  background: linear-gradient(to right, #ff1801, #e01500);
-  padding: 0.875rem 1.75rem;
+.home-live-pill {
+  display: inline-block;
+  margin-top: 1.25rem;
+  border-radius: 9999px;
+  background-color: #ff1801;
+  padding: 0.5rem 1.25rem;
   font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #ffffff;
-  box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3);
-  transition: opacity 0.15s ease, filter 0.15s ease;
 }
 
-.hero__btn--primary:hover {
-  filter: brightness(1.1);
+.home-countdown {
+  display: block;
+  margin-top: 1.25rem;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #ffffff;
 }
 
-.hero__btn--secondary {
+.home-muted {
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.home-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.home-card {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+}
+
+.home-card__icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: #f87171;
+}
+
+.home-card__title {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.home-card__text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: #9ca3af;
+}
+
+.home-table {
+  list-style: none;
+  margin: 2rem auto 0;
+  max-width: 42rem;
+  padding: 0;
+}
+
+.home-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0.25rem;
+  font-size: 0.875rem;
+}
+
+.home-row__position {
+  width: 1.5rem;
+  font-weight: 800;
+  color: #f87171;
+}
+
+.home-row__code {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.home-row__name {
+  flex: 1 1 auto;
+  text-align: left;
+  color: #e5e7eb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-row__team {
+  display: none;
+  color: #9ca3af;
+}
+
+.home-row__points {
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .home-section__inner {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .home-section__title {
+    font-size: 1.875rem;
+  }
+
+  .home-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .home-row__team {
+    display: inline;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-section__inner {
+    padding: 4rem;
+  }
+}
+
+
+/* ==========================================================================
+   Newsroom (live RSS headlines)
+   Hero + sidebar on desktop, stacked on mobile. Same dark tokens.
+   ========================================================================== */
+
+.home-section__inner--wide {
+  max-width: 72rem;
+}
+
+/* Wide screens: single column flow (hero, towers, full-width news). */
+
+.news-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.news-hero__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.news-hero__title {
+  margin-top: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.news-card__meta {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f87171;
+}
+
+.news-card__summary {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: #9ca3af;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.news-side {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 1.25rem;
+  align-self: start;
+}
+
+.news-side__heading {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.news-side__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.news-side__row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0;
+}
+
+.news-side__row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.news-side__row a {
+  display: block;
+  transition: opacity 0.15s ease;
+}
+
+.news-side__row a:hover .news-side__title {
+  color: #f87171;
+}
+
+.news-side__title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #e5e7eb;
+}
+
+.news-side__meta {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.news-card {
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.news-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  /* Skeleton slot: visible while the remote photo loads, no layout shift. */
+  background:
+    linear-gradient(135deg, rgba(255, 24, 1, 0.12), rgba(255, 255, 255, 0.02) 60%),
+    rgba(255, 255, 255, 0.03);
+}
+
+.news-card__body {
+  padding: 1.25rem;
+}
+
+.news-card__body .news-card__meta {
+  margin-top: 0;
+}
+
+.news-card__title {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #ffffff;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Two-line story summary under the grid-card title (13px floor). */
+.news-card__summary {
+  margin-top: 0.375rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--pit-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .news-hero__title {
+    font-size: 1.875rem;
+  }
+
+  .news-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .news-top {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .news-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Newcomer welcome, topic filter chips, season pulse
+   ========================================================================== */
+
+.welcome-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.topic-chip {
+  display: inline-block;
+  margin-right: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--pit-red);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #ffffff;
+  transform: skewX(var(--pit-skew));
+  transform: skewX(var(--pit-skew));
+}
+
+.news-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.news-filter__btn {
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: transparent;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.news-filter__btn--active {
+  background-color: #ff1801;
+  border-color: #ff1801;
+  color: #ffffff;
+}
+
+.news-filter__btn:focus-visible {
+  outline: 2px solid #f87171;
+  outline-offset: 2px;
+}
+
+.season-progress {
+  height: 0.375rem;
+  max-width: 28rem;
+  margin: 1.25rem auto 0;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.season-progress__bar {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #ff1801, #e01500);
+}
+
+@media (min-width: 640px) {
+  .welcome-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .welcome-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Responsive robustness + motion
+   One-line flex-truncation fix, entrance motion, hover lifts, live pulse.
+   All motion switches off under prefers-reduced-motion.
+   ========================================================================== */
+
+/* Flex children refuse to shrink past content without this — without it,
+   long driver names push the standings row wider than small phones. */
+.home-row__name {
+  min-width: 0;
+}
+
+.home-row__team {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.news-hero,
+.news-card,
+.home-card,
+.home-row {
+  animation: rise-in 0.5s ease both;
+}
+
+/* Gentle stagger so grids read top-to-bottom on load. */
+.news-card:nth-child(2),
+.home-card:nth-child(2),
+.home-row:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.news-card:nth-child(3),
+.home-card:nth-child(3),
+.home-row:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.news-card:nth-child(n + 4),
+.home-card:nth-child(n + 4),
+.home-row:nth-child(n + 4) {
+  animation-delay: 0.18s;
+}
+
+.news-card,
+.home-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.news-card:hover,
+.home-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 24, 1, 0.4);
+  box-shadow: 0 12px 24px -12px rgba(255, 24, 1, 0.35);
+}
+
+.home-live-pill {
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 24, 1, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 24, 1, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-hero,
+  .news-card,
+  .home-card,
+  .home-row,
+  .home-live-pill,
+  .ticker__track,
+  .mobile-menu__overlay {
+    animation: none;
+  }
+
+  .news-card,
+  .home-card {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Timing ticker (homepage tape under the navbar)
+   Seamless CSS loop: two identical groups, -50% shift. Pauses on hover,
+   static under prefers-reduced-motion (see block above).
+   ========================================================================== */
+
+.ticker {
+  overflow: hidden;
+  border-top: 1px solid var(--pit-line);
+  border-bottom: 1px solid var(--pit-line);
+  background-color: var(--pit-surface);
+}
+
+.ticker__track {
+  display: inline-flex;
+  animation: ticker-scroll 45s linear infinite;
+}
+
+.ticker:hover .ticker__track {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker__group {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 0.875rem 1.75rem;
+  white-space: nowrap;
+}
+
+.ticker__item {
+  padding: 0.5rem 0.25rem;
+  font-size: 13px;
+  color: var(--pit-muted);
+}
+
+.ticker__item::after {
+  content: '//';
+  margin: 0 1rem;
+  color: var(--pit-red);
+}
+
+.ticker__item--next {
+  color: var(--pit-text);
+  font-weight: 700;
+}
+
+.ticker__live {
+  margin-left: 1rem;
+  border-radius: 0.25rem;
+  background-color: var(--pit-red);
+  padding: 0.125rem 0.5rem;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+}
+
+/* ==========================================================================
+   Weekend session timeline (schedule page)
+   ========================================================================== */
+
+.timeline {
+  list-style: none;
+  margin: 2rem auto 0;
+  max-width: 42rem;
+  padding: 0;
+  text-align: left;
+}
+
+.timeline__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0.25rem;
+  font-size: 0.875rem;
+}
+
+.timeline__dot {
+  flex: none;
+  height: 0.625rem;
+  width: 0.625rem;
+  border-radius: 9999px;
+  background-color: #4b5563;
+}
+
+.timeline__row--live .timeline__dot {
+  background-color: #ff1801;
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+
+.timeline__row--next .timeline__dot {
+  background-color: transparent;
+  border: 2px solid #f87171;
+}
+
+.timeline__label {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.timeline__time {
+  margin-left: auto;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.timeline__state {
+  flex: none;
+  width: 5.5rem;
+  text-align: right;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #ffffff;
-  transition: background-color 0.15s ease;
+  color: #9ca3af;
 }
 
-.hero__btn--secondary:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+.timeline__row--live .timeline__state {
+  color: #ff1801;
+}
+
+.timeline__row--done .timeline__label {
+  color: #9ca3af;
+}
+
+/* ==========================================================================
+   Season calendar (full-year list on /schedule)
+   ========================================================================== */
+
+.calendar {
+  list-style: none;
+  margin: 2rem auto 0;
+  max-width: 42rem;
+  padding: 0;
+  text-align: left;
+}
+
+.calendar__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0.25rem;
+  font-size: 0.875rem;
+}
+
+.calendar__round {
+  flex: none;
+  width: 1.75rem;
+  font-weight: 800;
+  color: #f87171;
+}
+
+.calendar__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.calendar__name {
+  font-weight: 700;
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar__circuit {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar__date {
+  flex: none;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.calendar__status {
+  flex: none;
+  width: 5.5rem;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+}
+
+.calendar__row--completed .calendar__name {
+  color: #9ca3af;
+}
+
+/* ==========================================================================
+   Race-week hero (mockup: eyebrow, giant title, countdown boxes,
+   circuit outline, session schedule). Mobile-first, tokens from :root.
+   ========================================================================== */
+
+.race-hero {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+
+.race-hero__inner {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1240px;
+  padding: 3rem 1.5rem 2.5rem;
+}
+
+.race-hero__eyebrow {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.race-hero__title {
+  margin-top: 0.5rem;
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  transform: skewX(-4deg);
+  transform-origin: left center;
+}
+
+.race-hero__circuit {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.race-hero__countdown {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.75rem;
+}
+
+.countdown-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.countdown-box__value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-box__label {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.race-hero__track {
+  display: block;
+  width: 100%;
+  max-width: 28rem;
+  height: auto;
+  margin-top: 2rem;
+}
+
+.race-hero__sessions {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.race-hero__session {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.875rem;
+}
+
+.race-hero__session-name {
+  color: var(--text);
+}
+
+.race-hero__session-name--live {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.race-hero__session-time {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Driver portraits on the /drivers table. */
+.driver-row__photo {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  background-color: var(--surface);
+}
+
+.driver-row__photo--fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+@media (min-width: 640px) {
+  .race-hero__inner {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .race-hero__title {
+    font-size: 4rem;
+  }
+
+  .countdown-box__value {
+    font-size: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .race-hero__inner {
+    padding: 4rem;
+  }
+
+  .race-hero__title {
+    font-size: 4.5rem;
+  }
+}
+
+/* ==========================================================================
+   Pit-wall pass · Step 3 — split hero + standings tower
+   Left: title, giant countdown, session rows. Right: top-5 tower.
+   One skew angle everywhere (--pit-skew).
+   ========================================================================== */
+
+.race-hero__inner--split {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  overflow: hidden;
+}
+
+.race-hero__roundbg {
+  pointer-events: none;
+  user-select: none;
+  position: absolute;
+  top: -1.5rem;
+  left: -0.5rem;
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(8rem, 28vw, 16rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.08);
+  z-index: 0;
+}
+
+.race-hero__main {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.race-hero__inner--split .race-hero__title {
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  transform: skewX(var(--pit-skew));
+}
+
+/* Countdown digits run larger than the title — tabular numerals only. */
+.race-hero__inner--split .countdown-box__value {
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-variant-numeric: tabular-nums;
+}
+
+.race-hero__session-local {
+  font-variant-numeric: tabular-nums;
+  color: var(--pit-text);
+  white-space: nowrap;
+}
+
+.race-hero__session-utc {
+  font-size: 0.75rem;
+  color: var(--pit-muted);
+  white-space: nowrap;
+}
+
+.race-hero__tower {
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--pit-line);
+  border-radius: 0.75rem;
+  background-color: var(--pit-surface);
+  padding: 1.25rem 1.25rem 1rem;
+  min-width: 0;
+}
+
+.race-hero__tower-heading {
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--pit-ink);
+  margin: 0 0 0.75rem;
+}
+
+.race-hero__tower-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.race-hero__tower-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-radius: 0.375rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.race-hero__tower-pos {
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 1.125rem;
+  width: 1.5rem;
+  color: var(--pit-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.race-hero__tower-code {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--pit-ink);
+}
+
+.race-hero__tower-gap {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--pit-muted);
+  white-space: nowrap;
+}
+
+.race-hero__tower-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pit-red);
+}
+
+.race-hero__tower-link:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 1024px) {
+  .race-hero__inner--split {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+/* ==========================================================================
+   Step 4 (pit-wall): whole-card links, lead overlay, 3-line headlines
+   ========================================================================== */
+
+a.news-card,
+a.news-hero {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+a.news-card:hover .news-card__title,
+a.news-hero:hover .news-hero__title {
+  text-decoration: underline;
+  text-decoration-color: var(--pit-red);
+  text-underline-offset: 0.25rem;
+}
+
+.news-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(255, 24, 1, 0.28), transparent 55%);
+  pointer-events: none;
+}
+
+.news-hero__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Home standings towers live only in the race hero now — no tower-section CSS. */
+
+/* ==========================================================================
+   Pit-wall mockup pass: container, titles, badge, ticker, hero, team
+   bars, news overlay, towers, footer. Appended as an override layer —
+   earlier shared blocks above stay valid for the other content pages.
+   ========================================================================== */
+
+/* One container: 1240px max, content left-aligned. */
+.pit-container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1240px;
+  padding: 3rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .pit-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+/* Left-aligned section title with a skewed red marker. */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-family: var(--font-pit-display), 'Arial Narrow', sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: 0.01em;
+  color: var(--pit-ink);
+  text-align: left;
+}
+
+.section-title::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 2rem;
+  background-color: var(--pit-red);
+  transform: skewX(var(--pit-skew));
+}
+
+/* Yellow round badge in the hero. */
+.round-badge {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.375rem 1rem;
+  background-color: var(--pit-yellow);
+  color: #07080b;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transform: skewX(var(--pit-skew));
+}
+
+/* Alternate-section band. */
+.home-section--band {
+  background-color: rgba(255, 255, 255, 0.015);
+}
+
+/* Standings towers sit on the surface shade; news sits on the base. */
+.home-section--surface {
+  background-color: var(--pit-surface);
+}
+
+/* ---- Ticker: red LATEST tag, red-to-yellow underline ---- */
+.ticker {
+  display: flex;
+  align-items: stretch;
+  border-top: 1px solid var(--pit-line);
+  border-bottom: 1px solid var(--pit-line);
+  background-color: var(--pit-surface);
+  position: relative;
+}
+
+.ticker::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--pit-red), var(--pit-yellow));
+}
+
+.ticker__tag {
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: var(--pit-red);
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.ticker__viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: pit-ticker 45s linear infinite;
+}
+
+.ticker:hover .ticker__track {
+  animation-play-state: paused;
+}
+
+@keyframes pit-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker__item {
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track {
+    animation: none;
+    width: auto;
+  }
+
+  .ticker__viewport {
+    overflow-x: auto;
+  }
+}
+
+/* ---- Hero: two columns at 960px, red session row ----
+   (Hero grid comes from .bg-racing-grid on the section — fully shown.) */
+.race-hero {
+  position: relative;
+}
+
+.race-hero__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .race-hero__inner {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .race-hero__inner {
+    grid-template-columns: 7fr 5fr;
+    align-items: stretch;
+  }
+}
+
+.race-hero__title {
+  font-size: clamp(2.25rem, 6vw, 4rem);
+}
+
+.race-hero__session--race .race-hero__session-name,
+.race-hero__session--race .race-hero__session-local {
+  color: var(--pit-red);
+  font-weight: 800;
+}
+
+.race-hero__session-local,
+.race-hero__session-utc {
+  font-size: 0.8125rem;
+}
+
+/* Constructor bar chart inside the hero tower card. */
+.team-bars {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--pit-line);
+  padding-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.team-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.team-bar__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--pit-ink);
+}
+
+.team-bar__track {
+  height: 0.5rem;
+  min-width: 4rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.team-bar__fill {
+  display: block;
+  height: 100%;
+  transform: skewX(var(--pit-skew-bars));
+  transform-origin: left center;
+}
+
+.team-bar__points {
+  font-variant-numeric: tabular-nums;
+  color: var(--pit-muted);
+}
+
+/* ---- News: lead overlay, credit, 13px floors ---- */
+.news-hero__media {
+  position: relative;
+}
+
+.news-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 55%;
+  background: linear-gradient(180deg, transparent, rgba(7, 8, 11, 0.85));
+}
+
+.news-credit {
+  margin-top: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--pit-muted);
+  text-align: left;
+}
+
+.news-side__meta,
+.countdown-box__label {
+  font-size: 0.8125rem;
+}
+
+/* ---- Towers: gap column hides under 560px ---- */
+@media (max-width: 559px) {
+  .tower__gap,
+  .race-hero__tower-gap {
+    display: none;
+  }
+}
+
+/* ---- Footer: checker divider, store teaser ---- */
+.pit-footer {
+  border-top: 1px solid var(--pit-line);
+}
+
+.pit-footer .pit-container {
+  padding-top: 2rem;
+  padding-bottom: 2.5rem;
+}
+
+.checker {
+  height: 10px;
+  background: repeating-conic-gradient(
+    rgba(242, 243, 245, 0.5) 0% 25%,
+    transparent 0% 50%
+  );
+  background-size: 20px 20px;
+}
+
+/* Slimmer reuse of the footer checker as a section divider. */
+.checker--slim {
+  height: 6px;
+  opacity: 0.6;
+}
+
+.pit-footer__title {
+  margin-top: 1.5rem;
+  font-family: var(--font-pit-display);
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--pit-text);
+}
+
+.pit-footer__sub {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--pit-muted);
+}
+
+.shop-teaser {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.shop-card {
+  display: block;
+  border-radius: 0.5rem;
+  border: 1px solid var(--pit-line);
+  background: var(--pit-surface);
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.shop-card:hover {
+  border-color: var(--pit-red);
+}
+
+.shop-card__eyebrow {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pit-muted);
+}
+
+.shop-card__name {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--pit-text);
+}
+
+@media (min-width: 640px) {
+  .shop-teaser {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .shop-teaser {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Relocation badge inside the hero circuit line (yellow = alert). */
+.race-hero__relocated {
+  color: var(--pit-yellow);
+  font-weight: 800;
+}
+
+/* Image states: red shimmer while a remote photo loads, branded fallback
+   when the URL is missing or the download fails. Never an empty box. */
+.news-media--loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.news-media--loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 24, 1, 0.06) 30%,
+    rgba(255, 24, 1, 0.22) 50%,
+    rgba(255, 24, 1, 0.06) 70%
+  );
+  background-size: 200% 100%;
+  animation: news-media-shimmer 1.6s linear infinite;
+}
+
+@keyframes news-media-shimmer {
+  from {
+    background-position: 180% 0;
+  }
+  to {
+    background-position: -80% 0;
+  }
+}
+
+.news-media--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 24, 1, 0.28), rgba(255, 24, 1, 0.06) 55%, rgba(255, 255, 255, 0.03));
+}
+
+.news-media__fallback-label {
+  position: relative;
+  display: inline-block;
+  border: 1px solid rgba(255, 24, 1, 0.55);
+  border-radius: 9999px;
+  background-color: rgba(7, 8, 11, 0.72);
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+}
+
+/* Abstract racing-line brand device (TrackLine component).
+   Decorative layers only: behind content, never intercepting taps. */
+.race-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.race-hero__track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.news-media--fallback {
+  position: relative;
+  overflow: hidden;
+}
+
+.news-fallback__track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-media--loading::before {
+    animation: none;
+  }
+}
+
+/* Item 2: data-driven hero glows. Colors arrive via inline style from live
+   standings; these classes only position the layers behind the content
+   (pointer-events: none, no blur filters). */
+.page__glow--leader {
+  pointer-events: none;
+  position: absolute;
+  left: -12rem;
+  top: -12rem;
+  height: 36rem;
+  width: 36rem;
+  border-radius: 9999px;
+}
+
+.page__glow--red {
+  pointer-events: none;
+  position: absolute;
+  right: -12rem;
+  top: -8rem;
+  height: 30rem;
+  width: 30rem;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 24, 1, 0.1),
+    transparent
+  );
+}
+
+/* Glossary chips: touch-first term explainers. The readout panel flows in
+   normal layout (never absolutely positioned) so it always wraps at 390px. */
+.gloss {
+  margin-top: 1rem;
+}
+
+.gloss-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gloss-term {
+  border: 1px solid var(--pit-line);
+  border-radius: 9999px;
+  background: transparent;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--pit-muted);
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.gloss-term:hover {
+  border-color: var(--pit-red);
+  color: var(--pit-text);
+}
+
+.gloss-term--open {
+  border-color: var(--pit-red);
+  color: #ffffff;
+  background: rgba(255, 24, 1, 0.14);
+}
+
+.gloss-term:focus-visible {
+  outline: 2px solid var(--pit-red);
+  outline-offset: 2px;
+}
+
+.gloss-tip {
+  margin: 0.75rem 0 0;
+  border-left: 3px solid var(--pit-red);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--pit-text);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.gloss-tip__term {
+  color: #ffffff;
+}
+
+/* Review fix 1 (mobile overflow): fixed fr/flex tracks can't shrink below
+   content width. minmax(0, …) + min-width:0 on children + wrappable titles. */
+.race-hero__inner {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 960px) {
+  .race-hero__inner {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+@media (min-width: 640px) {
+  .news-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .news-top {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+
+  .news-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.news-top > *,
+.news-side,
+a.news-hero,
+.race-hero__main,
+.race-hero__tower,
+.race-hero__tower-row > *,
+.home-row > * {
+  min-width: 0;
+}
+
+.news-hero__title,
+.news-side__title {
+  overflow-wrap: anywhere;
+}
+
+.race-hero__tower-code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.race-hero__tower-gap {
+  flex-shrink: 0;
+}
+
+/* Review fix 7: compact next-race strip under the post-race podium. */
+.race-hero__next {
+  margin: 1rem 0 0;
+  border-left: 3px solid var(--pit-red);
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 0 0.375rem 0.375rem 0;
+  padding: 0.625rem 0.875rem;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--pit-text);
 }

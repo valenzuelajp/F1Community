@@ -2,7 +2,24 @@ import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
 import { loginSchema } from '@/lib/validations/auth';
+import { checkLoginRateLimit } from '@/lib/rate-limit';
 import { db } from '@/lib/db';
+
+/**
+ * Resolves the NextAuth secret. Fails closed when a real production server
+ * starts without NEXTAUTH_SECRET, but stays permissive for local dev and
+ * for `next build` (which evaluates this module with no env configured).
+ */
+function resolveAuthSecret(): string {
+  const configured = process.env.NEXTAUTH_SECRET;
+  if (configured) {
+    return configured;
+  }
+  if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE !== 'phase-production-build') {
+    throw new Error('NEXTAUTH_SECRET is not set. Refusing to start with an insecure default.');
+  }
+  return 'f1-store-dev-secret-key-1234567890';
+}
 
 /**
  * NextAuth.js v4 Configuration
@@ -29,7 +46,15 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        const { email, password } = validatedFields.data;
+        const { email: rawEmail, password } = validatedFields.data;
+        // Belt-and-braces: the schema already lowercases, but the DB lookup
+        // must never depend on caller casing.
+        const email = rawEmail.toLowerCase();
+
+        // Throttle brute force against a single account.
+        if (!checkLoginRateLimit(email)) {
+          return null;
+        }
 
         // 2. Look up the user by email in the database
         const user = await db.user.findUnique({
@@ -90,5 +115,5 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET || 'f1-store-dev-secret-key-1234567890',
+  secret: resolveAuthSecret(),
 };

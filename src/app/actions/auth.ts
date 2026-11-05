@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { hash } from 'bcryptjs';
 import { db } from '@/lib/db';
 import { registerSchema, type RegisterInput } from '@/lib/validations/auth';
+import { checkRegisterRateLimit } from '@/lib/rate-limit';
 
 /**
  * Registration server action.
@@ -18,6 +19,11 @@ export async function registerUser(input: RegisterInput): Promise<{ error?: stri
   }
 
   const { name, username, email, password } = parsed.data;
+
+  if (!checkRegisterRateLimit(email)) {
+    return { error: 'Too many accounts created. Please try again later.' };
+  }
+
   const passwordHash = await hash(password, 12);
 
   try {

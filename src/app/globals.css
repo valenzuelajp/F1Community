@@ -14,6 +14,52 @@
   --tire-hard: #ffffff;
   --tire-intermediate: #43b02a;
   --tire-wet: #0067ad;
+  /* Page tokens: one vocabulary for canvas, surfaces, lines, and text. */
+  --canvas: #07080b;
+  --surface: #10131a;
+  --line: #1f242e;
+  --text: #f2f3f5;
+  --muted: #a6adbb;
+  --accent: #ff1801;
+  /* Pit-wall broadcast tokens (step 1): single theme, one skew, live colors. */
+  --pit-carbon: #07080b;
+  --pit-band: #0b0d12;
+  /* Layered carbon scale (background pass): base gradient + surfaces + cards. */
+  --pit-base: #0d1018;
+  --pit-base-to: #121826;
+  --pit-surface: #141925;
+  --pit-card: #1a2030;
+  --pit-border: rgba(255, 255, 255, 0.08);
+  --pit-red: #ff1801;
+  --pit-yellow: #ffd12e;
+  --pit-green: #3ddc84;
+  --pit-ink: #f2f3f5;
+  --pit-muted: #a6adbb;
+  --pit-line: #1f242e;
+  --pit-skew: -8deg;
+  --pit-skew-bars: -14deg;
+  /* Maximalist re-skin tokens (new system; pit-* stays for login). */
+  --max-ground: #0d0e13;
+  --max-panel: #171923;
+  --max-line: #2c2f3d;
+  --max-cream: #f5f0e6;
+  --max-muted: #b8b3a7;
+  --max-red: #ff2d1f;
+  --max-yellow: #ffd60a;
+  --max-teal: #19e3c7;
+}
+
+/* Chequer divider strip (22px per spec): repeating squares, no images. */
+.chequer {
+  height: 22px;
+  background: repeating-conic-gradient(var(--max-cream) 0 25%, var(--max-ground) 0 50%);
+  background-size: 22px 22px;
+}
+
+/* Display-only red outline type (large sizes only — unreadable small). */
+.text-outline-red {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--max-red);
 }
 
 html {
@@ -28,16 +74,67 @@ html::-webkit-scrollbar {
 body {
   color: #e5e7eb;
   background-color: #0b0e14;
-  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-max-body), var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
 }
 
-/* Custom Racing Grid Background */
+/* Custom Racing Grid Background — shows fully wherever applied.
+   Decorative only (pointer-events come from the parent layers). */
 .bg-racing-grid {
   background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 32px 32px;
+}
+
+/* Shared page shell (home/news/schedule/standings): base gradient plus
+   carbon weave plus a fine film-grain texture (data URI, ~4% opacity).
+   Body text always sits on plain surfaces, never on pattern. */
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  flex: 1 1 0%;
+  overflow: hidden;
+  background-color: #07080b;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #0b0d12 0%, #07080b 34rem),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.018) 0 2px,
+      transparent 2px 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.28) 0 2px,
+      transparent 2px 4px
+    );
+  color: #e5e7eb;
+}
+
+/* Hero-only red glow, top-left. The div sits at the top of the page. */
+.page__glow {
+  pointer-events: none;
+  position: absolute;
+  left: -12rem;
+  top: -12rem;
+  height: 36rem;
+  width: 36rem;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 24, 1, 0.16),
+    transparent
+  );
+}
+
+/* Visible keyboard focus everywhere on the pit-wall pages. */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--pit-red);
+  outline-offset: 2px;
 }
 
 .f1-outline-title {

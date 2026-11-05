@@ -1,7 +1,7 @@
 // F1Store Database Seed
 // Run with: pnpm db:seed
 
-import { PrismaClient, Role, OrderStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -297,7 +297,7 @@ async function main() {
       username: 'admin',
       name: 'Admin User',
       passwordHash: adminPassword,
-      role: Role.ADMIN,
+      role: 'ADMIN',
       emailVerified: new Date(),
     },
   });
@@ -312,7 +312,7 @@ async function main() {
       username: 'customer',
       name: 'Test Customer',
       passwordHash: customerPassword,
-      role: Role.CUSTOMER,
+      role: 'CUSTOMER',
       emailVerified: new Date(),
     },
   });
